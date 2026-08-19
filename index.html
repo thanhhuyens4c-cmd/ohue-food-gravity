@@ -197,7 +197,7 @@
             font-weight: 600;
         }
 
-        /* 4. POPUP */
+        /* 4. POPUP CHI TIẾT */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -291,9 +291,10 @@
 </head>
 <body>
 
-    <!-- NHẠC NỀN -->
+    <!-- THẺ AUDIO: Ưu tiên file nội bộ nhac-mien-trung.mp3 bạn tải lên GitHub -->
     <audio id="bgMusic" loop preload="auto">
-        <source src="https://actions.google.com/sounds/v1/ambiences/asian_garden.ogg" type="audio/ogg">
+        <source src="./nhac-mien-trung.mp3" type="audio/mpeg">
+        <source src="https://ia801503.us.archive.org/15/items/audio-traditional-vietnam/vietnam_traditional_melody.mp3" type="audio/mpeg">
     </audio>
 
     <div id="topping-layer"></div>
@@ -303,7 +304,7 @@
             <h1>ẨM THỰC O HUỆ - MIỀN TRUNG</h1>
             <div class="header-controls">
                 <button class="music-btn" id="musicToggleBtn" onclick="toggleMusic()">
-                    <span id="musicIcon">🔈</span> <span id="musicText">Bật Nhạc</span>
+                    <span id="musicIcon">🔈</span> <span id="musicText">Bật Nhạc Huế</span>
                 </button>
                 <a href="tel:0900000000" class="contact-btn">Đặt Món</a>
             </div>
@@ -341,7 +342,7 @@
 
     <script>
         // ==========================================
-        // 1. HỆ THỐNG ÂM THANH VA CHẠM (WEB AUDIO API)
+        // 1. TIẾNG GÕ VA CHẠM (WEB AUDIO API)
         // ==========================================
         let audioCtx = null;
         let lastSoundTime = 0;
@@ -356,24 +357,18 @@
             }
         }
 
-        // Tạo tiếng va chạm mềm "pop/thud"
         function playCollisionSound(intensity = 1) {
             if (!audioCtx) return;
-            
             const now = Date.now();
-            // Giới hạn tần suất: Không phát nhiều hơn 1 tiếng trong vòng 40ms để tránh chói
             if (now - lastSoundTime < 40) return;
             lastSoundTime = now;
 
             try {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-
-                // Tính toán âm lượng dựa trên lực va chạm
                 const volume = Math.min(Math.max(intensity * 0.12, 0.03), 0.25);
-                
-                // Tần số âm thanh hạ nhanh tạo tiếng "bụp"
                 const startFreq = 160 + Math.random() * 40;
+
                 osc.frequency.setValueAtTime(startFreq, audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.08);
 
@@ -389,7 +384,7 @@
         }
 
         // ==========================================
-        // 2. NHẠC NỀN & KHỞI TẠO ÂM THANH
+        // 2. NHẠC NỀN MIỀN TRUNG
         // ==========================================
         const bgMusic = document.getElementById('bgMusic');
         const musicToggleBtn = document.getElementById('musicToggleBtn');
@@ -405,7 +400,7 @@
             } else {
                 musicToggleBtn.classList.remove('playing');
                 musicIcon.innerText = '🔈';
-                musicText.innerText = 'Bật Nhạc';
+                musicText.innerText = 'Bật Nhạc Huế';
             }
         }
 
@@ -416,18 +411,21 @@
                 isMusicPlaying = false;
                 updateMusicUI(false);
             } else {
-                bgMusic.volume = 0.4;
+                bgMusic.volume = 0.45;
                 bgMusic.play().then(() => {
                     isMusicPlaying = true;
                     updateMusicUI(true);
-                }).catch(() => {});
+                }).catch(err => {
+                    console.log("Cần tương tác để phát nhạc:", err);
+                });
             }
         }
 
+        // Chạm lần đầu tự động kích hoạt cả tiếng va chạm và nhạc nền
         const autoPlayOnFirstTouch = () => {
             initAudioContext();
             if (!isMusicPlaying) {
-                bgMusic.volume = 0.35;
+                bgMusic.volume = 0.4;
                 bgMusic.play().then(() => {
                     isMusicPlaying = true;
                     updateMusicUI(true);
@@ -438,7 +436,7 @@
         window.addEventListener('pointerdown', autoPlayOnFirstTouch, { once: true });
 
         // ==========================================
-        // 3. DỮ LIỆU THỰC ĐƠN
+        // 3. DỮ LIỆU MÓN ĂN 5 KHU VỰC
         // ==========================================
         const menuData = {
             danang_quangnam: [
@@ -519,7 +517,7 @@
         }
 
         // ==========================================
-        // 4. THIẾT LẬP VẬT LÝ & LẮNG NGHE VA CHẠM
+        // 4. THIẾT LẬP VẬT LÝ & VA CHẠM
         // ==========================================
         const { Engine, Runner, Bodies, Composite, Mouse, MouseConstraint, Events } = Matter;
         const engine = Engine.create();
@@ -537,16 +535,13 @@
 
         Composite.add(world, [ground, leftWall, rightWall, ceiling]);
 
-        // LẮNG NGHE SỰ KIỆN VA CHẠM ĐỂ PHÁT ÂM THANH
         Events.on(engine, 'collisionStart', (event) => {
             event.pairs.forEach((pair) => {
                 const { bodyA, bodyB } = pair;
-                // Tính toán vận tốc tương đối giữa 2 vật thể va chạm
                 const speedA = bodyA.speed || 0;
                 const speedB = bodyB.speed || 0;
                 const relativeSpeed = Math.max(speedA, speedB);
 
-                // Chỉ phát âm thanh khi va chạm có vận tốc đủ lớn (> 1.2)
                 if (relativeSpeed > 1.2) {
                     playCollisionSound(relativeSpeed);
                 }
@@ -605,7 +600,6 @@
             loadRegionFoods(regionKey);
         }
 
-        // BẮT SỰ KIỆN CHUỘT / CẢM ỨNG
         const mouse = Mouse.create(document.body);
         const mouseConstraint = MouseConstraint.create(engine, {
             mouse: mouse,
