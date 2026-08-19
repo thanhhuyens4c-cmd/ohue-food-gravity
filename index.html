@@ -23,7 +23,7 @@
             position: relative;
         }
 
-        /* 1. LỚP TOPPING CHẠY NỀN */
+        /* 1. LỚP TOPPING NỀN */
         #topping-layer {
             position: absolute;
             top: 0;
@@ -47,7 +47,7 @@
             100% { transform: translate(0, 0) rotate(360deg); }
         }
 
-        /* 2. THANH HEADER VÀ MENU TỈNH THÀNH */
+        /* 2. THANH HEADER */
         header {
             position: fixed;
             top: 0;
@@ -66,8 +66,32 @@
             border-bottom: 1px solid rgba(255,255,255,0.15);
         }
         .top-bar h1 {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 700;
+        }
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .music-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #ffffff;
+            padding: 5px 12px;
+            border-radius: 16px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+        }
+        .music-btn.playing {
+            background: #f5c542;
+            color: #4a120e;
+            border-color: #f5c542;
         }
         .contact-btn {
             background: #f5c542;
@@ -79,17 +103,16 @@
             text-decoration: none;
         }
 
-        /* Thanh Menu tỉnh thành cuộn ngang */
         .category-menu {
             display: flex;
             overflow-x: auto;
             white-space: nowrap;
             padding: 8px 12px;
             gap: 8px;
-            scrollbar-width: none; /* Ẩn scrollbar Firefox */
+            scrollbar-width: none;
         }
         .category-menu::-webkit-scrollbar {
-            display: none; /* Ẩn scrollbar Chrome */
+            display: none;
         }
         .cat-btn {
             background: rgba(255, 255, 255, 0.18);
@@ -124,7 +147,7 @@
             text-align: center;
         }
 
-        /* 3. THẺ MÓN ĂN VẬT LÝ */
+        /* 3. THẺ MÓN ĂN */
         .food-card {
             position: absolute;
             width: 190px;
@@ -174,7 +197,7 @@
             font-weight: 600;
         }
 
-        /* 4. POPUP XEM CHI TIẾT */
+        /* 4. POPUP */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -268,15 +291,23 @@
 </head>
 <body>
 
-    <!-- LỚP TOPPING CHẠY NỀN -->
+    <!-- NHẠC NỀN -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://actions.google.com/sounds/v1/ambiences/asian_garden.ogg" type="audio/ogg">
+    </audio>
+
     <div id="topping-layer"></div>
 
     <header>
         <div class="top-bar">
             <h1>ẨM THỰC O HUỆ - MIỀN TRUNG</h1>
-            <a href="tel:0900000000" class="contact-btn">Gọi Đặt Quán</a>
+            <div class="header-controls">
+                <button class="music-btn" id="musicToggleBtn" onclick="toggleMusic()">
+                    <span id="musicIcon">🔈</span> <span id="musicText">Bật Nhạc</span>
+                </button>
+                <a href="tel:0900000000" class="contact-btn">Đặt Món</a>
+            </div>
         </div>
-        <!-- THANH MENU CÁC TỈNH THÀNH MIỀN TRUNG -->
         <div class="category-menu">
             <button class="cat-btn active" onclick="switchRegion('danang_quangnam', this)">Đà Nẵng – Quảng Nam</button>
             <button class="cat-btn" onclick="switchRegion('hue', this)">Huế</button>
@@ -286,9 +317,8 @@
         </div>
     </header>
 
-    <div class="instruction">👆 Chọn Tỉnh ở trên • Chạm thẻ xem ảnh • Kéo ném tự do</div>
+    <div class="instruction">👆 Chọn Tỉnh • Chạm thẻ xem ảnh • Kéo ném tự do</div>
 
-    <!-- KHUNG CHỨA THẺ RƠI -->
     <div id="cards-container"></div>
 
     <!-- POPUP XEM CHI TIẾT -->
@@ -310,7 +340,106 @@
     </div>
 
     <script>
-        // DỮ LIỆU ĐẦY ĐỦ 44 MÓN ĂN THEO CÁC TỈNH THÀNH
+        // ==========================================
+        // 1. HỆ THỐNG ÂM THANH VA CHẠM (WEB AUDIO API)
+        // ==========================================
+        let audioCtx = null;
+        let lastSoundTime = 0;
+
+        function initAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // Tạo tiếng va chạm mềm "pop/thud"
+        function playCollisionSound(intensity = 1) {
+            if (!audioCtx) return;
+            
+            const now = Date.now();
+            // Giới hạn tần suất: Không phát nhiều hơn 1 tiếng trong vòng 40ms để tránh chói
+            if (now - lastSoundTime < 40) return;
+            lastSoundTime = now;
+
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                // Tính toán âm lượng dựa trên lực va chạm
+                const volume = Math.min(Math.max(intensity * 0.12, 0.03), 0.25);
+                
+                // Tần số âm thanh hạ nhanh tạo tiếng "bụp"
+                const startFreq = 160 + Math.random() * 40;
+                osc.frequency.setValueAtTime(startFreq, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.08);
+
+                gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.09);
+            } catch (e) {}
+        }
+
+        // ==========================================
+        // 2. NHẠC NỀN & KHỞI TẠO ÂM THANH
+        // ==========================================
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggleBtn = document.getElementById('musicToggleBtn');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicText = document.getElementById('musicText');
+        let isMusicPlaying = false;
+
+        function updateMusicUI(playing) {
+            if (playing) {
+                musicToggleBtn.classList.add('playing');
+                musicIcon.innerText = '🔊';
+                musicText.innerText = 'Tắt Nhạc';
+            } else {
+                musicToggleBtn.classList.remove('playing');
+                musicIcon.innerText = '🔈';
+                musicText.innerText = 'Bật Nhạc';
+            }
+        }
+
+        function toggleMusic() {
+            initAudioContext();
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                isMusicPlaying = false;
+                updateMusicUI(false);
+            } else {
+                bgMusic.volume = 0.4;
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                    updateMusicUI(true);
+                }).catch(() => {});
+            }
+        }
+
+        const autoPlayOnFirstTouch = () => {
+            initAudioContext();
+            if (!isMusicPlaying) {
+                bgMusic.volume = 0.35;
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                    updateMusicUI(true);
+                }).catch(() => {});
+            }
+            window.removeEventListener('pointerdown', autoPlayOnFirstTouch);
+        };
+        window.addEventListener('pointerdown', autoPlayOnFirstTouch, { once: true });
+
+        // ==========================================
+        // 3. DỮ LIỆU THỰC ĐƠN
+        // ==========================================
         const menuData = {
             danang_quangnam: [
                 { title: "Mì Quảng", loc: "Đà Nẵng - Quảng Nam", price: "45.000đ", desc: "Sợi mì vàng óng, nước nhưỡng tôm thịt đậm đà ăn kèm bánh tráng mè nướng giòn.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
@@ -375,7 +504,7 @@
             ]
         };
 
-        // HIỆU ỨNG TOPPING NỀN
+        // TOPPING NỀN
         const toppingLayer = document.getElementById('topping-layer');
         const toppingIcons = ['🦐', '🥩', '🌶️', '🥟', '🍋', '🌿', '🧄', '🥢', '🍘'];
         for (let i = 0; i < 14; i++) {
@@ -389,7 +518,9 @@
             toppingLayer.appendChild(item);
         }
 
-        // THIẾT LẬP VẬT LÝ MATTER.JS
+        // ==========================================
+        // 4. THIẾT LẬP VẬT LÝ & LẮNG NGHE VA CHẠM
+        // ==========================================
         const { Engine, Runner, Bodies, Composite, Mouse, MouseConstraint, Events } = Matter;
         const engine = Engine.create();
         const world = engine.world;
@@ -402,16 +533,31 @@
         const ground = Bodies.rectangle(width / 2, height + 30, width * 2, 60, wallOptions);
         const leftWall = Bodies.rectangle(-30, height / 2, 60, height * 2, wallOptions);
         const rightWall = Bodies.rectangle(width + 30, height / 2, 60, height * 2, wallOptions);
-        const ceiling = Bodies.rectangle(width / 2, 80, width * 2, 10, wallOptions); // Tránh va vào menu
+        const ceiling = Bodies.rectangle(width / 2, 85, width * 2, 10, wallOptions);
 
         Composite.add(world, [ground, leftWall, rightWall, ceiling]);
+
+        // LẮNG NGHE SỰ KIỆN VA CHẠM ĐỂ PHÁT ÂM THANH
+        Events.on(engine, 'collisionStart', (event) => {
+            event.pairs.forEach((pair) => {
+                const { bodyA, bodyB } = pair;
+                // Tính toán vận tốc tương đối giữa 2 vật thể va chạm
+                const speedA = bodyA.speed || 0;
+                const speedB = bodyB.speed || 0;
+                const relativeSpeed = Math.max(speedA, speedB);
+
+                // Chỉ phát âm thanh khi va chạm có vận tốc đủ lớn (> 1.2)
+                if (relativeSpeed > 1.2) {
+                    playCollisionSound(relativeSpeed);
+                }
+            });
+        });
 
         let cardBodies = [];
         const cardsContainer = document.getElementById('cards-container');
 
-        // HÀM TẠO VÀ TẢI LẠI THỰC ĐƠN THEO VÙNG
         function loadRegionFoods(regionKey) {
-            // Xóa thẻ cũ trên màn hình và trong thế giới vật lý
+            initAudioContext();
             cardsContainer.innerHTML = '';
             cardBodies.forEach(({ body }) => Composite.remove(world, body));
             cardBodies = [];
@@ -438,9 +584,8 @@
                 `;
                 cardsContainer.appendChild(card);
 
-                // Điểm rơi ngẫu nhiên từ phía trên
                 const startX = 80 + (index % 5) * ((width - 200) / 4);
-                const startY = 100 + Math.floor(index / 5) * 50;
+                const startY = 105 + Math.floor(index / 5) * 50;
 
                 const body = Bodies.rectangle(startX, startY, 190, 105, {
                     restitution: 0.45,
@@ -454,14 +599,13 @@
             });
         }
 
-        // CHUYỂN TAB VÙNG MIỀN
         function switchRegion(regionKey, btnElement) {
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
             loadRegionFoods(regionKey);
         }
 
-        // BẮT SỰ KIỆN CHUỘT & CHẠM
+        // BẮT SỰ KIỆN CHUỘT / CẢM ỨNG
         const mouse = Mouse.create(document.body);
         const mouseConstraint = MouseConstraint.create(engine, {
             mouse: mouse,
@@ -474,6 +618,7 @@
         let activeBody = null;
 
         Events.on(mouseConstraint, 'startdrag', (evt) => {
+            initAudioContext();
             activeBody = evt.body;
             startPoint = { x: mouse.position.x, y: mouse.position.y };
             startTime = Date.now();
@@ -505,7 +650,7 @@
             });
         });
 
-        // XỬ LÝ POPUP CHI TIẾT
+        // MODAL
         const modalOverlay = document.getElementById('modalOverlay');
         const modalImg = document.getElementById('modalImg');
         const modalTitle = document.getElementById('modalTitle');
@@ -514,6 +659,7 @@
         const closeBtn = document.getElementById('closeBtn');
 
         function openModal(cardElement) {
+            initAudioContext();
             modalImg.src = cardElement.getAttribute('data-img');
             modalTitle.innerText = cardElement.getAttribute('data-title');
             modalPrice.innerText = cardElement.getAttribute('data-price');
@@ -530,7 +676,6 @@
             if (e.target === modalOverlay) closeModal();
         });
 
-        // KHỞI TẠO MẶC ĐỊNH VỚI VÙNG ĐÀ NẴNG - QUẢNG NAM
         loadRegionFoods('danang_quangnam');
     </script>
 </body>
