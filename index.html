@@ -197,7 +197,7 @@
             font-weight: 600;
         }
 
-        /* 4. POPUP MODAL ĐƯỢC TỐI ƯU CƠ CHẾ CLICK */
+        /* 4. POPUP */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -208,7 +208,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 99999; /* Đảm bảo nổi lên trên cùng */
+            z-index: 9999;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.25s ease;
@@ -216,7 +216,7 @@
         }
         .modal-overlay.active {
             opacity: 1;
-            pointer-events: auto; /* Bật nhận sự kiện click */
+            pointer-events: auto;
         }
         .modal-content {
             background: #ffffff;
@@ -227,8 +227,6 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.4);
             transform: scale(0.9);
             transition: transform 0.25s ease;
-            position: relative;
-            pointer-events: auto;
         }
         .modal-overlay.active .modal-content {
             transform: scale(1);
@@ -270,22 +268,16 @@
         }
         .close-btn {
             flex: 1;
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #ddd;
             background: #f1f2f6;
             border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.9rem;
+            font-weight: 600;
             cursor: pointer;
-            pointer-events: auto;
-            text-align: center;
-        }
-        .close-btn:active {
-            background: #e2e4e8;
         }
         .order-btn {
             flex: 2;
-            padding: 12px;
+            padding: 10px;
             background: #b8332a;
             color: white;
             border: none;
@@ -294,15 +286,14 @@
             text-align: center;
             text-decoration: none;
             cursor: pointer;
-            pointer-events: auto;
         }
     </style>
 </head>
 <body>
 
-    <!-- THẺ AUDIO: Sử dụng file nhac-mien-trung.mp3.mp3 theo đúng tên của bạn -->
+    <!-- NHẠC NỀN -->
     <audio id="bgMusic" loop preload="auto">
-        <source src="./nhac-mien-trung.mp3.mp3" type="audio/mpeg">
+        <source src="https://actions.google.com/sounds/v1/ambiences/asian_garden.ogg" type="audio/ogg">
     </audio>
 
     <div id="topping-layer"></div>
@@ -312,7 +303,7 @@
             <h1>ẨM THỰC O HUỆ - MIỀN TRUNG</h1>
             <div class="header-controls">
                 <button class="music-btn" id="musicToggleBtn" onclick="toggleMusic()">
-                    <span id="musicIcon">🔈</span> <span id="musicText">Bật Nhạc Huế</span>
+                    <span id="musicIcon">🔈</span> <span id="musicText">Bật Nhạc</span>
                 </button>
                 <a href="tel:0900000000" class="contact-btn">Đặt Món</a>
             </div>
@@ -330,9 +321,9 @@
 
     <div id="cards-container"></div>
 
-    <!-- POPUP XEM CHI TIẾT ĐÃ FIX NÚT ĐÓNG -->
+    <!-- POPUP XEM CHI TIẾT -->
     <div id="modalOverlay" class="modal-overlay">
-        <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-content">
             <img id="modalImg" class="modal-img" src="" alt="Món ăn">
             <div class="modal-body">
                 <div class="modal-header">
@@ -341,7 +332,7 @@
                 </div>
                 <p id="modalDesc" class="modal-desc"></p>
                 <div class="modal-actions">
-                    <button class="close-btn" id="closeBtn" type="button">Đóng</button>
+                    <button class="close-btn" id="closeBtn">Đóng</button>
                     <a href="tel:0900000000" class="order-btn">Đặt Món Ngay</a>
                 </div>
             </div>
@@ -350,7 +341,7 @@
 
     <script>
         // ==========================================
-        // 1. TIẾNG GÕ VA CHẠM (WEB AUDIO API)
+        // 1. HỆ THỐNG ÂM THANH VA CHẠM (WEB AUDIO API)
         // ==========================================
         let audioCtx = null;
         let lastSoundTime = 0;
@@ -365,18 +356,24 @@
             }
         }
 
+        // Tạo tiếng va chạm mềm "pop/thud"
         function playCollisionSound(intensity = 1) {
             if (!audioCtx) return;
+            
             const now = Date.now();
+            // Giới hạn tần suất: Không phát nhiều hơn 1 tiếng trong vòng 40ms để tránh chói
             if (now - lastSoundTime < 40) return;
             lastSoundTime = now;
 
             try {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-                const volume = Math.min(Math.max(intensity * 0.12, 0.03), 0.25);
-                const startFreq = 160 + Math.random() * 40;
 
+                // Tính toán âm lượng dựa trên lực va chạm
+                const volume = Math.min(Math.max(intensity * 0.12, 0.03), 0.25);
+                
+                // Tần số âm thanh hạ nhanh tạo tiếng "bụp"
+                const startFreq = 160 + Math.random() * 40;
                 osc.frequency.setValueAtTime(startFreq, audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.08);
 
@@ -392,7 +389,7 @@
         }
 
         // ==========================================
-        // 2. NHẠC NỀN MIỀN TRUNG
+        // 2. NHẠC NỀN & KHỞI TẠO ÂM THANH
         // ==========================================
         const bgMusic = document.getElementById('bgMusic');
         const musicToggleBtn = document.getElementById('musicToggleBtn');
@@ -408,7 +405,7 @@
             } else {
                 musicToggleBtn.classList.remove('playing');
                 musicIcon.innerText = '🔈';
-                musicText.innerText = 'Bật Nhạc Huế';
+                musicText.innerText = 'Bật Nhạc';
             }
         }
 
@@ -419,20 +416,18 @@
                 isMusicPlaying = false;
                 updateMusicUI(false);
             } else {
-                bgMusic.volume = 0.45;
+                bgMusic.volume = 0.4;
                 bgMusic.play().then(() => {
                     isMusicPlaying = true;
                     updateMusicUI(true);
-                }).catch(err => {
-                    console.log("Cần tương tác để phát nhạc:", err);
-                });
+                }).catch(() => {});
             }
         }
 
         const autoPlayOnFirstTouch = () => {
             initAudioContext();
             if (!isMusicPlaying) {
-                bgMusic.volume = 0.4;
+                bgMusic.volume = 0.35;
                 bgMusic.play().then(() => {
                     isMusicPlaying = true;
                     updateMusicUI(true);
@@ -443,7 +438,7 @@
         window.addEventListener('pointerdown', autoPlayOnFirstTouch, { once: true });
 
         // ==========================================
-        // 3. DỮ LIỆU MÓN ĂN 5 KHU VỰC
+        // 3. DỮ LIỆU THỰC ĐƠN
         // ==========================================
         const menuData = {
             danang_quangnam: [
@@ -524,7 +519,7 @@
         }
 
         // ==========================================
-        // 4. THIẾT LẬP VẬT LÝ & VA CHẠM
+        // 4. THIẾT LẬP VẬT LÝ & LẮNG NGHE VA CHẠM
         // ==========================================
         const { Engine, Runner, Bodies, Composite, Mouse, MouseConstraint, Events } = Matter;
         const engine = Engine.create();
@@ -542,13 +537,16 @@
 
         Composite.add(world, [ground, leftWall, rightWall, ceiling]);
 
+        // LẮNG NGHE SỰ KIỆN VA CHẠM ĐỂ PHÁT ÂM THANH
         Events.on(engine, 'collisionStart', (event) => {
             event.pairs.forEach((pair) => {
                 const { bodyA, bodyB } = pair;
+                // Tính toán vận tốc tương đối giữa 2 vật thể va chạm
                 const speedA = bodyA.speed || 0;
                 const speedB = bodyB.speed || 0;
                 const relativeSpeed = Math.max(speedA, speedB);
 
+                // Chỉ phát âm thanh khi va chạm có vận tốc đủ lớn (> 1.2)
                 if (relativeSpeed > 1.2) {
                     playCollisionSound(relativeSpeed);
                 }
@@ -607,6 +605,7 @@
             loadRegionFoods(regionKey);
         }
 
+        // BẮT SỰ KIỆN CHUỘT / CẢM ỨNG
         const mouse = Mouse.create(document.body);
         const mouseConstraint = MouseConstraint.create(engine, {
             mouse: mouse,
@@ -651,9 +650,7 @@
             });
         });
 
-        // ==========================================
-        // 5. XỬ LÝ POPUP & SỬA LỖI NÚT ĐÓNG DỨT ĐIỂM
-        // ==========================================
+        // MODAL
         const modalOverlay = document.getElementById('modalOverlay');
         const modalImg = document.getElementById('modalImg');
         const modalTitle = document.getElementById('modalTitle');
@@ -670,26 +667,13 @@
             modalOverlay.classList.add('active');
         }
 
-        function closeModal(e) {
-            if (e) {
-                e.stopPropagation();
-                e.preventDefault();
-            }
+        function closeModal() {
             modalOverlay.classList.remove('active');
         }
 
-        // Bắt mọi sự kiện đóng (Click, Chạm, Phím Esc)
         closeBtn.addEventListener('click', closeModal);
-        closeBtn.addEventListener('touchend', closeModal);
-        
         modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) closeModal(e);
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-                closeModal();
-            }
+            if (e.target === modalOverlay) closeModal();
         });
 
         loadRegionFoods('danang_quangnam');
