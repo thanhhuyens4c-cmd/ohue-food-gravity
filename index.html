@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ẩm Thực Miền Trung - O Huệ</title>
+    <!-- Thư viện vật lý 2D Matter.js tải trực tiếp qua CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+        body {
+            background-color: #fcf8f2;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+        /* Thanh tiêu đề phía trên */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 16px 24px;
+            background: rgba(184, 51, 42, 0.95);
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+        }
+        header h1 {
+            font-size: 1.3rem;
+            letter-spacing: 0.5px;
+        }
+        .contact-btn {
+            background: #f7d070;
+            color: #5c1813;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        /* Hướng dẫn thao tác */
+        .instruction {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            color: #ffffff;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            pointer-events: none;
+            z-index: 100;
+        }
+        /* Thẻ hiển thị món ăn rơi */
+        .food-card {
+            position: absolute;
+            width: 220px;
+            height: 110px;
+            background: #ffffff;
+            border: 2px solid #b8332a;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+            cursor: grab;
+            touch-action: none;
+        }
+        .food-card:active {
+            cursor: grabbing;
+        }
+        .food-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #b8332a;
+        }
+        .food-desc {
+            font-size: 0.75rem;
+            color: #666666;
+            line-height: 1.2;
+        }
+        .food-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px dashed #e0e0e0;
+            padding-top: 6px;
+        }
+        .food-price {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        .order-tag {
+            background: #b8332a;
+            color: #ffffff;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ĐẶC SẢN MIỀN TRUNG - O HUỆ</h1>
+        <a href="tel:0900000000" class="contact-btn">Đặt Món Ngay</a>
+    </header>
+
+    <div class="instruction">💡 Dùng chuột hoặc ngón tay để cầm, ném và kéo thả các món ăn!</div>
+
+    <!-- Dữ liệu các món ăn -->
+    <div id="cards-container">
+        <div class="food-card" data-x="150" data-y="80">
+            <div class="food-title">🍜 Bún Bò Huế</div>
+            <div class="food-desc">Nước dùng đậm đà, chả cua, nạm bò và huyết chuẩn vị cố đô.</div>
+            <div class="food-footer">
+                <span class="food-price">45.000đ</span>
+                <span class="order-tag">Gọi món</span>
+            </div>
+        </div>
+
+        <div class="food-card" data-x="380" data-y="120">
+            <div class="food-title">🍲 Bánh Canh Cá Lóc</div>
+            <div class="food-desc">Sợi bột gạo dai mềm, cá lóc đồng rim nghệ cay nồng thơm lừng.</div>
+            <div class="food-footer">
+                <span class="food-price">40.000đ</span>
+                <span class="order-tag">Gọi món</span>
+            </div>
+        </div>
+
+        <div class="food-card" data-x="600" data-y="70">
+            <div class="food-title">🥟 Bánh Bèo Chén</div>
+            <div class="food-desc">Bánh bèo tôm cháy giòn rụm, chan nước mắm ngọt cay đặc trưng.</div>
+            <div class="food-footer">
+                <span class="food-price">35.000đ/khay</span>
+                <span class="order-tag">Gọi món</span>
+            </div>
+        </div>
+
+        <div class="food-card" data-x="800" data-y="150">
+            <div class="food-title">🌯 Nem Lụi Nướng</div>
+            <div class="food-desc">Nem lụi nướng than hoa thơm nức, ăn kèm rau sống và nước lèo béo bùi.</div>
+            <div class="food-footer">
+                <span class="food-price">60.000đ/phần</span>
+                <span class="order-tag">Gọi món</span>
+            </div>
+        </div>
+
+        <div class="food-card" data-x="450" data-y="200">
+            <div class="food-title">🍘 Bánh Nậm & Lọc</div>
+            <div class="food-desc">Gói lá chuối xanh mướt, nhân tôm thịt đậm đà chuẩn vị quê nhà.</div>
+            <div class="food-footer">
+                <span class="food-price">50.000đ/đĩa</span>
+                <span class="order-tag">Gọi món</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script tạo hiệu ứng vật lý rơi tự do Anti-Gravity -->
+    <script>
+        const { Engine, Render, Runner, Bodies, Composite, Mouse, MouseConstraint, Events } = Matter;
+
+        const engine = Engine.create();
+        const world = engine.world;
+        engine.world.gravity.y = 0.8; // Thiết lập trọng lực rơi tự nhiên
+
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        // Tạo các bức tường vô hình giữ cho các món ăn không văng ra ngoài màn hình
+        const wallOptions = { isStatic: true, render: { visible: false } };
+        const ground = Bodies.rectangle(width / 2, height + 30, width * 2, 60, wallOptions);
+        const leftWall = Bodies.rectangle(-30, height / 2, 60, height * 2, wallOptions);
+        const rightWall = Bodies.rectangle(width + 30, height / 2, 60, height * 2, wallOptions);
+        const ceiling = Bodies.rectangle(width / 2, 60, width * 2, 10, wallOptions);
+
+        Composite.add(world, [ground, leftWall, rightWall, ceiling]);
+
+        // Liên kết từng thẻ HTML món ăn với 1 vật thể vật lý trong Matter.js
+        const cards = document.querySelectorAll('.food-card');
+        const cardBodies = [];
+
+        cards.forEach((card) => {
+            const startX = parseFloat(card.getAttribute('data-x')) || Math.random() * (width - 240) + 120;
+            const startY = parseFloat(card.getAttribute('data-y')) || Math.random() * 150 + 80;
+            const cardWidth = 220;
+            const cardHeight = 110;
+
+            const body = Bodies.rectangle(startX, startY, cardWidth, cardHeight, {
+                restitution: 0.5, // Độ nảy khi va chạm sàn
+                friction: 0.2,
+                density: 0.002
+            });
+
+            cardBodies.push({ element: card, body: body });
+            Composite.add(world, body);
+        });
+
+        // Xử lý tương tác kéo thả bằng chuột / cảm ứng
+        const mouse = Mouse.create(document.body);
+        const mouseConstraint = MouseConstraint.create(engine, {
+            mouse: mouse,
+            constraint: {
+                stiffness: 0.2,
+                render: { visible: false }
+            }
+        });
+
+        Composite.add(world, mouseConstraint);
+
+        const runner = Runner.create();
+        Runner.run(runner, engine);
+
+        // Đồng bộ vị trí và góc xoay của thẻ HTML theo chuyển động vật lý của Matter.js
+        Events.on(engine, 'afterUpdate', () => {
+            cardBodies.forEach(({ element, body }) => {
+                const { x, y } = body.position;
+                const angle = body.angle;
+                element.style.transform = `translate(${x - 110}px, ${y - 55}px) rotate(${angle}rad)`;
+            });
+        });
+    </script>
+</body>
+</html>
