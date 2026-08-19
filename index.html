@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SỬA LỖI: Chạm Hiện Ảnh - Ẩm Thực O Huệ</title>
+    <title>Ẩm Thực Miền Trung - O Huệ</title>
     <!-- Thư viện vật lý Matter.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <style>
@@ -15,12 +15,52 @@
             -webkit-user-select: none;
         }
         body {
-            background-color: #fdfbf7;
+            background-color: #fcf8f2;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             overflow: hidden;
             width: 100vw;
             height: 100vh;
+            position: relative;
         }
+
+        /* 1. LỚP BACKGROUND TOPPING DI CHUYỂN */
+        #topping-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Không cản trở chuột/chạm */
+            z-index: 1; /* Nằm dưới các thẻ thực đơn */
+            overflow: hidden;
+        }
+        .topping-item {
+            position: absolute;
+            font-size: 2.2rem;
+            opacity: 0.65;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.08));
+            animation: floatAround linear infinite;
+        }
+
+        @keyframes floatAround {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(0.9);
+            }
+            25% {
+                transform: translate(60px, -40px) rotate(90deg) scale(1.1);
+            }
+            50% {
+                transform: translate(120px, 30px) rotate(180deg) scale(1);
+            }
+            75% {
+                transform: translate(40px, 80px) rotate(270deg) scale(1.15);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg) scale(0.9);
+            }
+        }
+
+        /* 2. THANH HEADER */
         header {
             position: fixed;
             top: 0;
@@ -62,69 +102,55 @@
             z-index: 100;
             text-align: center;
         }
-        /* THẺ MÓN ĂN (DÙNG ĐỂ KÉO NÉM) */
+
+        /* 3. THẺ MÓN ĂN VẬT LÝ */
         .food-card {
             position: absolute;
-            width: 200px;
-            height: 120px; /* Tăng nhẹ chiều cao */
+            width: 210px;
+            height: 115px;
             background: #ffffff;
             border: 2px solid #b8332a;
             border-radius: 12px;
-            padding: 10px;
+            padding: 10px 12px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-            cursor: grab;
-            touch-action: none;
-            z-index: 10;
-        }
-        .food-card:active {
-            cursor: grabbing;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            pointer-events: none;
+            z-index: 20; /* Nằm trên lớp topping */
         }
         .food-title {
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: bold;
             color: #b8332a;
-            margin-bottom: 2px;
         }
         .food-desc {
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             color: #666;
             line-height: 1.25;
-            flex-grow: 1;
         }
         .food-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px dashed #eee;
+            border-top: 1px dashed #ddd;
             padding-top: 5px;
-            margin-top: 3px;
         }
         .food-price {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: bold;
             color: #27ae60;
         }
-        /* NÚT "XEM ẢNH" CÓ THỂ CHẠM ĐƯỢC */
-        .view-photo-btn {
+        .hint-badge {
             background: #fdf2e9;
             color: #d35400;
-            font-size: 0.7rem;
-            padding: 4px 8px;
-            border-radius: 6px;
+            font-size: 0.68rem;
+            padding: 2px 6px;
+            border-radius: 4px;
             font-weight: 600;
-            cursor: pointer; /* Hiển thị bàn tay */
-            border: 1px solid #fab1a0;
-            transition: background 0.2s;
-        }
-        .view-photo-btn:hover {
-            background: #fab1a0;
-            color: white;
         }
 
-        /* POPUP XEM CHI TIẾT ẢNH */
+        /* 4. POPUP XEM CHI TIẾT ẢNH */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -135,10 +161,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 999; /* Luôn trên cùng */
+            z-index: 9999;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.25s ease;
             padding: 20px;
         }
         .modal-overlay.active {
@@ -148,30 +174,30 @@
         .modal-content {
             background: #ffffff;
             width: 100%;
-            max-width: 380px;
+            max-width: 360px;
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 15px 35px rgba(0,0,0,0.4);
             transform: scale(0.9);
-            transition: transform 0.3s ease;
+            transition: transform 0.25s ease;
         }
         .modal-overlay.active .modal-content {
             transform: scale(1);
         }
         .modal-img {
             width: 100%;
-            height: 230px;
+            height: 220px;
             object-fit: cover;
             display: block;
         }
         .modal-body {
-            padding: 20px;
+            padding: 16px 20px;
         }
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         .modal-title {
             font-size: 1.25rem;
@@ -179,33 +205,33 @@
             color: #b8332a;
         }
         .modal-price {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: bold;
             color: #27ae60;
         }
         .modal-desc {
-            font-size: 0.9rem;
-            color: #444;
-            line-height: 1.5;
-            margin-bottom: 20px;
+            font-size: 0.88rem;
+            color: #555;
+            line-height: 1.45;
+            margin-bottom: 18px;
         }
         .modal-actions {
             display: flex;
-            gap: 12px;
+            gap: 10px;
         }
         .close-btn {
             flex: 1;
-            padding: 12px;
+            padding: 11px;
             border: 1px solid #ddd;
-            background: #f8f9fa;
+            background: #f1f2f6;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
         }
         .order-btn {
             flex: 2;
-            padding: 12px;
-            background: #27ae60;
+            padding: 11px;
+            background: #b8332a;
             color: white;
             border: none;
             border-radius: 8px;
@@ -218,98 +244,85 @@
 </head>
 <body>
 
+    <!-- LỚP TOPPING CHẠY NỀN -->
+    <div id="topping-layer"></div>
+
     <header>
         <h1>ẨM THỰC O HUỆ - MIỀN TRUNG</h1>
-        <a href="tel:0900000000" class="contact-btn">Đặt món ngay</a>
+        <a href="tel:0900000000" class="contact-btn">Gọi Quán</a>
     </header>
 
-    <div class="instruction">✋ Giữ để ném • 🖱️ Click "Xem ảnh 🔍" để xem chi tiết</div>
+    <div class="instruction">👆 Chạm vào thẻ xem ảnh món • Giữ & kéo để ném</div>
 
-    <!-- DỮ LIỆU MÓN ĂN -->
+    <!-- DANH SÁCH MÓN ĂN CHÍNH -->
     <div id="cards-container">
-        <!-- Món 1 -->
-        <div class="food-card" data-x="150" data-y="80"
-             data-title="Bún Bò Huế"
+        <div class="food-card" id="card-0"
+             data-title="Bún Bò Huế Đặc Biệt"
              data-price="45.000đ"
-             data-desc="Tô bún bò đậm đà với nạm bò tender, chả cua đặc biệt, và nước dùng chuẩn vị cố đô, thơm mùi sả ruốc."
+             data-desc="Tô bún bò nóng hổi với nạm bò, chả cua giòn ngọt, huyết và nước dùng hầm xương dậy mùi sả ruốc chuẩn vị cố đô."
              data-img="https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80">
-            <div>
-                <div class="food-title">🍜 Bún Bò Huế</div>
-                <div class="food-desc">Nước dùng chuẩn vị cố đô, chả cua, nạm bò.</div>
-            </div>
+            <div class="food-title">🍜 Bún Bò Huế</div>
+            <div class="food-desc">Nước dùng chuẩn vị cố đô, chả cua, nạm bò.</div>
             <div class="food-footer">
                 <span class="food-price">45.000đ</span>
-                <!-- NÚT BẤM RIÊNG ĐỂ XEM ẢNH -->
-                <div class="view-photo-btn">Xem ảnh 🔍</div>
+                <span class="hint-badge">Chạm xem 🔍</span>
             </div>
         </div>
 
-        <!-- Món 2 -->
-        <div class="food-card" data-x="380" data-y="130"
+        <div class="food-card" id="card-1"
              data-title="Bánh Canh Cá Lóc"
              data-price="40.000đ"
-             data-desc="Sợi bánh bột gạo dai mềm hoà quyện cùng thịt cá lóc đồng rim nghệ vàng óng, cay nồng thơm lừng."
+             data-desc="Sợi bánh bột gạo dai mềm hoà quyện cùng thịt cá lóc đồng rim nghệ cay nồng thơm lừng."
              data-img="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80">
-            <div>
-                <div class="food-title">🍲 Bánh Canh Cá Lóc</div>
-                <div class="food-desc">Bột gạo mềm dai, cá lóc rim nghệ.</div>
-            </div>
+            <div class="food-title">🍲 Bánh Canh Cá Lóc</div>
+            <div class="food-desc">Bột gạo dai mềm, cá lóc rim nghệ vàng óng.</div>
             <div class="food-footer">
                 <span class="food-price">40.000đ</span>
-                <div class="view-photo-btn">Xem ảnh 🔍</div>
+                <span class="hint-badge">Chạm xem 🔍</span>
             </div>
         </div>
 
-        <!-- Món 3 -->
-        <div class="food-card" data-x="600" data-y="90"
+        <div class="food-card" id="card-2"
              data-title="Bánh Bèo Chén"
              data-price="35.000đ/khay"
-             data-desc="Bánh bèo mỏng dẻo, phủ đầy tôm chấy giòn rụm, mỡ hành béo ngậy. Chan mắm cay ngọt chuẩn vị."
+             data-desc="Bánh bèo mỏng dẻo, tôm chấy giòn rụm, mỡ hành béo ngậy ăn kèm nước mắm ớt cay ngọt đặc trưng."
              data-img="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80">
-            <div>
-                <div class="food-title">🥟 Bánh Bèo Chén</div>
-                <div class="food-desc">Tôm chấy giòn thơm, chan mắm cay ngọt.</div>
-            </div>
+            <div class="food-title">🥟 Bánh Bèo Chén</div>
+            <div class="food-desc">Tôm chấy giòn thơm, chan mắm cay ngọt.</div>
             <div class="food-footer">
                 <span class="food-price">35.000đ</span>
-                <div class="view-photo-btn">Xem ảnh 🔍</div>
+                <span class="hint-badge">Chạm xem 🔍</span>
             </div>
         </div>
 
-        <!-- Món 4 -->
-        <div class="food-card" data-x="800" data-y="160"
+        <div class="food-card" id="card-3"
              data-title="Nem Lụi Nướng Than"
              data-price="60.000đ/phần"
-             data-desc="Nem lụi nướng than hoa thơm nức, ăn kèm rau sống thơm phức và nước lèo đậu bùi ngọt đặc trưng."
+             data-desc="Nem lụi bọc sả nướng than hoa thơm phức, cuốn kèm bánh tráng, rau sống và nước lèo đậu phộng bùi béo."
              data-img="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80">
-            <div>
-                <div class="food-title">🌯 Nem Lụi Nướng</div>
-                <div class="food-desc">Nướng than hoa, kèm rau sống và nước lèo bùi.</div>
-            </div>
+            <div class="food-title">🌯 Nem Lụi Nướng</div>
+            <div class="food-desc">Nướng than hoa, kèm rau sống và nước lèo bùi.</div>
             <div class="food-footer">
                 <span class="food-price">60.000đ</span>
-                <div class="view-photo-btn">Xem ảnh 🔍</div>
+                <span class="hint-badge">Chạm xem 🔍</span>
             </div>
         </div>
 
-        <!-- Món 5 -->
-        <div class="food-card" data-x="450" data-y="220"
-             data-title="Bánh Nậm & Lọc Huế"
+        <div class="food-card" id="card-4"
+             data-title="Bánh Nậm & Bánh Lọc"
              data-price="50.000đ/đĩa"
-             data-desc="Gói lá chuối thơm, nhân tôm thịt đậm đà. Bánh lọc trong suốt, bánh nậm mềm mịn."
+             data-desc="Bánh lọc trong suốt dẻo dai lộ nhân tôm cùng bánh nậm mềm tan gói trọn trong lá chuối xanh thơm mát."
              data-img="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80">
-            <div>
-                <div class="food-title">🍘 Bánh Nậm & Lọc</div>
-                <div class="food-desc">Chuẩn vị quê nhà, tôm thịt đậm đà.</div>
-            </div>
+            <div class="food-title">🍘 Bánh Nậm & Lọc</div>
+            <div class="food-desc">Gói lá chuối, nhân tôm thịt đậm đà chuẩn vị.</div>
             <div class="food-footer">
                 <span class="food-price">50.000đ</span>
-                <div class="view-photo-btn">Xem ảnh 🔍</div>
+                <span class="hint-badge">Chạm xem 🔍</span>
             </div>
         </div>
     </div>
 
-    <!-- POPUP (MODAL) CHỈ TIẾT -->
+    <!-- POPUP XEM CHI TIẾT ẢNH -->
     <div id="modalOverlay" class="modal-overlay">
         <div class="modal-content">
             <img id="modalImg" class="modal-img" src="" alt="Món ăn">
@@ -320,26 +333,48 @@
                 </div>
                 <p id="modalDesc" class="modal-desc"></p>
                 <div class="modal-actions">
-                    <button class="close-btn" onclick="closeModal()">Đóng</button>
-                    <!-- Link đặt món (có thể đổi thành Zalo/Messenger) -->
-                    <a href="tel:0900000000" class="order-btn">Gọi Đặt Món</a>
+                    <button class="close-btn" id="closeBtn">Đóng</button>
+                    <a href="tel:0900000000" class="order-btn">Đặt Món Ngay</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPT VẬT LÝ VÀ SỬA LỖI CHẠM -->
     <script>
+        // TẠO TOPPING DI CHUYỂN Ở NỀN
+        const toppingLayer = document.getElementById('topping-layer');
+        // Các biểu tượng đại diện cho Topping đặc trưng miền Trung
+        const toppingIcons = ['🦐', '🥩', '🌶️', '🥟', '🍋', '🌿', '🧄', '🥢', '🍘'];
+        const totalToppings = 16; // Số lượng vật phẩm nền
+
+        for (let i = 0; i < totalToppings; i++) {
+            const item = document.createElement('div');
+            item.className = 'topping-item';
+            item.innerText = toppingIcons[i % toppingIcons.length];
+            
+            // Phân bổ vị trí ngẫu nhiên
+            item.style.left = Math.random() * 90 + 'vw';
+            item.style.top = Math.random() * 85 + 'vh';
+            
+            // Thời gian và quỹ đạo bay ngẫu nhiên (từ 8s đến 18s)
+            const duration = Math.random() * 10 + 8;
+            const delay = Math.random() * 5;
+            item.style.animationDuration = duration + 's';
+            item.style.animationDelay = '-' + delay + 's';
+            
+            toppingLayer.appendChild(item);
+        }
+
+        // VẬT LÝ VÀ CHẠM XEM ẢNH CHO THẺ
         const { Engine, Runner, Bodies, Composite, Mouse, MouseConstraint, Events } = Matter;
 
         const engine = Engine.create();
         const world = engine.world;
-        engine.world.gravity.y = 0.8; // Trọng lực rơi
+        engine.world.gravity.y = 0.8;
 
         const width = window.innerWidth;
         const height = window.innerHeight;
 
-        // Tường bao
         const wallOptions = { isStatic: true, render: { visible: false } };
         const ground = Bodies.rectangle(width / 2, height + 30, width * 2, 60, wallOptions);
         const leftWall = Bodies.rectangle(-30, height / 2, 60, height * 2, wallOptions);
@@ -351,75 +386,77 @@
         const cards = document.querySelectorAll('.food-card');
         const cardBodies = [];
 
-        cards.forEach((card) => {
-            const startX = parseFloat(card.getAttribute('data-x')) || Math.random() * (width - 240) + 120;
-            const startY = parseFloat(card.getAttribute('data-y')) || Math.random() * 150 + 80;
+        cards.forEach((card, index) => {
+            const startX = 100 + (index * ((width - 200) / 4));
+            const startY = 80 + (index % 2) * 60;
 
-            // Vật thể vật lý trùng với kích thước thẻ (200x120)
-            const body = Bodies.rectangle(startX, startY, 200, 120, {
-                restitution: 0.5, // Độ nảy
+            const body = Bodies.rectangle(startX, startY, 210, 115, {
+                restitution: 0.45,
                 friction: 0.3,
                 density: 0.002
             });
 
+            body.customData = card;
             cardBodies.push({ element: card, body: body });
             Composite.add(world, body);
-
-            // SỬA LỖI: Chỉ mở ảnh khi Click/Tap đúng vào nút "Xem ảnh"
-            const btn = card.querySelector('.view-photo-btn');
-            
-            // Xử lý cho cả Chuột (Click) và Cảm ứng (Touch)
-            const handleShowDetail = (e) => {
-                e.stopPropagation(); // QUAN TRỌNG: Ngăn chặn kéo thẻ khi chạm vào nút này
-                e.preventDefault();
-                openModal(card);
-            };
-
-            // Dùng click event (Mobile browser tự convert Tap thành Click mà k bị tranh chấp với Matter.js nếu stopPropagation)
-            btn.addEventListener('click', handleShowDetail);
-            // Thêm touchend để đảm bảo nhạy trên Mobile mà không bị Matter.js block
-            btn.addEventListener('touchend', handleShowDetail);
         });
 
-        // Xử lý kéo thả bằng chuột/ngón tay (Cho toàn bộ thẻ, trừ nút Xem ảnh)
         const mouse = Mouse.create(document.body);
         const mouseConstraint = MouseConstraint.create(engine, {
             mouse: mouse,
-            constraint: {
-                stiffness: 0.2,
-                render: { visible: false }
-            }
+            constraint: { stiffness: 0.2, render: { visible: false } }
         });
         Composite.add(world, mouseConstraint);
+
+        let startPoint = { x: 0, y: 0 };
+        let startTime = 0;
+        let activeBody = null;
+
+        Events.on(mouseConstraint, 'startdrag', (evt) => {
+            activeBody = evt.body;
+            startPoint = { x: mouse.position.x, y: mouse.position.y };
+            startTime = Date.now();
+        });
+
+        Events.on(mouseConstraint, 'enddrag', (evt) => {
+            if (activeBody && activeBody.customData) {
+                const distanceMoved = Math.hypot(
+                    mouse.position.x - startPoint.x,
+                    mouse.position.y - startPoint.y
+                );
+                const duration = Date.now() - startTime;
+
+                if (distanceMoved < 15 && duration < 350) {
+                    openModal(activeBody.customData);
+                }
+            }
+            activeBody = null;
+        });
 
         const runner = Runner.create();
         Runner.run(runner, engine);
 
-        // Đồng bộ thẻ HTML với vật thể vật lý
         Events.on(engine, 'afterUpdate', () => {
             cardBodies.forEach(({ element, body }) => {
                 const { x, y } = body.position;
                 const angle = body.angle;
-                // Cập nhật vị trí và góc xoay
-                element.style.transform = `translate(${x - 100}px, ${y - 60}px) rotate(${angle}rad)`;
+                element.style.transform = `translate(${x - 105}px, ${y - 57.5}px) rotate(${angle}rad)`;
             });
         });
 
-        // LOGIC POPUP (MODAL)
+        // MODAL HIỂN THỊ
         const modalOverlay = document.getElementById('modalOverlay');
         const modalImg = document.getElementById('modalImg');
         const modalTitle = document.getElementById('modalTitle');
         const modalPrice = document.getElementById('modalPrice');
         const modalDesc = document.getElementById('modalDesc');
+        const closeBtn = document.getElementById('closeBtn');
 
-        function openModal(card) {
-            // Lấy dữ liệu từ thẻ được chạm
-            modalImg.src = card.getAttribute('data-img');
-            modalTitle.innerText = card.getAttribute('data-title');
-            modalPrice.innerText = card.getAttribute('data-price');
-            modalDesc.innerText = card.getAttribute('data-desc');
-            
-            // Hiện Popup
+        function openModal(cardElement) {
+            modalImg.src = cardElement.getAttribute('data-img');
+            modalTitle.innerText = cardElement.getAttribute('data-title');
+            modalPrice.innerText = cardElement.getAttribute('data-price');
+            modalDesc.innerText = cardElement.getAttribute('data-desc');
             modalOverlay.classList.add('active');
         }
 
@@ -427,16 +464,9 @@
             modalOverlay.classList.remove('active');
         }
 
-        // Đóng khi bấm ra ngoài vùng nội dung
+        closeBtn.addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', (e) => {
             if (e.target === modalOverlay) closeModal();
-        });
-
-        // Đóng khi bấm phím Esc
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-                closeModal();
-            }
         });
     </script>
 </body>
