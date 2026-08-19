@@ -197,7 +197,7 @@
             font-weight: 600;
         }
 
-        /* 4. POPUP CHI TIẾT */
+        /* 4. POPUP MODAL ĐƯỢC TỐI ƯU CƠ CHẾ CLICK */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -208,7 +208,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
+            z-index: 99999; /* Đảm bảo nổi lên trên cùng */
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.25s ease;
@@ -216,7 +216,7 @@
         }
         .modal-overlay.active {
             opacity: 1;
-            pointer-events: auto;
+            pointer-events: auto; /* Bật nhận sự kiện click */
         }
         .modal-content {
             background: #ffffff;
@@ -227,6 +227,8 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.4);
             transform: scale(0.9);
             transition: transform 0.25s ease;
+            position: relative;
+            pointer-events: auto;
         }
         .modal-overlay.active .modal-content {
             transform: scale(1);
@@ -268,16 +270,22 @@
         }
         .close-btn {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ddd;
             background: #f1f2f6;
             border-radius: 8px;
-            font-weight: 600;
+            font-weight: bold;
+            font-size: 0.9rem;
             cursor: pointer;
+            pointer-events: auto;
+            text-align: center;
+        }
+        .close-btn:active {
+            background: #e2e4e8;
         }
         .order-btn {
             flex: 2;
-            padding: 10px;
+            padding: 12px;
             background: #b8332a;
             color: white;
             border: none;
@@ -286,15 +294,15 @@
             text-align: center;
             text-decoration: none;
             cursor: pointer;
+            pointer-events: auto;
         }
     </style>
 </head>
 <body>
 
-    <!-- THẺ AUDIO: Ưu tiên file nội bộ nhac-mien-trung.mp3.mp3 bạn tải lên GitHub -->
+    <!-- THẺ AUDIO: Sử dụng file nhac-mien-trung.mp3.mp3 theo đúng tên của bạn -->
     <audio id="bgMusic" loop preload="auto">
         <source src="./nhac-mien-trung.mp3.mp3" type="audio/mpeg">
-        <source src="https://ia801503.us.archive.org/15/items/audio-traditional-vietnam/vietnam_traditional_melody.mp3" type="audio/mpeg">
     </audio>
 
     <div id="topping-layer"></div>
@@ -322,9 +330,9 @@
 
     <div id="cards-container"></div>
 
-    <!-- POPUP XEM CHI TIẾT -->
+    <!-- POPUP XEM CHI TIẾT ĐÃ FIX NÚT ĐÓNG -->
     <div id="modalOverlay" class="modal-overlay">
-        <div class="modal-content">
+        <div class="modal-content" onclick="event.stopPropagation()">
             <img id="modalImg" class="modal-img" src="" alt="Món ăn">
             <div class="modal-body">
                 <div class="modal-header">
@@ -333,7 +341,7 @@
                 </div>
                 <p id="modalDesc" class="modal-desc"></p>
                 <div class="modal-actions">
-                    <button class="close-btn" id="closeBtn">Đóng</button>
+                    <button class="close-btn" id="closeBtn" type="button">Đóng</button>
                     <a href="tel:0900000000" class="order-btn">Đặt Món Ngay</a>
                 </div>
             </div>
@@ -421,7 +429,6 @@
             }
         }
 
-        // Chạm lần đầu tự động kích hoạt cả tiếng va chạm và nhạc nền
         const autoPlayOnFirstTouch = () => {
             initAudioContext();
             if (!isMusicPlaying) {
@@ -644,7 +651,9 @@
             });
         });
 
-        // MODAL
+        // ==========================================
+        // 5. XỬ LÝ POPUP & SỬA LỖI NÚT ĐÓNG DỨT ĐIỂM
+        // ==========================================
         const modalOverlay = document.getElementById('modalOverlay');
         const modalImg = document.getElementById('modalImg');
         const modalTitle = document.getElementById('modalTitle');
@@ -661,13 +670,26 @@
             modalOverlay.classList.add('active');
         }
 
-        function closeModal() {
+        function closeModal(e) {
+            if (e) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
             modalOverlay.classList.remove('active');
         }
 
+        // Bắt mọi sự kiện đóng (Click, Chạm, Phím Esc)
         closeBtn.addEventListener('click', closeModal);
+        closeBtn.addEventListener('touchend', closeModal);
+        
         modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) closeModal();
+            if (e.target === modalOverlay) closeModal(e);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                closeModal();
+            }
         });
 
         loadRegionFoods('danang_quangnam');
