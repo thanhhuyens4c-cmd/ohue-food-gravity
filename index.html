@@ -1617,28 +1617,19 @@
             loadRegionFoods(regionKey);
         }
 
-        const physicsContainer = document.getElementById('physics-container');
-        const mouse = Mouse.create(physicsContainer);
-
-        const mouseConstraint = MouseConstraint.create(engine, {
-            mouse,
-            collisionFilter: {
-                mask: 0xFFFFFFFF
-            },
-            constraint: {
-                stiffness: 0.18,
-                angularStiffness: 0.15,
-                render: { visible: false }
-            }
-        });
-
-        Composite.add(world, mouseConstraint);
-
+        // ==========================================
+        // KÉO THẢ CARD - NATIVE POINTER EVENTS
+        // Không dùng MouseConstraint cho thao tác kéo để tránh
+        // xung đột với header, nút bấm và giỏ ở layer phía trên.
+        // ==========================================
         let startPoint = { x: 0, y: 0 };
         let startTime = 0;
         let draggedBody = null;
+        let dragOffset = { x: 0, y: 0 };
         let cartHoverState = false;
+        let suppressNextClick = false;
 
+        const physicsContainer = document.getElementById('physics-container');
         const cartElement = document.getElementById('bamboo-cart-zone');
         let cartRectCache = cartElement.getBoundingClientRect();
 
@@ -1654,96 +1645,117 @@
 
         function isPointNearCart(x, y) {
             return (
-                x >= cartRectCache.left - 60 &&
-                x <= cartRectCache.right + 60 &&
-                y >= cartRectCache.top - 60 &&
-                y <= cartRectCache.bottom + 60
+                x >= cartRectCache.left - 70 &&
+                x <= cartRectCache.right + 70 &&
+                y >= cartRectCache.top - 70 &&
+                y <= cartRectCache.bottom + 70
             );
         }
 
-        Events.on(mouseConstraint, 'startdrag', (evt) => {
-            if (isModalOpen) return;
+        function getTopBodyAtPoint(x, y) {
+            const bodies = cardBodies.map(cb => cb.body);
+            const hits = Query.point(bodies, { x, y });
+            if (!hits.length) return null;
+            hits.sort((a, b) => b.renderOrder - a.renderOrder);
+            return hits[0];
+        }
+
+        function isInteractiveTarget(target) {
+            if (!target) return false;
+            return !!target.closest(
+                'button, a, input, select, textarea, #bamboo-cart-zone, ' +
+                '.modal-overlay, .cart-modal-overlay, .bill-modal-overlay, .wheel-modal-overlay'
+            );
+        }
+
+        document.addEventListener('pointerdown', (event) => {
+            if (isModalOpen || isInteractiveTarget(event.target)) return;
+            if (event.pointerType === 'mouse' && event.button !== 0) return;
+
+            const body = getTopBodyAtPoint(event.clientX, event.clientY);
+            if (!body || !body.customData || !body.foodRawData) return;
 
             initAudioContext();
             updateCartRectCache();
 
-            startPoint = { x: mouse.position.x, y: mouse.position.y };
+            draggedBody = body;
+            startPoint = { x: event.clientX, y: event.clientY };
             startTime = performance.now();
-            draggedBody = evt.body;
+            dragOffset = {
+                x: body.position.x - event.clientX,
+                y: body.position.y - event.clientY
+            };
 
-            if (draggedBody?.customData) {
-                draggedBody.customData.classList.add('dragging-to-cart');
-            }
-        });
+            body.isSleeping = false;
+            body.customData.classList.add('dragging-to-cart');
+            physicsContainer.setPointerCapture?.(event.pointerId);
+            event.preventDefault();
+        }, { passive: false });
 
-        // Chỉ đọc bounding rect một lần khi bắt đầu kéo / resize,
-        // không gọi getBoundingClientRect() trên mỗi physics tick.
-        Events.on(engine, 'afterUpdate', () => {
-            if (isModalOpen || !draggedBody) return;
+        document.addEventListener('pointermove', (event) => {
+            if (!draggedBody || isModalOpen) return;
 
-            setCartHover(isPointNearCart(mouse.position.x, mouse.position.y));
+            const x = event.clientX + dragOffset.x;
+            const y = event.clientY + dragOffset.y;
+
+            Body.setPosition(draggedBody, { x, y });
+            Body.setVelocity(draggedBody, { x: 0, y: 0 });
+            Body.setAngularVelocity(draggedBody, 0);
+
+            setCartHover(isPointNearCart(event.clientX, event.clientY));
             requestCardRender();
-        });
+            event.preventDefault();
+        }, { passive: false });
 
-        Events.on(mouseConstraint, 'enddrag', () => {
-            if (isModalOpen) return;
+        function finishNativeDrag(event) {
+            if (!draggedBody) return;
 
-            updateCartRectCache();
-
-            const mouseX = mouse.position.x;
-            const mouseY = mouse.position.y;
-            const droppedIntoCart = isPointNearCart(mouseX, mouseY);
             const targetBody = draggedBody;
+            const mouseX = event.clientX;
+            const mouseY = event.clientY;
+            const droppedIntoCart = isPointNearCart(mouseX, mouseY);
+            const distanceMoved = Math.hypot(
+                mouseX - startPoint.x,
+                mouseY - startPoint.y
+            );
+            const duration = performance.now() - startTime;
 
-            if (targetBody?.foodRawData && droppedIntoCart) {
+            targetBody.customData?.classList.remove('dragging-to-cart');
+            setCartHover(false);
+
+            if (targetBody.foodRawData && droppedIntoCart && distanceMoved >= 8) {
                 addToCart(targetBody.foodRawData);
 
                 const el = targetBody.customData;
+                Composite.remove(world, targetBody);
+                cardBodies = cardBodies.filter(cb => cb.body !== targetBody);
 
+                suppressNextClick = true;
                 if (el) {
                     el.style.transition = 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.25s ease';
                     el.style.transform =
-                        `translate3d(${cartRectCache.left}px, ${cartRectCache.top}px, 0) scale(0.05) rotate(720deg)`;
+                        `translate3d(${cartRectCache.left + cartRectCache.width / 2 - cardW / 2}px, ${cartRectCache.top + cartRectCache.height / 2 - cardH / 2}px, 0) scale(0.05) rotate(720deg)`;
                     el.style.opacity = '0';
-
-                    // Xóa ngay khỏi physics world, tránh body vô hình tiếp tục tính toán.
-                    Composite.remove(world, targetBody);
-                    cardBodies = cardBodies.filter(cb => cb.body !== targetBody);
-
-                    setTimeout(() => {
-                        el.remove();
-                    }, 260);
-                } else {
-                    Composite.remove(world, targetBody);
-                    cardBodies = cardBodies.filter(cb => cb.body !== targetBody);
+                    setTimeout(() => el.remove(), 260);
                 }
-            } else {
-                const distanceMoved = Math.hypot(
-                    mouseX - startPoint.x,
-                    mouseY - startPoint.y
-                );
-                const duration = performance.now() - startTime;
-
-                if (distanceMoved < 12 && duration < 300) {
-                    const bodies = cardBodies.map(cb => cb.body);
-                    const allUnderCursor = Query.point(bodies, mouse.position);
-
-                    if (allUnderCursor.length) {
-                        allUnderCursor.sort((a, b) => b.renderOrder - a.renderOrder);
-                        const topmostBody = allUnderCursor[0];
-
-                        if (topmostBody?.customData) {
-                            openModal(topmostBody.customData, topmostBody.foodRawData);
-                        }
-                    }
-                }
+            } else if (distanceMoved < 12 && duration < 350) {
+                openModal(targetBody.customData, targetBody.foodRawData);
             }
 
-            targetBody?.customData?.classList.remove('dragging-to-cart');
-            setCartHover(false);
             draggedBody = null;
             requestCardRender();
-        });
+        }
+
+        document.addEventListener('pointerup', finishNativeDrag, { passive: false });
+        document.addEventListener('pointercancel', finishNativeDrag, { passive: false });
+
+        // Khi thả món vào giỏ, không để onclick của giỏ mở modal ngay lập tức.
+        document.addEventListener('click', (event) => {
+            if (!suppressNextClick) return;
+            suppressNextClick = false;
+            event.preventDefault();
+            event.stopPropagation();
+        }, true);
 
         const runner = Runner.create({
             isFixed: true,
