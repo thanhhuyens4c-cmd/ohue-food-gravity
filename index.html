@@ -2,20 +2,38 @@
 <html lang="vi">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z1275YFSCM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z1275YFSCM"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-Z1275YFSCM');
-</script>
+      gtag('config', 'G-Z1275YFSCM');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ẩm Thực Miền Trung - Cửa Hàng O Huệ</title>
+    <title>Ẩm Thực O Huệ - Đượm Vị Quê Hương Miền Trung</title>
+    
+    <!-- Google Fonts: Playfair Display & Quicksand -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Thư viện vật lý Matter.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    
     <style>
+        :root {
+            --primary: #8c2d19;       /* Đỏ nâu đất nung Cố Đô */
+            --primary-dark: #5c180a;  /* Nâu gỗ gụ trầm */
+            --accent: #d4a359;        /* Vàng lúa chín / rơm rạ */
+            --accent-light: #f3dfb4;  /* Màu mây tre đan nhạt */
+            --leaf: #2d5a27;          /* Xanh lá chuối nếp */
+            --bg-paper: #f7f2e7;      /* Màu giấy dó truyền thống */
+            --text-main: #2c2523;     /* Đen mun than củi */
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -25,15 +43,44 @@
             -webkit-touch-callout: none;
             -webkit-tap-highlight-color: transparent;
         }
+
         html, body {
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #fcf8f2;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-paper);
+            font-family: 'Quicksand', sans-serif;
+            color: var(--text-main);
         }
 
-        /* 1. LỚP TOPPING NỀN */
+        /* 1. KHÔNG GIAN ĐỒNG QUÊ CHÂN THỰC Ở NỀN */
+        .scenery-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 50% 30%, rgba(247, 242, 231, 0.4) 0%, rgba(218, 197, 163, 0.75) 100%),
+                url('https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1800&q=80') center center / cover no-repeat;
+            filter: saturate(0.85) contrast(1.05);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .scenery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(#8c2d19 0.75px, transparent 0.75px);
+            background-size: 24px 24px;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 1;
+        }
+
         #topping-layer {
             position: absolute;
             top: 0;
@@ -41,137 +88,170 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 1;
+            z-index: 2;
             overflow: hidden;
         }
         .topping-item {
             position: absolute;
-            font-size: 1.5rem;
-            opacity: 0.45;
+            font-size: 1.6rem;
+            opacity: 0.55;
             animation: floatAround linear infinite;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.12));
             will-change: transform;
         }
         @keyframes floatAround {
-            0% { transform: translate3d(0, 0, 0) rotate(0deg); }
-            50% { transform: translate3d(50px, 25px, 0) rotate(180deg); }
-            100% { transform: translate3d(0, 0, 0) rotate(360deg); }
+            0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.95); }
+            50% { transform: translate3d(45px, 20px, 0) rotate(180deg) scale(1.05); }
+            100% { transform: translate3d(0, 0, 0) rotate(360deg) scale(0.95); }
         }
 
-        /* 2. THANH HEADER & MENU (BẢO ĐẢM NHẬN CẢM ỨNG 100%) */
+        /* 2. THANH HEADER */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: #b8332a;
-            color: #ffffff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%);
+            border-bottom: 2px solid var(--accent);
+            box-shadow: 0 4px 15px rgba(44, 24, 16, 0.35);
             z-index: 1000;
-            pointer-events: auto !important; /* Tuyệt đối không bị Matter.js chặn */
+            pointer-events: auto !important;
         }
         .top-bar {
-            padding: 8px 12px;
+            padding: 8px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
+            border-bottom: 1px solid rgba(212, 163, 89, 0.25);
         }
-        .top-bar h1 {
-            font-size: 0.95rem;
-            font-weight: 700;
+        .brand-block {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .brand-logo-icon {
+            font-size: 1.3rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        .brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #fff9eb;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+        .brand-sub {
+            font-size: 0.65rem;
+            color: var(--accent-light);
+            display: block;
+            margin-top: -2px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
         .header-controls {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
         .wheel-nav-btn {
-            background: linear-gradient(135deg, #ff9f43, #ee5253);
-            border: 1px solid #ffeaa7;
+            background: linear-gradient(135deg, #c0392b, #d35400);
+            border: 1px solid var(--accent);
             color: #ffffff;
-            padding: 6px 10px;
-            border-radius: 14px;
-            font-weight: bold;
-            font-size: 0.72rem;
+            padding: 6px 12px;
+            border-radius: 18px;
+            font-weight: 700;
+            font-size: 0.75rem;
             cursor: pointer;
-            pointer-events: auto;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         .music-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.35);
-            color: #ffffff;
-            padding: 6px 8px;
-            border-radius: 14px;
-            font-size: 0.72rem;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(212, 163, 89, 0.4);
+            color: #fff9eb;
+            padding: 6px 10px;
+            border-radius: 18px;
+            font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
-            pointer-events: auto;
         }
         .music-btn.playing {
-            background: #f5c542;
-            color: #4a120e;
+            background: var(--accent);
+            color: var(--primary-dark);
+            border-color: #fff;
+            font-weight: 700;
         }
         .contact-btn {
-            background: #f5c542;
-            color: #4a120e;
-            padding: 6px 10px;
-            border-radius: 14px;
-            font-weight: bold;
-            font-size: 0.72rem;
+            background: var(--accent);
+            color: var(--primary-dark);
+            padding: 6px 12px;
+            border-radius: 18px;
+            font-weight: 800;
+            font-size: 0.75rem;
             text-decoration: none;
-            pointer-events: auto;
+            border: 1px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
 
-        /* Menu tỉnh thành cuộn ngang mượt mà */
+        /* Menu tỉnh thành */
         .category-menu {
             display: flex;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             white-space: nowrap;
-            padding: 6px 10px;
-            gap: 6px;
+            padding: 7px 12px;
+            gap: 8px;
             scrollbar-width: none;
             pointer-events: auto !important;
             touch-action: pan-x !important;
+            background: rgba(44, 24, 16, 0.35);
         }
         .category-menu::-webkit-scrollbar {
             display: none;
         }
         .cat-btn {
-            background: rgba(255, 255, 255, 0.18);
-            border: 1px solid rgba(255, 255, 255, 0.35);
-            color: #ffffff;
-            padding: 6px 12px;
-            border-radius: 16px;
+            background: rgba(247, 242, 231, 0.15);
+            border: 1px solid rgba(212, 163, 89, 0.4);
+            color: #fff9eb;
+            padding: 5px 14px;
+            border-radius: 14px;
             font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
-            pointer-events: auto;
             flex-shrink: 0;
+            transition: all 0.2s ease;
         }
         .cat-btn.active {
-            background: #f5c542;
-            color: #4a120e;
-            border-color: #f5c542;
-            font-weight: bold;
+            background: linear-gradient(180deg, #f3dfb4 0%, var(--accent) 100%);
+            color: var(--primary-dark);
+            border-color: #ffffff;
+            font-weight: 800;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
         }
 
         .instruction {
             position: fixed;
-            bottom: 10px;
+            bottom: 12px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.75);
-            color: #ffffff;
-            padding: 5px 12px;
-            border-radius: 16px;
-            font-size: 0.7rem;
+            background: rgba(44, 24, 16, 0.85);
+            border: 1px solid var(--accent);
+            color: #fff9eb;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 600;
             pointer-events: none;
             z-index: 100;
             white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
-        /* 3. KHUNG CHỨA VẬT LÝ */
+        /* 3. KHUNG VẬT LÝ */
         #physics-container {
             position: absolute;
             top: 0;
@@ -185,63 +265,75 @@
         /* 4. THẺ MÓN ĂN */
         .food-card {
             position: absolute;
-            background: #ffffff;
-            border: 1.5px solid #b8332a;
-            border-radius: 10px;
-            padding: 6px 8px;
+            background: #fffdf9;
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 8px 10px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 6px 14px rgba(60, 30, 15, 0.2), inset 0 0 0 1px rgba(140, 45, 25, 0.1);
             pointer-events: none;
             z-index: 20;
             will-change: transform;
-            width: 145px;
-            height: 85px;
+            width: 155px;
+            height: 90px;
+            background-image: radial-gradient(#d4a359 0.5px, transparent 0.5px);
+            background-size: 8px 8px;
         }
         @media (min-width: 768px) {
             .food-card {
-                width: 190px;
-                height: 105px;
-                padding: 8px 10px;
-                border-width: 2px;
+                width: 195px;
+                height: 110px;
+                padding: 10px 12px;
+                border-width: 2.5px;
             }
         }
+        .food-card-header {
+            display: flex;
+            flex-direction: column;
+        }
         .food-title {
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: #b8332a;
+            font-family: 'Playfair Display', serif;
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--primary);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         @media (min-width: 768px) {
-            .food-title { font-size: 0.9rem; }
+            .food-title { font-size: 1rem; }
         }
         .food-location {
-            font-size: 0.62rem;
-            color: #888;
-            font-weight: 500;
+            font-size: 0.65rem;
+            color: #7d6b5c;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 2px;
         }
         .food-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px dashed #eee;
-            padding-top: 3px;
+            border-top: 1px dashed #d9c8b4;
+            padding-top: 4px;
         }
         .food-price {
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: #27ae60;
+            font-family: 'Playfair Display', serif;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--leaf);
         }
         .hint-badge {
-            background: #fdf2e9;
-            color: #d35400;
-            font-size: 0.6rem;
-            padding: 1px 4px;
-            border-radius: 3px;
-            font-weight: 600;
+            background: #fbf1e0;
+            color: var(--primary);
+            border: 1px solid var(--accent);
+            font-size: 0.62rem;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-weight: 700;
         }
 
         /* 5. MODAL VÒNG QUAY */
@@ -251,137 +343,146 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(35, 18, 11, 0.85);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 99998;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.2s ease;
+            transition: opacity 0.25s ease;
             padding: 12px;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(4px);
         }
         .wheel-modal-overlay.active {
             opacity: 1;
             pointer-events: auto;
         }
         .wheel-modal-card {
-            background: #ffffff;
+            background: #fdfbf7;
             width: 100%;
-            max-width: 340px;
-            border-radius: 18px;
-            padding: 16px;
+            max-width: 350px;
+            border-radius: 20px;
+            border: 3px solid var(--accent);
+            padding: 20px 16px;
             text-align: center;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
             position: relative;
             transform: scale(0.95);
-            transition: transform 0.2s ease;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background-image: radial-gradient(#d4a359 0.75px, transparent 0.75px);
+            background-size: 16px 16px;
         }
         .wheel-modal-overlay.active .wheel-modal-card {
             transform: scale(1);
         }
         .wheel-title {
-            font-size: 1.15rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
             font-weight: 800;
-            color: #b8332a;
+            color: var(--primary);
             margin-bottom: 2px;
         }
         .wheel-subtitle {
-            font-size: 0.75rem;
-            color: #666;
-            margin-bottom: 10px;
+            font-size: 0.78rem;
+            color: #6d5849;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
         .wheel-wrapper {
             position: relative;
-            width: 240px;
-            height: 240px;
-            margin: 0 auto 12px;
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 15px;
         }
         @media (min-width: 768px) {
-            .wheel-wrapper { width: 280px; height: 280px; }
+            .wheel-wrapper { width: 290px; height: 290px; }
         }
         #wheelCanvas {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 20px rgba(60, 30, 15, 0.35);
+            border: 3px solid var(--accent);
             transition: transform 4s cubic-bezier(0.15, 0.9, 0.2, 1);
             will-change: transform;
         }
         .wheel-pointer {
             position: absolute;
-            top: -10px;
+            top: -12px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 12px solid transparent;
-            border-right: 12px solid transparent;
-            border-top: 20px solid #e74c3c;
-            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-top: 24px solid var(--primary);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
             z-index: 10;
         }
         .spin-action-btn {
-            background: linear-gradient(135deg, #b8332a, #e74c3c);
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 20px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #fff9eb;
+            border: 2px solid var(--accent);
+            padding: 11px 28px;
+            border-radius: 25px;
             font-size: 0.95rem;
-            font-weight: bold;
+            font-weight: 800;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.5px;
             cursor: pointer;
-            box-shadow: 0 3px 10px rgba(184, 51, 42, 0.35);
+            box-shadow: 0 4px 12px rgba(92, 24, 10, 0.4);
         }
         .spin-action-btn:disabled {
-            background: #bbb;
+            background: #9e8d83;
+            border-color: #ccc;
             box-shadow: none;
         }
         .close-wheel-btn {
             position: absolute;
-            top: 6px;
-            right: 10px;
+            top: 8px;
+            right: 12px;
             background: none;
             border: none;
             font-size: 1.8rem;
-            color: #888;
+            color: #8c7362;
             cursor: pointer;
-            padding: 6px;
             line-height: 1;
             z-index: 20;
         }
 
-        /* 6. POPUP CHI TIẾT MÓN ĂN VỚI NÚT ĐÓNG DẤU X */
+        /* 6. POPUP CHI TIẾT */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(35, 18, 11, 0.85);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 99999;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.2s ease;
-            padding: 15px;
-            backdrop-filter: blur(2px);
+            transition: opacity 0.25s ease;
+            padding: 16px;
+            backdrop-filter: blur(4px);
         }
         .modal-overlay.active {
             opacity: 1;
             pointer-events: auto;
         }
         .modal-content {
-            background: #ffffff;
+            background: #fffdf9;
             width: 100%;
-            max-width: 340px;
-            border-radius: 16px;
+            max-width: 350px;
+            border-radius: 20px;
+            border: 2.5px solid var(--accent);
             overflow: hidden;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.5);
             transform: scale(0.95);
-            transition: transform 0.2s ease;
+            transition: transform 0.25s ease;
             position: relative;
             pointer-events: auto;
         }
@@ -389,16 +490,15 @@
             transform: scale(1);
         }
 
-        /* NÚT ĐÓNG DẤU "X" NẰM GÓC TRÊN BÊN PHẢI */
         .modal-close-x {
             position: absolute;
             top: 10px;
             right: 10px;
-            width: 34px;
-            height: 34px;
-            background: rgba(0, 0, 0, 0.6);
-            color: #ffffff;
-            border: none;
+            width: 36px;
+            height: 36px;
+            background: rgba(44, 24, 16, 0.75);
+            border: 1.5px solid var(--accent);
+            color: #fff9eb;
             border-radius: 50%;
             font-size: 1.4rem;
             font-weight: bold;
@@ -407,75 +507,92 @@
             align-items: center;
             cursor: pointer;
             z-index: 100;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
             pointer-events: auto !important;
         }
         .modal-close-x:active {
-            background: rgba(0, 0, 0, 0.85);
+            background: var(--primary-dark);
             transform: scale(0.92);
         }
 
         .modal-img {
             width: 100%;
-            height: 185px;
+            height: 195px;
             object-fit: cover;
             display: block;
+            border-bottom: 2px solid var(--accent);
         }
         .modal-body {
-            padding: 14px;
+            padding: 16px;
         }
         .modal-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
+            align-items: baseline;
+            margin-bottom: 6px;
         }
         .modal-title {
-            font-size: 1.05rem;
-            font-weight: bold;
-            color: #b8332a;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--primary);
         }
         .modal-price {
-            font-size: 1rem;
-            font-weight: bold;
-            color: #27ae60;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--leaf);
         }
         .modal-desc {
-            font-size: 0.8rem;
-            color: #555;
-            line-height: 1.35;
-            margin-bottom: 14px;
+            font-size: 0.82rem;
+            color: #554438;
+            line-height: 1.45;
+            margin-bottom: 16px;
+            font-weight: 500;
         }
         .order-btn-full {
             width: 100%;
             padding: 12px;
-            background: #b8332a;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 0.9rem;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: 1.5px solid var(--accent);
+            color: #fff9eb;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.5px;
             text-align: center;
             text-decoration: none;
             display: block;
+            box-shadow: 0 4px 10px rgba(92, 24, 10, 0.3);
         }
         .order-btn-full:active {
-            background: #962820;
+            transform: scale(0.98);
         }
     </style>
 </head>
 <body>
 
-    <!-- THẺ AUDIO -->
+    <!-- FILE NHẠC TRUYỀN THỐNG -->
     <audio id="bgMusic" loop preload="auto">
         <source src="./nhac-mien-trung.mp3.mp3" type="audio/mpeg">
     </audio>
 
+    <!-- NỀN ĐỒNG QUÊ MỘC MẠC -->
+    <div class="scenery-background"></div>
+    <div class="scenery-overlay"></div>
     <div id="topping-layer"></div>
 
+    <!-- HEADER -->
     <header>
         <div class="top-bar">
-            <h1>ẨM THỰC O HUỆ</h1>
+            <div class="brand-block">
+                <span class="brand-logo-icon">🏮</span>
+                <div>
+                    <h1 class="brand-name">Ẩm Thực O Huệ</h1>
+                    <span class="brand-sub">Hương Vị Quê Nhà Miền Trung</span>
+                </div>
+            </div>
             <div class="header-controls">
                 <button class="wheel-nav-btn" onclick="openWheelModal()">🎁 Hôm Nay Ăn Gì?</button>
                 <button class="music-btn" id="musicToggleBtn" onclick="toggleMusic()">
@@ -484,19 +601,18 @@
                 <a href="tel:0900000000" class="contact-btn">Đặt Món</a>
             </div>
         </div>
-        <!-- THANH MENU ĐÃ FIX CẢM ỨNG 100% -->
         <div class="category-menu">
             <button class="cat-btn active" onclick="switchRegion('danang_quangnam', this)">Đà Nẵng – Quảng Nam</button>
-            <button class="cat-btn" onclick="switchRegion('hue', this)">Huế</button>
+            <button class="cat-btn" onclick="switchRegion('hue', this)">Xứ Huế Cố Đô</button>
             <button class="cat-btn" onclick="switchRegion('quangngai_binhdinh', this)">Quảng Ngãi – Bình Định</button>
             <button class="cat-btn" onclick="switchRegion('phuyen_khanhhoa', this)">Phú Yên – Khánh Hòa</button>
             <button class="cat-btn" onclick="switchRegion('bactrungbo', this)">Bắc Trung Bộ</button>
         </div>
     </header>
 
-    <div class="instruction">👆 Chạm xem ảnh • Kéo ném tự do</div>
+    <div class="instruction">🌾 Chạm xem chi tiết món • Cầm ném tự do</div>
 
-    <!-- VÙNG TƯƠNG TÁC VẬT LÝ -->
+    <!-- KHUNG VẬT LÝ -->
     <div id="physics-container">
         <div id="cards-container"></div>
     </div>
@@ -505,8 +621,8 @@
     <div id="wheelModalOverlay" class="wheel-modal-overlay">
         <div class="wheel-modal-card">
             <button class="close-wheel-btn" onclick="closeWheelModal()">&times;</button>
-            <h2 class="wheel-title">🎡 HÔM NAY ĂN GÌ?</h2>
-            <p class="wheel-subtitle">Để O Huệ gợi ý món ngon cho bạn nhé!</p>
+            <h2 class="wheel-title">🎡 Hôm Nay Ăn Gì?</h2>
+            <p class="wheel-subtitle">Để O Huệ chọn giúp bạn món ngon đượm vị quê nhé!</p>
             <div class="wheel-wrapper">
                 <div class="wheel-pointer"></div>
                 <canvas id="wheelCanvas" width="600" height="600"></canvas>
@@ -515,10 +631,9 @@
         </div>
     </div>
 
-    <!-- POPUP CHI TIẾT MÓN ĂN VỚI NÚT ĐÓNG "X" -->
+    <!-- POPUP CHI TIẾT -->
     <div id="modalOverlay" class="modal-overlay" onclick="closeModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <!-- NÚT "X" ĐÓNG GÓC TRÊN BÊN PHẢI -->
             <button class="modal-close-x" onclick="closeModal()" type="button">&times;</button>
             <img id="modalImg" class="modal-img" src="" alt="Món ăn">
             <div class="modal-body">
@@ -559,10 +674,10 @@
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 const volume = Math.min(Math.max(intensity * 0.08, 0.02), 0.18);
-                const startFreq = 160 + Math.random() * 30;
+                const startFreq = 180 + Math.random() * 30;
 
                 osc.frequency.setValueAtTime(startFreq, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.07);
+                osc.frequency.exponentialRampToValueAtTime(35, audioCtx.currentTime + 0.07);
 
                 gain.gain.setValueAtTime(volume, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.07);
@@ -581,8 +696,8 @@
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(550, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.03);
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(140, audioCtx.currentTime + 0.03);
                 gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
                 osc.connect(gain);
@@ -665,33 +780,33 @@
         // ==========================================
         const menuData = {
             danang_quangnam: [
-                { title: "Mì Quảng", loc: "Đà Nẵng - Quảng Nam", price: "45.000đ", desc: "Sợi mì vàng óng, nước nhưỡng tôm thịt đậm đà ăn kèm bánh tráng mè nướng giòn.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
-                { title: "Cao Lầu Hội An", loc: "Hội An", price: "45.000đ", desc: "Sợi cao lầu tro củi đặc trưng, thịt xá xíu thơm lừng, da heo chiên giòn rụm.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
-                { title: "Cơm Gà Hội An", loc: "Hội An", price: "55.000đ", desc: "Cơm nấu nước luộc gà vàng ươm, thịt gà ta xé phay bóp gỏi hành tây chua ngọt.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Tráng Cuốn Thịt Heo", loc: "Đà Nẵng", price: "65.000đ", desc: "Thịt heo hai đầu da luộc mềm cuốn bánh tráng đại lộc chấm mắm nêm nguyên chất.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bê Thui Cầu Mống", loc: "Quảng Nam", price: "90.000đ", desc: "Thịt bê tái mềm ngọt bọc da giòn thấu, chấm mắm nêm pha tỏi ớt mè rang.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Nem Nướng", loc: "Đà Nẵng", price: "45.000đ", desc: "Nem thịt nướng lụi than hồng thơm lừng chấm tương đậu phộng sền sệt.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Đập – Hến Xào", loc: "Hội An", price: "40.000đ", desc: "Bánh ướt kẹp bánh tráng nướng đập giòn tan xúc hến xào hành răm thơm béo.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { title: "Mì Quảng", loc: "Đà Nẵng - Quảng Nam", price: "45.000đ", desc: "Sợi mì vàng óng dẻo mềm, nước nhưỡng tôm thịt đậm đà ăn kèm bánh tráng mè nướng giòn rụm.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
+                { title: "Cao Lầu Hội An", loc: "Hội An", price: "45.000đ", desc: "Sợi cao lầu tro củi đặc trưng, thịt xá xíu thơm lừng, da heo chiên giòn béo ngậy.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
+                { title: "Cơm Gà Hội An", loc: "Hội An", price: "55.000đ", desc: "Cơm nấu nước luộc gà vàng ươm thơm lừng, thịt gà ta xé phay bóp gỏi hành tây chua ngọt.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { title: "Bánh Tráng Cuốn Thịt Heo", loc: "Đà Nẵng", price: "65.000đ", desc: "Thịt heo hai đầu da luộc mềm cuốn bánh tráng đại lộc chấm mắm nêm cá cơm nguyên chất.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+                { title: "Bê Thui Cầu Mống", loc: "Quảng Nam", price: "90.000đ", desc: "Thịt bê tái mềm ngọt bọc da giòn thấu, chấm mắm nêm pha tỏi ớt mè rang nồng nàn.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { title: "Nem Nướng", loc: "Đà Nẵng", price: "45.000đ", desc: "Nem thịt nướng lụi than hồng thơm lừng chấm tương đậu phộng béo bùi sánh mịn.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+                { title: "Bánh Đập – Hến Xào", loc: "Hội An", price: "40.000đ", desc: "Bánh ướt kẹp bánh tráng nướng đập giòn tan xúc hến xào hành răm thơm phức.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
                 { title: "Bánh Tổ", loc: "Quảng Nam", price: "30.000đ", desc: "Bánh đường bát dẻo quánh thơm gừng tươi rắc mè rang nướng hoặc chiên giòn.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
-                { title: "Chè Đậu Xanh Đánh", loc: "Hội An", price: "20.000đ", desc: "Đậu xanh đãi vỏ nấu nhuyễn sánh mịn, thơm ngát cốt dừa tươi và đường phèn.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" }
+                { title: "Chè Đậu Xanh Đánh", loc: "Hội An", price: "20.000đ", desc: "Đậu xanh đãi vỏ nấu nhuyễn sánh mịn, thơm ngát nước cốt dừa tươi và đường phèn.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" }
             ],
             hue: [
-                { title: "Bún Bò Huế", loc: "Cố Đô Huế", price: "45.000đ", desc: "Nước dùng hầm xương dậy mùi sả ruốc đặc trưng, nạm bò mềm, chả cua giòn ngọt.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
-                { title: "Cơm Hến", loc: "Cồn Hến Huế", price: "25.000đ", desc: "Cơm nguội trộn thịt hến xào, tóp mỡ giòn rụm, môn bạc hà và ruốc ớt cay nồng.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { title: "Bún Bò Huế", loc: "Cố Đô Huế", price: "45.000đ", desc: "Nước dùng hầm xương dậy mùi sả ruốc đặc trưng, nạm bò mềm, chả cua giòn ngọt chuẩn vị cố đô.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
+                { title: "Cơm Hến", loc: "Cồn Hến Huế", price: "25.000đ", desc: "Cơm nguội trộn thịt hến xào, tóp mỡ giòn rụm, môn bạc hà và ruốc ớt cay xé lưỡi.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
                 { title: "Bún Hến", loc: "Huế", price: "25.000đ", desc: "Bún sợi tươi ăn kèm hến xào, rau thơm, đậu phộng rang và nước lèo hến ngọt thanh.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Bèo Huế", loc: "Huế", price: "35.000đ/khay", desc: "Bánh bèo mỏng chén tôm chấy đỏ cam, chan mắm ớt ngọt thơm nức mũi.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Nậm", loc: "Huế", price: "35.000đ/đĩa", desc: "Bột gạo trải mỏng bọc nhân tôm thịt đậm đà gói trong lá chuối xanh thơm ngát.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Lọc", loc: "Huế", price: "40.000đ/đĩa", desc: "Bánh lọc bột sắn trong suốt nhìn thấu con tôm sông kho rim đậm vị.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Ram Ít", loc: "Huế", price: "40.000đ/đĩa", desc: "Đế bánh ram chiên giòn rụm nâng đỡ phần bánh ít dẻo mềm nhân tôm thịt.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { title: "Bánh Bèo Huế", loc: "Huế", price: "35.000đ/khay", desc: "Bánh bèo mỏng chén tôm chấy đỏ cam, chan mắm ớt ngọt cay thơm nức mũi.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { title: "Bánh Nậm", loc: "Huế", price: "35.000đ/đĩa", desc: "Bột gạo trải mỏng bọc nhân tôm thịt đậm đà gói trọn trong lá chuối xanh thơm ngát.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { title: "Bánh Lọc", loc: "Huế", price: "40.000đ/đĩa", desc: "Bánh lọc bột sắn trong suốt nhìn thấu con tôm sông kho rim đậm vị quê nhà.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { title: "Bánh Ram Ít", loc: "Huế", price: "40.000đ/đĩa", desc: "Đế bánh ram chiên giòn rụm nâng đỡ phần bánh ít dẻo mềm nhân tôm thịt béo ngậy.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
                 { title: "Bánh Khoái", loc: "Huế", price: "35.000đ/cái", desc: "Vỏ bánh giòn vàng ruộm nhân tôm, thịt băm, giá đỗ chấm nước lèo gan béo bùi.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Nem Lụi Huế", loc: "Huế", price: "60.000đ/phần", desc: "Nem cuốn que sả nướng than hoa thơm lừng, chấm nước tương đậu bùi ngậy.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+                { title: "Nem Lụi Huế", loc: "Huế", price: "60.000đ/phần", desc: "Nem cuốn que sả nướng than hoa thơm lừng, chấm nước tương đậu phộng bùi béo.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
                 { title: "Chả Huế", loc: "Huế", price: "50.000đ/đòn", desc: "Chả lụa gói lá chuối thơm lừng gia vị tiêu tỏi đặc trưng xứ Huế.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
                 { title: "Cơm Âm Phủ", loc: "Huế", price: "50.000đ", desc: "Món cơm cung đình đầy màu sắc với thịt nướng, chả lụa, tôm chấy, dưa góp.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
                 { title: "Chè Cung Đình Huế", loc: "Huế", price: "25.000đ/ly", desc: "Tổng hợp chè hạt sen long nhãn, chè heo quay độc đáo thanh mát.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" }
             ],
             quangngai_binhdinh: [
-                { title: "Don Quảng Ngãi", loc: "Sông Trà - Quảng Ngãi", price: "30.000đ", desc: "Nước don luộc ngọt lịm ăn kèm bánh tráng sống, ớt xiêm xanh cay xé lưỡi.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
-                { title: "Cá Bống Sông Trà Kho Tiêu", loc: "Quảng Ngãi", price: "80.000đ/niêu", desc: "Cá bống sông Trà kho tộ kẹo đường vàng óng thơm nồng vị tiêu sọ.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { title: "Don Quảng Ngãi", loc: "Sông Trà - Quảng Ngãi", price: "30.000đ", desc: "Nước don luộc ngọt lịm ăn kèm bánh tráng sống, ớt xiêm xanh cay nồng.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
+                { title: "Cá Bống Sông Trà Kho Tiêu", loc: "Quảng Ngãi", price: "80.000đ/niêu", desc: "Cá bống sông Trà kho tộ kẹo đường vàng óng thơm nồng vị tiêu sọ cay nồng.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
                 { title: "Bánh Xèo Tôm Nhảy Quảng Ngãi", loc: "Quảng Ngãi", price: "35.000đ", desc: "Bánh đúc khuôn đất tôm đất nhảy tanh tách giòn rụm cuốn bánh tráng ram.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
                 { title: "Ram Bắp", loc: "Quảng Ngãi", price: "35.000đ/đĩa", desc: "Bắp non bào nhuyễn cuốn bánh tráng chiên vàng rộm chấm mắm chua ngọt.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
                 { title: "Bún Chả Cá Quy Nhơn", loc: "Quy Nhơn", price: "40.000đ", desc: "Chả cá thu quết dai tự nhiên, nước dùng nấu từ đầu cá ngừ ngọt thanh mát.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
@@ -702,7 +817,7 @@
             ],
             phuyen_khanhhoa: [
                 { title: "Mắt Cá Ngừ Đại Dương", loc: "Phú Yên", price: "55.000đ/thố", desc: "Mắt cá ngừ tiềm thuốc bắc trong thố đất, nước dùng béo ngọt thơm ngát lá tía tô.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bún Mực Phú Yên", loc: "Phú Yên", price: "45.000đ", desc: "Mực cơm tươi ngọt giòn sần sật nấu với cà chua thơm dứa chua thanh.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
+                { title: "Bún Mực Phú Yên", loc: "Phú Yên", price: "45.000đ", desc: "Mực cơm tươi ngọt giòn sần sật nấu với cà chua thơm dứa chua thanh mát.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
                 { title: "Bánh Canh Hẹ", loc: "Tuy Hòa", price: "35.000đ", desc: "Tô bánh canh phủ xanh mướt ngập tràn lá hẹ tươi thái nhỏ cùng chả cá biển dai ngọt.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
                 { title: "Cơm Gà Phú Yên", loc: "Phú Yên", price: "50.000đ", desc: "Hạt cơm vàng thơm ngậy mỡ gà ăn kèm đùi gà ta xé chấm nước mắm gừng sệt.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
                 { title: "Gỏi Cá Mai", loc: "Nha Trang", price: "70.000đ/đĩa", desc: "Cá mai tươi rói rút xương bóp chanh rắc đậu phộng cuốn bánh tráng chấm tương ớt.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
@@ -712,10 +827,10 @@
                 { title: "Bánh Xèo Mực", loc: "Khánh Hòa", price: "40.000đ", desc: "Bánh xèo giòn rụm ôm trọn con mực sữa tươi còn nguyên túi mật béo ngọt.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" }
             ],
             bactrungbo: [
-                { title: "Cháo Lươn Nghệ An", loc: "Nghệ An", price: "45.000đ", desc: "Lươn đồng xào nghệ cay nồng, cháo hạt nở đều thơm mùi hành tăm đặc sản.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
+                { title: "Cháo Lươn Nghệ An", loc: "Nghệ An", price: "45.000đ", desc: "Lươn đồng xào nghệ cay nồng, cháo hạt nở đều thơm mùi hành tăm đặc sản xứ Nghệ.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
                 { title: "Súp Lươn Nghệ An", loc: "Nghệ An", price: "50.000đ", desc: "Nước súp lươn sóng sánh cay bỏng lưỡi chấm bánh mì giòn hoặc bánh mướt nóng.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
                 { title: "Miến Lươn", loc: "Nghệ An", price: "45.000đ", desc: "Miến dong dai mềm kết hợp lươn đồng xào cay hoặc lươn chiên giòn tan.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Mướt Xứ Nghệ", loc: "Nghệ An", price: "30.000đ", desc: "Bánh tráng mỏng mềm mướt phủ hành tăm phi thơm chấm mắm chanh ớt.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { title: "Bánh Mướt Xứ Nghệ", loc: "Nghệ An", price: "30.000đ", desc: "Bánh tráng mỏng mềm mướt phủ hành tăm phi thơm lừng chấm mắm chanh ớt.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
                 { title: "Nhút Thanh Chương", loc: "Nghệ An", price: "40.000đ/hũ", desc: "Xơ mít non muối chua mặn đậm đà, món ăn chống đói truyền thống trứ danh.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
                 { title: "Bánh Đa Xúc Hến", loc: "Sông Lam", price: "40.000đ", desc: "Hến sông Lam xào hành tăm ớt cay xúc bánh đa Đô Lương giòn tan rụm.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
                 { title: "Kẹo Cu Đơ Hà Tĩnh", loc: "Hà Tĩnh", price: "35.000đ/gói", desc: "Mật mía dẻo quánh quện đậu phộng bùi và gừng tươi kẹp bánh tráng nướng giòn.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
@@ -732,10 +847,10 @@
             menuData[key].forEach(food => allFoods.push(food));
         });
 
-        // TOPPING NỀN
+        // TOPPING ĐỒNG QUÊ
         const isMobile = window.innerWidth < 768;
         const toppingLayer = document.getElementById('topping-layer');
-        const toppingIcons = ['🦐', '🥩', '🌶️', '🥟', '🍋', '🌿', '🧄', '🥢', '🍘'];
+        const toppingIcons = ['🌾', '🍃', '🪷', '🌶️', '🦐', '🥩', '🥟', '🍋', '🥢'];
         const totalToppings = isMobile ? 8 : 14;
 
         for (let i = 0; i < totalToppings; i++) {
@@ -783,8 +898,8 @@
 
         let cardBodies = [];
         const cardsContainer = document.getElementById('cards-container');
-        const cardW = isMobile ? 145 : 190;
-        const cardH = isMobile ? 85 : 105;
+        const cardW = isMobile ? 155 : 195;
+        const cardH = isMobile ? 90 : 110;
 
         function loadRegionFoods(regionKey) {
             initAudioContext();
@@ -805,13 +920,13 @@
                 card.setAttribute('data-img', item.img);
 
                 card.innerHTML = `
-                    <div>
+                    <div class="food-card-header">
                         <div class="food-title">${item.title}</div>
                         <div class="food-location">📍 ${item.loc}</div>
                     </div>
                     <div class="food-footer">
                         <span class="food-price">${item.price}</span>
-                        <span class="hint-badge">Xem 🔍</span>
+                        <span class="hint-badge">Xem Món 🔍</span>
                     </div>
                 `;
                 cardsContainer.appendChild(card);
@@ -835,14 +950,12 @@
             });
         }
 
-        // HÀM CHUYỂN VÙNG TỈNH THÀNH (HOẠT ĐỘNG HOÀN HẢO TRÊN MOBILE)
         function switchRegion(regionKey, btnElement) {
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
             if (btnElement) btnElement.classList.add('active');
             loadRegionFoods(regionKey);
         }
 
-        // GẮN CHUỘT VẬT LÝ VÀO CONTAINER RIÊNG
         const physicsContainer = document.getElementById('physics-container');
         const mouse = Mouse.create(physicsContainer);
         const mouseConstraint = MouseConstraint.create(engine, {
@@ -898,7 +1011,7 @@
         });
 
         // ==========================================
-        // 5. VÒNG QUAY
+        // 5. VÒNG QUAY "HÔM NAY ĂN GÌ?"
         // ==========================================
         const wheelModalOverlay = document.getElementById('wheelModalOverlay');
         const wheelCanvas = document.getElementById('wheelCanvas');
@@ -907,7 +1020,7 @@
         let currentWheelAngle = 0;
         let isSpinning = false;
 
-        const wheelColors = ['#f39c12', '#e74c3c', '#27ae60', '#2980b9', '#8e44ad', '#d35400', '#16a085'];
+        const wheelColors = ['#8c2d19', '#d4a359', '#2d5a27', '#a04000', '#6c3483', '#117864', '#b9770e'];
 
         function drawWheel() {
             const numSegments = allFoods.length;
@@ -928,23 +1041,23 @@
                 ctx.translate(300, 300);
                 ctx.rotate(angle + arcSize / 2);
                 ctx.textAlign = 'right';
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 12px Arial';
+                ctx.fillStyle = '#fff9eb';
+                ctx.font = 'bold 12px Quicksand, sans-serif';
                 const text = allFoods[i].title.length > 13 ? allFoods[i].title.substring(0, 12) + '..' : allFoods[i].title;
                 ctx.fillText(text, radius - 20, 4);
                 ctx.restore();
             }
 
             ctx.beginPath();
-            ctx.arc(300, 300, 35, 0, 2 * Math.PI);
-            ctx.fillStyle = '#ffffff';
+            ctx.arc(300, 300, 38, 0, 2 * Math.PI);
+            ctx.fillStyle = '#fffdf9';
             ctx.fill();
             ctx.lineWidth = 4;
-            ctx.strokeStyle = '#b8332a';
+            ctx.strokeStyle = '#d4a359';
             ctx.stroke();
 
-            ctx.fillStyle = '#b8332a';
-            ctx.font = 'bold 14px Arial';
+            ctx.fillStyle = '#8c2d19';
+            ctx.font = 'bold 15px Playfair Display, serif';
             ctx.textAlign = 'center';
             ctx.fillText('O HUỆ', 300, 305);
         }
@@ -1007,7 +1120,7 @@
         }
 
         // ==========================================
-        // 6. POPUP CHI TIẾT (ĐÃ THAY NÚT "X" GÓC PHẢI)
+        // 6. POPUP CHI TIẾT
         // ==========================================
         const modalOverlay = document.getElementById('modalOverlay');
         const modalImg = document.getElementById('modalImg');
@@ -1029,7 +1142,7 @@
             initAudioContext();
             isModalOpen = true;
             modalImg.src = foodObj.img;
-            modalTitle.innerText = "🎉 Gợi Ý: " + foodObj.title;
+            modalTitle.innerText = "🌾 Gợi Ý: " + foodObj.title;
             modalPrice.innerText = foodObj.price;
             modalDesc.innerText = `[${foodObj.loc}] - ${foodObj.desc}`;
             modalOverlay.classList.add('active');
