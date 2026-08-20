@@ -53,7 +53,7 @@
             color: var(--charcoal);
         }
 
-        /* 1. LỚP TOPPING NỀN LƠ LỬNG */
+        /* 1. TOPPING LƠ LỬNG */
         #topping-layer {
             position: absolute;
             top: 0;
@@ -224,7 +224,7 @@
             touch-action: none;
         }
 
-        /* 4. THẺ MÓN ĂN (TẬP TRUNG HOÀN TOÀN VÀO CẦM, KÉO, NÉM VÀO GIỎ) */
+        /* 4. THẺ MÓN ĂN */
         .food-card {
             position: absolute;
             background: #FFFDF9;
@@ -235,7 +235,7 @@
             flex-direction: column;
             justify-content: space-between;
             box-shadow: 0 6px 14px rgba(42, 36, 33, 0.12), inset 0 0 0 1px rgba(229, 169, 60, 0.2);
-            pointer-events: none; /* Để toàn bộ sự kiện kéo thả do Matter quản lý mượt mà */
+            pointer-events: none;
             z-index: 20;
             will-change: transform, opacity;
             width: 155px;
@@ -302,7 +302,7 @@
             font-weight: 700;
         }
 
-        /* 5. GIỎ NAN TRE GÓC DƯỚI BÊN TRÁI */
+        /* 5. GIỎ NAN TRE */
         #bamboo-cart-zone {
             position: fixed;
             bottom: 12px;
@@ -375,7 +375,7 @@
             transition: transform 0.2s;
         }
 
-        /* 6. MODAL GIỎ HÀNG CHỈNH SỬA SỐ LƯỢNG */
+        /* 6. MODAL GIỎ HÀNG */
         .cart-modal-overlay {
             position: fixed;
             top: 0;
@@ -980,7 +980,7 @@
                 <span class="cart-total-val" id="cartTotalPrice">0đ</span>
             </div>
 
-            <button class="checkout-order-btn" id="btnGoToBill" onclick="proceedToReceipt()">Tiến Hành Đặt Hàng & In Bill 🧾</button>
+            <button class="checkout-order-btn" id="btnGoToBill" onclick="proceedToReceipt()">Xem Hóa Đơn & Thanh Toán 🧾</button>
         </div>
     </div>
 
@@ -1306,7 +1306,7 @@
         // QUẢN LÝ GIỎ HÀNG VÀ HÓA ĐƠN
         let myCart = {};
         let selectedPaymentMethod = 'cod';
-        let isModalOpen = false; // Khóa toàn cục chống lẫn lộn thao tác
+        let isModalOpen = false;
 
         function addToCart(foodItem) {
             initAudioContext();
@@ -1600,10 +1600,10 @@
                 const mouseY = mouse.position.y;
                 
                 const isHoveringCart = (
-                    mouseX >= cartRect.left - 50 &&
-                    mouseX <= cartRect.right + 50 &&
-                    mouseY >= cartRect.top - 50 &&
-                    mouseY <= cartRect.bottom + 50
+                    mouseX >= cartRect.left - 60 &&
+                    mouseX <= cartRect.right + 60 &&
+                    mouseY >= cartRect.top - 60 &&
+                    mouseY <= cartRect.bottom + 60
                 );
 
                 if (isHoveringCart) {
@@ -1622,13 +1622,13 @@
             const mouseY = mouse.position.y;
 
             const isDroppedIntoCart = (
-                mouseX >= cartRect.left - 50 &&
-                mouseX <= cartRect.right + 50 &&
-                mouseY >= cartRect.top - 50 &&
-                mouseY <= cartRect.bottom + 50
+                mouseX >= cartRect.left - 60 &&
+                mouseX <= cartRect.right + 60 &&
+                mouseY >= cartRect.top - 60 &&
+                mouseY <= cartRect.bottom + 60
             );
 
-            // NẾU KÉO THẢ VÀO GIỎ NAN TRE: CHO VÀO GIỎ VÀ BIẾN MẤT VĨNH VIỄN
+            // NẾU KÉO THẢ VÀO GIỎ NAN TRE: CHO VÀO GIỎ VÀ BIẾN MẤT
             if (draggedBody && isDroppedIntoCart && draggedBody.foodRawData) {
                 addToCart(draggedBody.foodRawData);
                 
@@ -1641,7 +1641,6 @@
                     el.style.opacity = '0';
                     
                     setTimeout(() => {
-                        // Xóa hoàn toàn khỏi DOM và Thế giới vật lý Matter.js
                         el.remove();
                         Composite.remove(world, targetBody);
                         cardBodies = cardBodies.filter(cb => cb.body !== targetBody);
@@ -1691,7 +1690,7 @@
         });
 
         // ==========================================
-        // 5. VÒNG QUAY "HÔM NAY ĂN GÌ?"
+        // 5. VÒNG QUAY "HÔM NAY ĂN GÌ?" (ĐÃ FIX QUAY 100%)
         // ==========================================
         const wheelModalOverlay = document.getElementById('wheelModalOverlay');
         const wheelCanvas = document.getElementById('wheelCanvas');
@@ -1768,11 +1767,11 @@
             const winningIndex = Math.floor(Math.random() * numSegments);
             const winningFood = allFoods[winningIndex];
 
+            // Quay ngẫu nhiên từ 5 đến 7 vòng + căn đúng đỉnh mũi tên
             const extraRounds = 360 * (5 + Math.floor(Math.random() * 3));
             const stopAngle = 270 - (winningIndex * arcDegree + arcDegree / 2);
-            const totalRotation = currentWheelAngle + extraRounds + (stopAngle - (currentWheelAngle % 360));
+            currentWheelAngle = currentWheelAngle + extraRounds + (stopAngle - (currentWheelAngle % 360));
 
-            currentWheelAngle = totalRotation;
             wheelCanvas.style.transform = `rotate(${currentWheelAngle}deg)`;
 
             let tickInterval = 60;
