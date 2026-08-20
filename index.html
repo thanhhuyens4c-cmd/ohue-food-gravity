@@ -20,8 +20,6 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            position: fixed; /* Khóa hoàn toàn rung màn hình trên iOS/Android */
-            touch-action: none;
             background-color: #fcf8f2;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
@@ -39,19 +37,18 @@
         }
         .topping-item {
             position: absolute;
-            font-size: 1.6rem;
-            opacity: 0.5;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.06));
+            font-size: 1.5rem;
+            opacity: 0.45;
             animation: floatAround linear infinite;
             will-change: transform;
         }
         @keyframes floatAround {
             0% { transform: translate3d(0, 0, 0) rotate(0deg); }
-            50% { transform: translate3d(60px, 30px, 0) rotate(180deg); }
+            50% { transform: translate3d(50px, 25px, 0) rotate(180deg); }
             100% { transform: translate3d(0, 0, 0) rotate(360deg); }
         }
 
-        /* 2. THANH HEADER */
+        /* 2. THANH HEADER & MENU (BẢO ĐẢM NHẬN CẢM ỨNG 100%) */
         header {
             position: fixed;
             top: 0;
@@ -59,20 +56,20 @@
             width: 100%;
             background: #b8332a;
             color: #ffffff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            pointer-events: auto !important; /* Tuyệt đối không bị Matter.js chặn */
         }
         .top-bar {
             padding: 8px 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.12);
+            border-bottom: 1px solid rgba(255,255,255,0.15);
         }
         .top-bar h1 {
             font-size: 0.95rem;
             font-weight: 700;
-            letter-spacing: 0.2px;
         }
         .header-controls {
             display: flex;
@@ -83,24 +80,23 @@
             background: linear-gradient(135deg, #ff9f43, #ee5253);
             border: 1px solid #ffeaa7;
             color: #ffffff;
-            padding: 5px 10px;
+            padding: 6px 10px;
             border-radius: 14px;
             font-weight: bold;
             font-size: 0.72rem;
             cursor: pointer;
+            pointer-events: auto;
         }
         .music-btn {
             background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.35);
             color: #ffffff;
-            padding: 5px 8px;
+            padding: 6px 8px;
             border-radius: 14px;
             font-size: 0.72rem;
             font-weight: 600;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 3px;
+            pointer-events: auto;
         }
         .music-btn.playing {
             background: #f5c542;
@@ -109,14 +105,15 @@
         .contact-btn {
             background: #f5c542;
             color: #4a120e;
-            padding: 5px 10px;
+            padding: 6px 10px;
             border-radius: 14px;
             font-weight: bold;
             font-size: 0.72rem;
             text-decoration: none;
+            pointer-events: auto;
         }
 
-        /* Menu tỉnh thành hỗ trợ vuốt mượt trên mobile */
+        /* Menu tỉnh thành cuộn ngang mượt mà */
         .category-menu {
             display: flex;
             overflow-x: auto;
@@ -125,20 +122,23 @@
             padding: 6px 10px;
             gap: 6px;
             scrollbar-width: none;
-            touch-action: pan-x; /* Cho phép vuốt menu ngang tự nhiên */
+            pointer-events: auto !important;
+            touch-action: pan-x !important;
         }
         .category-menu::-webkit-scrollbar {
             display: none;
         }
         .cat-btn {
-            background: rgba(255, 255, 255, 0.16);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.35);
             color: #ffffff;
-            padding: 5px 12px;
+            padding: 6px 12px;
             border-radius: 16px;
             font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
+            pointer-events: auto;
+            flex-shrink: 0;
         }
         .cat-btn.active {
             background: #f5c542;
@@ -162,7 +162,18 @@
             white-space: nowrap;
         }
 
-        /* 3. THẺ MÓN ĂN - THIẾT KẾ ĐO LIỀNG RIÊNG CHO MOBILE & DESKTOP */
+        /* 3. KHUNG CHỨA VẬT LÝ */
+        #physics-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10;
+            touch-action: none;
+        }
+
+        /* 4. THẺ MÓN ĂN */
         .food-card {
             position: absolute;
             background: #ffffff;
@@ -176,7 +187,6 @@
             pointer-events: none;
             z-index: 20;
             will-change: transform;
-            /* Mobile mặc định */
             width: 145px;
             height: 85px;
         }
@@ -225,7 +235,7 @@
             font-weight: 600;
         }
 
-        /* 4. MODAL VÒNG QUAY */
+        /* 5. MODAL VÒNG QUAY */
         .wheel-modal-overlay {
             position: fixed;
             top: 0;
@@ -320,24 +330,26 @@
         }
         .close-wheel-btn {
             position: absolute;
-            top: 8px;
-            right: 12px;
+            top: 6px;
+            right: 10px;
             background: none;
             border: none;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: #888;
             cursor: pointer;
-            padding: 5px;
+            padding: 6px;
+            line-height: 1;
+            z-index: 20;
         }
 
-        /* 5. POPUP CHI TIẾT MÓN ĂN */
+        /* 6. POPUP CHI TIẾT MÓN ĂN VỚI NÚT ĐÓNG DẤU X */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.75);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -361,14 +373,42 @@
             box-shadow: 0 12px 30px rgba(0,0,0,0.35);
             transform: scale(0.95);
             transition: transform 0.2s ease;
+            position: relative;
             pointer-events: auto;
         }
         .modal-overlay.active .modal-content {
             transform: scale(1);
         }
+
+        /* NÚT ĐÓNG DẤU "X" NẰM GÓC TRÊN BÊN PHẢI */
+        .modal-close-x {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 34px;
+            height: 34px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.4rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            pointer-events: auto !important;
+        }
+        .modal-close-x:active {
+            background: rgba(0, 0, 0, 0.85);
+            transform: scale(0.92);
+        }
+
         .modal-img {
             width: 100%;
-            height: 180px;
+            height: 185px;
             object-fit: cover;
             display: block;
         }
@@ -397,36 +437,27 @@
             line-height: 1.35;
             margin-bottom: 14px;
         }
-        .modal-actions {
-            display: flex;
-            gap: 8px;
-        }
-        .close-btn {
-            flex: 1;
-            padding: 11px;
-            border: 1px solid #ddd;
-            background: #f1f2f6;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            cursor: pointer;
-        }
-        .order-btn {
-            flex: 2;
-            padding: 11px;
+        .order-btn-full {
+            width: 100%;
+            padding: 12px;
             background: #b8332a;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: bold;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             text-align: center;
             text-decoration: none;
+            display: block;
+        }
+        .order-btn-full:active {
+            background: #962820;
         }
     </style>
 </head>
 <body>
 
+    <!-- THẺ AUDIO -->
     <audio id="bgMusic" loop preload="auto">
         <source src="./nhac-mien-trung.mp3.mp3" type="audio/mpeg">
     </audio>
@@ -444,6 +475,7 @@
                 <a href="tel:0900000000" class="contact-btn">Đặt Món</a>
             </div>
         </div>
+        <!-- THANH MENU ĐÃ FIX CẢM ỨNG 100% -->
         <div class="category-menu">
             <button class="cat-btn active" onclick="switchRegion('danang_quangnam', this)">Đà Nẵng – Quảng Nam</button>
             <button class="cat-btn" onclick="switchRegion('hue', this)">Huế</button>
@@ -455,12 +487,15 @@
 
     <div class="instruction">👆 Chạm xem ảnh • Kéo ném tự do</div>
 
-    <div id="cards-container"></div>
+    <!-- VÙNG TƯƠNG TÁC VẬT LÝ -->
+    <div id="physics-container">
+        <div id="cards-container"></div>
+    </div>
 
     <!-- MODAL VÒNG QUAY -->
     <div id="wheelModalOverlay" class="wheel-modal-overlay">
         <div class="wheel-modal-card">
-            <button class="close-wheel-btn" id="closeWheelBtn">&times;</button>
+            <button class="close-wheel-btn" onclick="closeWheelModal()">&times;</button>
             <h2 class="wheel-title">🎡 HÔM NAY ĂN GÌ?</h2>
             <p class="wheel-subtitle">Để O Huệ gợi ý món ngon cho bạn nhé!</p>
             <div class="wheel-wrapper">
@@ -471,9 +506,11 @@
         </div>
     </div>
 
-    <!-- POPUP CHI TIẾT -->
-    <div id="modalOverlay" class="modal-overlay">
-        <div class="modal-content">
+    <!-- POPUP CHI TIẾT MÓN ĂN VỚI NÚT ĐÓNG "X" -->
+    <div id="modalOverlay" class="modal-overlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <!-- NÚT "X" ĐÓNG GÓC TRÊN BÊN PHẢI -->
+            <button class="modal-close-x" onclick="closeModal()" type="button">&times;</button>
             <img id="modalImg" class="modal-img" src="" alt="Món ăn">
             <div class="modal-body">
                 <div class="modal-header">
@@ -481,10 +518,7 @@
                     <span id="modalPrice" class="modal-price"></span>
                 </div>
                 <p id="modalDesc" class="modal-desc"></p>
-                <div class="modal-actions">
-                    <button class="close-btn" id="closeBtn" type="button">Đóng</button>
-                    <a href="tel:0900000000" class="order-btn">Đặt Món Ngay</a>
-                </div>
+                <a href="tel:0900000000" class="order-btn-full">Đặt Món Ngay</a>
             </div>
         </div>
     </div>
@@ -509,7 +543,7 @@
         function playCollisionSound(intensity = 1) {
             if (!audioCtx) return;
             const now = Date.now();
-            if (now - lastSoundTime < 60) return; // Throttling nhẹ hơn cho mobile
+            if (now - lastSoundTime < 60) return;
             lastSoundTime = now;
 
             try {
@@ -689,7 +723,7 @@
             menuData[key].forEach(food => allFoods.push(food));
         });
 
-        // TOPPING NỀN: Giảm số lượng để máy nhẹ
+        // TOPPING NỀN
         const isMobile = window.innerWidth < 768;
         const toppingLayer = document.getElementById('topping-layer');
         const toppingIcons = ['🦐', '🥩', '🌶️', '🥟', '🍋', '🌿', '🧄', '🥢', '🍘'];
@@ -707,12 +741,12 @@
         }
 
         // ==========================================
-        // 4. THIẾT LẬP VẬT LÝ & TỐI ƯU CẢM ỨNG DI ĐỘNG
+        // 4. THIẾT LẬP VẬT LÝ
         // ==========================================
         const { Engine, Runner, Bodies, Composite, Mouse, MouseConstraint, Events, Query } = Matter;
         const engine = Engine.create();
         const world = engine.world;
-        engine.world.gravity.y = isMobile ? 0.7 : 0.8;
+        engine.world.gravity.y = isMobile ? 0.75 : 0.8;
 
         const width = window.innerWidth;
         const height = window.innerHeight;
@@ -740,8 +774,6 @@
 
         let cardBodies = [];
         const cardsContainer = document.getElementById('cards-container');
-
-        // Kích thước thẻ theo từng loại thiết bị
         const cardW = isMobile ? 145 : 190;
         const cardH = isMobile ? 85 : 105;
 
@@ -794,13 +826,16 @@
             });
         }
 
+        // HÀM CHUYỂN VÙNG TỈNH THÀNH (HOẠT ĐỘNG HOÀN HẢO TRÊN MOBILE)
         function switchRegion(regionKey, btnElement) {
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
             loadRegionFoods(regionKey);
         }
 
-        const mouse = Mouse.create(document.body);
+        // GẮN CHUỘT VẬT LÝ VÀO CONTAINER RIÊNG
+        const physicsContainer = document.getElementById('physics-container');
+        const mouse = Mouse.create(physicsContainer);
         const mouseConstraint = MouseConstraint.create(engine, {
             mouse: mouse,
             constraint: { stiffness: 0.25, render: { visible: false } }
@@ -842,7 +877,6 @@
         const runner = Runner.create();
         Runner.run(runner, engine);
 
-        // Render tối ưu GPU bằng translate3d
         const halfW = cardW / 2;
         const halfH = cardH / 2;
 
@@ -861,7 +895,6 @@
         const wheelCanvas = document.getElementById('wheelCanvas');
         const ctx = wheelCanvas.getContext('2d');
         const spinBtn = document.getElementById('spinBtn');
-        const closeWheelBtn = document.getElementById('closeWheelBtn');
         let currentWheelAngle = 0;
         let isSpinning = false;
 
@@ -921,17 +954,6 @@
             isModalOpen = false;
         }
 
-        closeWheelBtn.addEventListener('pointerup', (e) => {
-            e.stopPropagation();
-            closeWheelModal();
-        });
-
-        wheelModalOverlay.addEventListener('pointerup', (e) => {
-            if (e.target === wheelModalOverlay) {
-                closeWheelModal();
-            }
-        });
-
         function spinWheel() {
             if (isSpinning) return;
             initAudioContext();
@@ -976,14 +998,13 @@
         }
 
         // ==========================================
-        // 6. POPUP CHI TIẾT
+        // 6. POPUP CHI TIẾT (ĐÃ THAY NÚT "X" GÓC PHẢI)
         // ==========================================
         const modalOverlay = document.getElementById('modalOverlay');
         const modalImg = document.getElementById('modalImg');
         const modalTitle = document.getElementById('modalTitle');
         const modalPrice = document.getElementById('modalPrice');
         const modalDesc = document.getElementById('modalDesc');
-        const closeBtn = document.getElementById('closeBtn');
 
         function openModal(cardElement) {
             initAudioContext();
@@ -1009,19 +1030,6 @@
             modalOverlay.classList.remove('active');
             isModalOpen = false;
         }
-
-        closeBtn.addEventListener('pointerup', (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            closeModal();
-        });
-
-        modalOverlay.addEventListener('pointerup', (e) => {
-            if (e.target === modalOverlay) {
-                e.stopPropagation();
-                closeModal();
-            }
-        });
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
