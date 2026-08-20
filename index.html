@@ -18,7 +18,7 @@
     <!-- Phông chữ chuẩn hóa tiếng Việt Be Vietnam Pro & Merriweather -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Merriweather:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
     
     <!-- Thư viện vật lý Matter.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
@@ -26,7 +26,7 @@
     <style>
         :root {
             --hoian-yellow: #E5A93C;      /* Vàng ấm tường cổ Hội An */
-            --hoian-yellow-light: #FBF4E6;/* Kem giấy dó ngả vàng ấm */
+            --bg-solid: #F5EFEB;          /* NỀN TRƠN: Màu kem giấy dó ấm trang nhã */
             --burgundy: #8E2824;          /* Đỏ đô trầm cung đình */
             --burgundy-dark: #5C1512;     /* Đỏ đô thẫm gỗ gụ */
             --teal-blue: #1C4E5B;         /* Xanh cổ vịt (Teal Blue) */
@@ -48,39 +48,12 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: var(--hoian-yellow-light);
+            background-color: var(--bg-solid); /* NỀN TRƠN NHÃ NHẶN */
             font-family: 'Be Vietnam Pro', sans-serif;
             color: var(--charcoal);
         }
 
-        /* 1. KHÔNG GIAN HỘI AN HOÀNG HÔN NỀN NÃ */
-        .scenery-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 50% 35%, rgba(251, 244, 230, 0.45) 0%, rgba(28, 78, 91, 0.75) 100%),
-                url('https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1800&q=80') center center / cover no-repeat;
-            filter: saturate(0.9) brightness(0.95);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .scenery-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(var(--teal-blue) 0.6px, transparent 0.6px);
-            background-size: 20px 20px;
-            opacity: 0.1;
-            pointer-events: none;
-            z-index: 1;
-        }
-
+        /* 1. LỚP TOPPING NỀN LƠ LỬNG NHẸ */
         #topping-layer {
             position: absolute;
             top: 0;
@@ -88,24 +61,24 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 2;
+            z-index: 1;
             overflow: hidden;
         }
         .topping-item {
             position: absolute;
-            font-size: 1.5rem;
-            opacity: 0.5;
+            font-size: 1.4rem;
+            opacity: 0.35;
             animation: floatAround linear infinite;
-            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.12));
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.06));
             will-change: transform;
         }
         @keyframes floatAround {
             0% { transform: translate3d(0, 0, 0) rotate(0deg); }
-            50% { transform: translate3d(40px, 20px, 0) rotate(180deg); }
+            50% { transform: translate3d(35px, 15px, 0) rotate(180deg); }
             100% { transform: translate3d(0, 0, 0) rotate(360deg); }
         }
 
-        /* 2. THANH HEADER: PHONG CÁCH XANH CỔ VỊT & ĐỎ ĐÔ ĐÔNG DƯƠNG */
+        /* 2. THANH HEADER */
         header {
             position: fixed;
             top: 0;
@@ -113,7 +86,7 @@
             width: 100%;
             background: linear-gradient(180deg, var(--teal-dark) 0%, var(--teal-blue) 100%);
             border-bottom: 2px solid var(--hoian-yellow);
-            box-shadow: 0 4px 16px rgba(16, 50, 59, 0.35);
+            box-shadow: 0 4px 16px rgba(16, 50, 59, 0.25);
             z-index: 1000;
             pointer-events: auto !important;
         }
@@ -135,7 +108,7 @@
         }
         .brand-name {
             font-family: 'Merriweather', serif;
-            font-size: 1.15rem;
+            font-size: 1.12rem;
             font-weight: 900;
             color: #FFFFFF;
             letter-spacing: 0.5px;
@@ -183,17 +156,6 @@
             border-color: #fff;
             font-weight: 700;
         }
-        .contact-btn {
-            background: var(--hoian-yellow);
-            color: var(--teal-dark);
-            padding: 6px 14px;
-            border-radius: 18px;
-            font-weight: 700;
-            font-size: 0.75rem;
-            text-decoration: none;
-            border: 1px solid #FFFFFF;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        }
 
         /* Menu tỉnh thành */
         .category-menu {
@@ -206,7 +168,7 @@
             scrollbar-width: none;
             pointer-events: auto !important;
             touch-action: pan-x !important;
-            background: rgba(16, 50, 59, 0.4);
+            background: rgba(16, 50, 59, 0.35);
         }
         .category-menu::-webkit-scrollbar {
             display: none;
@@ -234,19 +196,18 @@
         .instruction {
             position: fixed;
             bottom: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(18, 53, 62, 0.88);
+            right: 16px;
+            background: rgba(18, 53, 62, 0.9);
             border: 1px solid var(--hoian-yellow);
             color: #FFFFFF;
-            padding: 6px 16px;
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.72rem;
             font-weight: 600;
             pointer-events: none;
             z-index: 100;
             white-space: nowrap;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         /* 3. KHUNG VẬT LÝ */
@@ -260,7 +221,7 @@
             touch-action: none;
         }
 
-        /* 4. THẺ MÓN ĂN: NỀN KEM ẤM - VIỀN ĐỒNG & XANH TEAL */
+        /* 4. THẺ MÓN ĂN */
         .food-card {
             position: absolute;
             background: #FFFDF9;
@@ -270,12 +231,13 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 5px 12px rgba(28, 78, 91, 0.18), inset 0 0 0 1px rgba(229, 169, 60, 0.2);
+            box-shadow: 0 6px 14px rgba(42, 36, 33, 0.12), inset 0 0 0 1px rgba(229, 169, 60, 0.2);
             pointer-events: none;
             z-index: 20;
-            will-change: transform;
+            will-change: transform, opacity;
             width: 155px;
             height: 90px;
+            transition: opacity 0.2s ease, transform 0.1s linear;
         }
         @media (min-width: 768px) {
             .food-card {
@@ -284,6 +246,10 @@
                 padding: 10px 12px;
                 border-width: 2px;
             }
+        }
+        .food-card.dragging-to-cart {
+            border-color: var(--burgundy);
+            box-shadow: 0 8px 20px rgba(142, 40, 36, 0.35);
         }
         .food-card-header {
             display: flex;
@@ -319,11 +285,11 @@
         .food-price {
             font-family: 'Be Vietnam Pro', sans-serif;
             font-size: 0.82rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--teal-blue);
         }
         .hint-badge {
-            background: var(--hoian-yellow-light);
+            background: #FAF3E0;
             color: var(--burgundy);
             border: 1px solid rgba(229, 169, 60, 0.6);
             font-size: 0.62rem;
@@ -332,7 +298,211 @@
             font-weight: 700;
         }
 
-        /* 5. MODAL VÒNG QUAY "HÔM NAY ĂN GÌ?" */
+        /* 5. GIỎ NAN TRE GÓC DƯỚI BÊN TRÁI */
+        #bamboo-cart-zone {
+            position: fixed;
+            bottom: 12px;
+            left: 12px;
+            width: 85px;
+            height: 85px;
+            background: radial-gradient(circle at 35% 35%, #F4D393 0%, #D89838 70%, #9C671B 100%);
+            border: 3px solid #6C4410;
+            border-radius: 50%;
+            box-shadow: 0 8px 24px rgba(42, 36, 33, 0.35), inset 0 0 10px rgba(108, 68, 16, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 900;
+            cursor: pointer;
+            pointer-events: auto !important;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s;
+        }
+        @media (min-width: 768px) {
+            #bamboo-cart-zone {
+                width: 100px;
+                height: 100px;
+                bottom: 16px;
+                left: 16px;
+            }
+        }
+        #bamboo-cart-zone.drag-hover {
+            transform: scale(1.18) rotate(-5deg);
+            border-color: var(--burgundy);
+            box-shadow: 0 12px 30px rgba(142, 40, 36, 0.5);
+        }
+        #bamboo-cart-zone.item-dropped {
+            animation: cartBounce 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes cartBounce {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.3) rotate(8deg); }
+            75% { transform: scale(0.9) rotate(-4deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        .basket-icon {
+            font-size: 2.2rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        .basket-text {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: #432607;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: -2px;
+        }
+        .cart-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--burgundy);
+            border: 2px solid #FFFFFF;
+            color: #FFFFFF;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        /* 6. MODAL XEM CHI TIẾT GIỎ HÀNG */
+        .cart-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(16, 50, 59, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            padding: 16px;
+            backdrop-filter: blur(4px);
+        }
+        .cart-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .cart-modal-card {
+            background: #FFFDF9;
+            width: 100%;
+            max-width: 380px;
+            border-radius: 20px;
+            border: 2px solid var(--hoian-yellow);
+            padding: 18px;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.25s ease;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .cart-modal-overlay.active .cart-modal-card {
+            transform: scale(1);
+        }
+        .cart-title {
+            font-family: 'Merriweather', serif;
+            font-size: 1.18rem;
+            font-weight: 900;
+            color: var(--burgundy);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #E2D7C5;
+            padding-bottom: 10px;
+        }
+        .cart-items-list {
+            overflow-y: auto;
+            max-height: 45vh;
+            margin: 10px 0;
+            padding-right: 4px;
+        }
+        .cart-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dashed #EDE2D2;
+        }
+        .cart-item-info h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--charcoal);
+        }
+        .cart-item-info span {
+            font-size: 0.72rem;
+            color: var(--teal-blue);
+            font-weight: 600;
+        }
+        .cart-item-qty {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .qty-btn {
+            background: #EDE2D2;
+            border: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .cart-total-bar {
+            border-top: 2px solid var(--hoian-yellow);
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .cart-total-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--charcoal);
+        }
+        .cart-total-val {
+            font-family: 'Merriweather', serif;
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: var(--burgundy);
+        }
+        .checkout-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+            border: 1.5px solid var(--hoian-yellow);
+            color: #FFFFFF;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .close-cart-btn {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            color: var(--teal-blue);
+            cursor: pointer;
+        }
+
+        /* 7. MODAL VÒNG QUAY */
         .wheel-modal-overlay {
             position: fixed;
             top: 0;
@@ -443,7 +613,7 @@
             z-index: 20;
         }
 
-        /* 6. POPUP CHI TIẾT */
+        /* 8. POPUP CHI TIẾT */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -481,7 +651,6 @@
         .modal-overlay.active .modal-content {
             transform: scale(1);
         }
-
         .modal-close-x {
             position: absolute;
             top: 10px;
@@ -506,7 +675,6 @@
             background: var(--burgundy);
             transform: scale(0.92);
         }
-
         .modal-img {
             width: 100%;
             height: 195px;
@@ -532,7 +700,7 @@
         .modal-price {
             font-family: 'Be Vietnam Pro', sans-serif;
             font-size: 1.05rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--teal-blue);
         }
         .modal-desc {
@@ -542,7 +710,7 @@
             margin-bottom: 16px;
             font-weight: 500;
         }
-        .order-btn-full {
+        .add-cart-direct-btn {
             width: 100%;
             padding: 12px;
             background: linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
@@ -552,28 +720,21 @@
             font-weight: 700;
             font-size: 0.92rem;
             text-align: center;
-            text-decoration: none;
-            display: block;
+            cursor: pointer;
             box-shadow: 0 4px 10px rgba(142, 40, 36, 0.3);
-        }
-        .order-btn-full:active {
-            transform: scale(0.98);
         }
     </style>
 </head>
 <body>
 
-    <!-- FILE NHẠC TRUYỀN THỐNG -->
+    <!-- NHẠC NỀN -->
     <audio id="bgMusic" loop preload="auto">
         <source src="./nhac-mien-trung.mp3.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- NỀN HỘI AN HOÀNG HÔN NỀN NÃ -->
-    <div class="scenery-background"></div>
-    <div class="scenery-overlay"></div>
     <div id="topping-layer"></div>
 
-    <!-- HEADER XANH CỔ VỊT - ĐỎ ĐÔ - VÀNG ẤM -->
+    <!-- HEADER -->
     <header>
         <div class="top-bar">
             <div class="brand-block">
@@ -588,10 +749,8 @@
                 <button class="music-btn" id="musicToggleBtn" onclick="toggleMusic()">
                     <span id="musicIcon">🔈</span> <span id="musicText">Nhạc</span>
                 </button>
-                <a href="tel:0900000000" class="contact-btn">Đặt Món</a>
             </div>
         </div>
-        <!-- MENU TỈNH THÀNH -->
         <div class="category-menu">
             <button class="cat-btn active" onclick="switchRegion('danang_quangnam', this)">Đà Nẵng – Quảng Nam</button>
             <button class="cat-btn" onclick="switchRegion('hue', this)">Xứ Huế Cố Đô</button>
@@ -601,11 +760,37 @@
         </div>
     </header>
 
-    <div class="instruction">💡 Chạm xem chi tiết món • Cầm ném tự do</div>
+    <div class="instruction">🧺 Kéo món thả vào giỏ nan tre bên trái để chọn!</div>
+
+    <!-- GIỎ NAN TRE ĐI CHỢ GÓC DƯỚI BÊN TRÁI -->
+    <div id="bamboo-cart-zone" onclick="openCartModal()">
+        <span class="basket-icon">🧺</span>
+        <span class="basket-text">Giỏ Món</span>
+        <div class="cart-badge" id="cartBadgeCount">0</div>
+    </div>
 
     <!-- KHUNG VẬT LÝ -->
     <div id="physics-container">
         <div id="cards-container"></div>
+    </div>
+
+    <!-- MODAL XEM CHI TIẾT GIỎ HÀNG -->
+    <div id="cartModalOverlay" class="cart-modal-overlay" onclick="closeCartModal()">
+        <div class="cart-modal-card" onclick="event.stopPropagation()">
+            <button class="close-cart-btn" onclick="closeCartModal()">&times;</button>
+            <h3 class="cart-title">🧺 Giỏ Món O Huệ (<span id="cartTotalItems">0</span>)</h3>
+            
+            <div class="cart-items-list" id="cartItemsContainer">
+                <!-- Danh sách món ăn đã chọn sẽ hiện ở đây -->
+            </div>
+
+            <div class="cart-total-bar">
+                <span class="cart-total-label">Tổng thanh toán:</span>
+                <span class="cart-total-val" id="cartTotalPrice">0đ</span>
+            </div>
+
+            <a href="tel:0900000000" class="checkout-btn">Đặt Giao Tận Nơi Ngay</a>
+        </div>
     </div>
 
     <!-- MODAL VÒNG QUAY -->
@@ -622,7 +807,7 @@
         </div>
     </div>
 
-    <!-- POPUP CHI TIẾT -->
+    <!-- POPUP CHI TIẾT MÓN -->
     <div id="modalOverlay" class="modal-overlay" onclick="closeModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="modal-close-x" onclick="closeModal()" type="button">&times;</button>
@@ -633,7 +818,7 @@
                     <span id="modalPrice" class="modal-price"></span>
                 </div>
                 <p id="modalDesc" class="modal-desc"></p>
-                <a href="tel:0900000000" class="order-btn-full">Đặt Món Ngay</a>
+                <button class="add-cart-direct-btn" id="addDirectBtn">Cho Vào Giỏ Nan Tre 🧺</button>
             </div>
         </div>
     </div>
@@ -655,6 +840,7 @@
             }
         }
 
+        // Âm thanh gõ va chạm
         function playCollisionSound(intensity = 1) {
             if (!audioCtx) return;
             const now = Date.now();
@@ -678,6 +864,38 @@
 
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.08);
+            } catch (e) {}
+        }
+
+        // Âm thanh thả món vào giỏ nan tre "Poof/Chime"
+        function playAddToCartSound() {
+            if (!audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                // Nốt 1: Tiếng nứa gõ
+                const osc1 = audioCtx.createOscillator();
+                const gain1 = audioCtx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(440, now);
+                osc1.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+                gain1.gain.setValueAtTime(0.2, now);
+                gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                osc1.connect(gain1);
+                gain1.connect(audioCtx.destination);
+                osc1.start(now);
+                osc1.stop(now + 0.22);
+
+                // Nốt 2: Tiếng chuông vàng
+                const osc2 = audioCtx.createOscillator();
+                const gain2 = audioCtx.createGain();
+                osc2.type = 'triangle';
+                osc2.frequency.setValueAtTime(1320, now + 0.08);
+                gain2.gain.setValueAtTime(0.15, now + 0.08);
+                gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                osc2.connect(gain2);
+                gain2.connect(audioCtx.destination);
+                osc2.start(now + 0.08);
+                osc2.stop(now + 0.38);
             } catch (e) {}
         }
 
@@ -767,69 +985,69 @@
         window.addEventListener('pointerdown', autoPlayOnFirstTouch, { once: true });
 
         // ==========================================
-        // 3. DỮ LIỆU ĐẦY ĐỦ 44 MÓN ĂN
+        // 3. DỮ LIỆU ĐẦY ĐỦ 44 MÓN ĂN & GIỎ HÀNG
         // ==========================================
         const menuData = {
             danang_quangnam: [
-                { title: "Mì Quảng", loc: "Đà Nẵng - Quảng Nam", price: "45.000đ", desc: "Sợi mì vàng óng dẻo mềm, nước nhưỡng tôm thịt đậm đà ăn kèm bánh tráng mè nướng giòn rụm.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
-                { title: "Cao Lầu Hội An", loc: "Hội An", price: "45.000đ", desc: "Sợi cao lầu tro củi đặc trưng, thịt xá xíu thơm lừng, da heo chiên giòn béo ngậy.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
-                { title: "Cơm Gà Hội An", loc: "Hội An", price: "55.000đ", desc: "Cơm nấu nước luộc gà vàng ươm thơm lừng, thịt gà ta xé phay bóp gỏi hành tây chua ngọt.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Tráng Cuốn Thịt Heo", loc: "Đà Nẵng", price: "65.000đ", desc: "Thịt heo hai đầu da luộc mềm cuốn bánh tráng đại lộc chấm mắm nêm cá cơm nguyên chất.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bê Thui Cầu Mống", loc: "Quảng Nam", price: "90.000đ", desc: "Thịt bê tái mềm ngọt bọc da giòn thấu, chấm mắm nêm pha tỏi ớt mè rang nồng nàn.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Nem Nướng", loc: "Đà Nẵng", price: "45.000đ", desc: "Nem thịt nướng lụi than hồng thơm lừng chấm tương đậu phộng béo bùi sánh mịn.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Đập – Hến Xào", loc: "Hội An", price: "40.000đ", desc: "Bánh ướt kẹp bánh tráng nướng đập giòn tan xúc hến xào hành răm thơm phức.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Tổ", loc: "Quảng Nam", price: "30.000đ", desc: "Bánh đường bát dẻo quánh thơm gừng tươi rắc mè rang nướng hoặc chiên giòn.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
-                { title: "Chè Đậu Xanh Đánh", loc: "Hội An", price: "20.000đ", desc: "Đậu xanh đãi vỏ nấu nhuyễn sánh mịn, thơm ngát nước cốt dừa tươi và đường phèn.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" }
+                { id: "dn_1", rawPrice: 45000, title: "Mì Quảng", loc: "Đà Nẵng - Quảng Nam", price: "45.000đ", desc: "Sợi mì vàng óng dẻo mềm, nước nhưỡng tôm thịt đậm đà ăn kèm bánh tráng mè nướng giòn rụm.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
+                { id: "dn_2", rawPrice: 45000, title: "Cao Lầu Hội An", loc: "Hội An", price: "45.000đ", desc: "Sợi cao lầu tro củi đặc trưng, thịt xá xíu thơm lừng, da heo chiên giòn béo ngậy.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
+                { id: "dn_3", rawPrice: 55000, title: "Cơm Gà Hội An", loc: "Hội An", price: "55.000đ", desc: "Cơm nấu nước luộc gà vàng ươm thơm lừng, thịt gà ta xé phay bóp gỏi hành tây chua ngọt.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { id: "dn_4", rawPrice: 65000, title: "Bánh Tráng Cuốn Thịt Heo", loc: "Đà Nẵng", price: "65.000đ", desc: "Thịt heo hai đầu da luộc mềm cuốn bánh tráng đại lộc chấm mắm nêm cá cơm nguyên chất.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+                { id: "dn_5", rawPrice: 90000, title: "Bê Thui Cầu Mống", loc: "Quảng Nam", price: "90.000đ", desc: "Thịt bê tái mềm ngọt bọc da giòn thấu, chấm mắm nêm pha tỏi ớt mè rang nồng nàn.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { id: "dn_6", rawPrice: 45000, title: "Nem Nướng", loc: "Đà Nẵng", price: "45.000đ", desc: "Nem thịt nướng lụi than hồng thơm lừng chấm tương đậu phộng béo bùi sánh mịn.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+                { id: "dn_7", rawPrice: 40000, title: "Bánh Đập – Hến Xào", loc: "Hội An", price: "40.000đ", desc: "Bánh ướt kẹp bánh tráng nướng đập giòn tan xúc hến xào hành răm thơm phức.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { id: "dn_8", rawPrice: 30000, title: "Bánh Tổ", loc: "Quảng Nam", price: "30.000đ", desc: "Bánh đường bát dẻo quánh thơm gừng tươi rắc mè rang nướng hoặc chiên giòn.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { id: "dn_9", rawPrice: 20000, title: "Chè Đậu Xanh Đánh", loc: "Hội An", price: "20.000đ", desc: "Đậu xanh đãi vỏ nấu nhuyễn sánh mịn, thơm ngát nước cốt dừa tươi và đường phèn.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" }
             ],
             hue: [
-                { title: "Bún Bò Huế", loc: "Cố Đô Huế", price: "45.000đ", desc: "Nước dùng hầm xương dậy mùi sả ruốc đặc trưng, nạm bò mềm, chả cua giòn ngọt chuẩn vị cố đô.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
-                { title: "Cơm Hến", loc: "Cồn Hến Huế", price: "25.000đ", desc: "Cơm nguội trộn thịt hến xào, tóp mỡ giòn rụm, môn bạc hà và ruốc ớt cay xé lưỡi.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bún Hến", loc: "Huế", price: "25.000đ", desc: "Bún sợi tươi ăn kèm hến xào, rau thơm, đậu phộng rang và nước lèo hến ngọt thanh.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Bèo Huế", loc: "Huế", price: "35.000đ/khay", desc: "Bánh bèo mỏng chén tôm chấy đỏ cam, chan mắm ớt ngọt cay thơm nức mũi.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Nậm", loc: "Huế", price: "35.000đ/đĩa", desc: "Bột gạo trải mỏng bọc nhân tôm thịt đậm đà gói trọn trong lá chuối xanh thơm ngát.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Lọc", loc: "Huế", price: "40.000đ/đĩa", desc: "Bánh lọc bột sắn trong suốt nhìn thấu con tôm sông kho rim đậm vị quê nhà.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Ram Ít", loc: "Huế", price: "40.000đ/đĩa", desc: "Đế bánh ram chiên giòn rụm nâng đỡ phần bánh ít dẻo mềm nhân tôm thịt béo ngậy.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Khoái", loc: "Huế", price: "35.000đ/cái", desc: "Vỏ bánh giòn vàng ruộm nhân tôm, thịt băm, giá đỗ chấm nước lèo gan béo bùi.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Nem Lụi Huế", loc: "Huế", price: "60.000đ/phần", desc: "Nem cuốn que sả nướng than hoa thơm lừng, chấm nước tương đậu phộng bùi béo.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
-                { title: "Chả Huế", loc: "Huế", price: "50.000đ/đòn", desc: "Chả lụa gói lá chuối thơm lừng gia vị tiêu tỏi đặc trưng xứ Huế.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
-                { title: "Cơm Âm Phủ", loc: "Huế", price: "50.000đ", desc: "Món cơm cung đình đầy màu sắc với thịt nướng, chả lụa, tôm chấy, dưa góp.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
-                { title: "Chè Cung Đình Huế", loc: "Huế", price: "25.000đ/ly", desc: "Tổng hợp chè hạt sen long nhãn, chè heo quay độc đáo thanh mát.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" }
+                { id: "h_1", rawPrice: 45000, title: "Bún Bò Huế", loc: "Cố Đô Huế", price: "45.000đ", desc: "Nước dùng hầm xương dậy mùi sả ruốc đặc trưng, nạm bò mềm, chả cua giòn ngọt chuẩn vị cố đô.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
+                { id: "h_2", rawPrice: 25000, title: "Cơm Hến", loc: "Cồn Hến Huế", price: "25.000đ", desc: "Cơm nguội trộn thịt hến xào, tóp mỡ giòn rụm, môn bạc hà và ruốc ớt cay xé lưỡi.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { id: "h_3", rawPrice: 25000, title: "Bún Hến", loc: "Huế", price: "25.000đ", desc: "Bún sợi tươi ăn kèm hến xào, rau thơm, đậu phộng rang và nước lèo hến ngọt thanh.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
+                { id: "h_4", rawPrice: 35000, title: "Bánh Bèo Huế", loc: "Huế", price: "35.000đ", desc: "Bánh bèo mỏng chén tôm chấy đỏ cam, chan mắm ớt ngọt cay thơm nức mũi.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { id: "h_5", rawPrice: 35000, title: "Bánh Nậm", loc: "Huế", price: "35.000đ", desc: "Bột gạo trải mỏng bọc nhân tôm thịt đậm đà gói trọn trong lá chuối xanh thơm ngát.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { id: "h_6", rawPrice: 40000, title: "Bánh Lọc", loc: "Huế", price: "40.000đ", desc: "Bánh lọc bột sắn trong suốt nhìn thấu con tôm sông kho rim đậm vị quê nhà.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { id: "h_7", rawPrice: 40000, title: "Bánh Ram Ít", loc: "Huế", price: "40.000đ", desc: "Đế bánh ram chiên giòn rụm nâng đỡ phần bánh ít dẻo mềm nhân tôm thịt béo ngậy.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { id: "h_8", rawPrice: 35000, title: "Bánh Khoái", loc: "Huế", price: "35.000đ", desc: "Vỏ bánh giòn vàng ruộm nhân tôm, thịt băm, giá đỗ chấm nước lèo gan béo bùi.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { id: "h_9", rawPrice: 60000, title: "Nem Lụi Huế", loc: "Huế", price: "60.000đ", desc: "Nem cuốn que sả nướng than hoa thơm lừng, chấm nước tương đậu phộng bùi béo.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+                { id: "h_10", rawPrice: 50000, title: "Chả Huế", loc: "Huế", price: "50.000đ", desc: "Chả lụa gói lá chuối thơm lừng gia vị tiêu tỏi đặc trưng xứ Huế.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+                { id: "h_11", rawPrice: 50000, title: "Cơm Âm Phủ", loc: "Huế", price: "50.000đ", desc: "Món cơm cung đình đầy màu sắc với thịt nướng, chả lụa, tôm chấy, dưa góp.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { id: "h_12", rawPrice: 25000, title: "Chè Cung Đình Huế", loc: "Huế", price: "25.000đ", desc: "Tổng hợp chè hạt sen long nhãn, chè heo quay độc đáo thanh mát.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" }
             ],
             quangngai_binhdinh: [
-                { title: "Don Quảng Ngãi", loc: "Sông Trà - Quảng Ngãi", price: "30.000đ", desc: "Nước don luộc ngọt lịm ăn kèm bánh tráng sống, ớt xiêm xanh cay nồng.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
-                { title: "Cá Bống Sông Trà Kho Tiêu", loc: "Quảng Ngãi", price: "80.000đ/niêu", desc: "Cá bống sông Trà kho tộ kẹo đường vàng óng thơm nồng vị tiêu sọ cay nồng.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Xèo Tôm Nhảy Quảng Ngãi", loc: "Quảng Ngãi", price: "35.000đ", desc: "Bánh đúc khuôn đất tôm đất nhảy tanh tách giòn rụm cuốn bánh tráng ram.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Ram Bắp", loc: "Quảng Ngãi", price: "35.000đ/đĩa", desc: "Bắp non bào nhuyễn cuốn bánh tráng chiên vàng rộm chấm mắm chua ngọt.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bún Chả Cá Quy Nhơn", loc: "Quy Nhơn", price: "40.000đ", desc: "Chả cá thu quết dai tự nhiên, nước dùng nấu từ đầu cá ngừ ngọt thanh mát.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Hỏi Lòng Heo", loc: "Bình Định", price: "45.000đ", desc: "Bánh hỏi sợi mỏng quét mỡ hẹ ăn cùng đĩa lòng heo tươi luộc và cháo lòng loãng.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Nem Chợ Huyện", loc: "Tuy Phước - Bình Định", price: "40.000đ/chục", desc: "Nem chua gói lá ổi lên men tự nhiên giòn dai, nướng than hoặc ăn sống tuyệt hảo.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Ít Lá Gai", loc: "Bình Định", price: "35.000đ/chục", desc: "Vỏ lá gai đen nhánh dẻo thơm nhân dừa đậu xanh ngọt bùi chuẩn vị xứ Nẫu.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
-                { title: "Tré Bình Định", loc: "Bình Định", price: "50.000đ/cây", desc: "Thịt đầu heo bì heo trộn thính gạo ủ rơm chua ngọt nồng đượm tỏi ớt.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" }
+                { id: "qn_1", rawPrice: 30000, title: "Don Quảng Ngãi", loc: "Sông Trà - Quảng Ngãi", price: "30.000đ", desc: "Nước don luộc ngọt lịm ăn kèm bánh tráng sống, ớt xiêm xanh cay nồng.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
+                { id: "qn_2", rawPrice: 80000, title: "Cá Bống Sông Trà", loc: "Quảng Ngãi", price: "80.000đ", desc: "Cá bống sông Trà kho tộ kẹo đường vàng óng thơm nồng vị tiêu sọ cay nồng.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { id: "qn_3", rawPrice: 35000, title: "Bánh Xèo Tôm Nhảy", loc: "Quảng Ngãi", price: "35.000đ", desc: "Bánh đúc khuôn đất tôm đất nhảy tanh tách giòn rụm cuốn bánh tráng ram.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { id: "qn_4", rawPrice: 35000, title: "Ram Bắp", loc: "Quảng Ngãi", price: "35.000đ", desc: "Bắp non bào nhuyễn cuốn bánh tráng chiên vàng rộm chấm mắm chua ngọt.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+                { id: "qn_5", rawPrice: 40000, title: "Bún Chả Cá Quy Nhơn", loc: "Quy Nhơn", price: "40.000đ", desc: "Chả cá thu quết dai tự nhiên, nước dùng nấu từ đầu cá ngừ ngọt thanh mát.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
+                { id: "qn_6", rawPrice: 45000, title: "Bánh Hỏi Lòng Heo", loc: "Bình Định", price: "45.000đ", desc: "Bánh hỏi sợi mỏng quét mỡ hẹ ăn cùng đĩa lòng heo tươi luộc và cháo lòng loãng.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { id: "qn_7", rawPrice: 40000, title: "Nem Chợ Huyện", loc: "Tuy Phước - Bình Định", price: "40.000đ", desc: "Nem chua gói lá ổi lên men tự nhiên giòn dai, nướng than hoặc ăn sống tuyệt hảo.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+                { id: "qn_8", rawPrice: 35000, title: "Bánh Ít Lá Gai", loc: "Bình Định", price: "35.000đ", desc: "Vỏ lá gai đen nhánh dẻo thơm nhân dừa đậu xanh ngọt bùi chuẩn vị xứ Nẫu.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { id: "qn_9", rawPrice: 50000, title: "Tré Bình Định", loc: "Bình Định", price: "50.000đ", desc: "Thịt đầu heo bì heo trộn thính gạo ủ rơm chua ngọt nồng đượm tỏi ớt.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" }
             ],
             phuyen_khanhhoa: [
-                { title: "Mắt Cá Ngừ Đại Dương", loc: "Phú Yên", price: "55.000đ/thố", desc: "Mắt cá ngừ tiềm thuốc bắc trong thố đất, nước dùng béo ngọt thơm ngát lá tía tô.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bún Mực Phú Yên", loc: "Phú Yên", price: "45.000đ", desc: "Mực cơm tươi ngọt giòn sần sật nấu với cà chua thơm dứa chua thanh mát.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Canh Hẹ", loc: "Tuy Hòa", price: "35.000đ", desc: "Tô bánh canh phủ xanh mướt ngập tràn lá hẹ tươi thái nhỏ cùng chả cá biển dai ngọt.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
-                { title: "Cơm Gà Phú Yên", loc: "Phú Yên", price: "50.000đ", desc: "Hạt cơm vàng thơm ngậy mỡ gà ăn kèm đùi gà ta xé chấm nước mắm gừng sệt.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
-                { title: "Gỏi Cá Mai", loc: "Nha Trang", price: "70.000đ/đĩa", desc: "Cá mai tươi rói rút xương bóp chanh rắc đậu phộng cuốn bánh tráng chấm tương ớt.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bún Cá Nha Trang", loc: "Nha Trang", price: "40.000đ", desc: "Chả cá hấp giòn sần sật, sứa biển tươi giòn ngọt nước lèo thanh tao.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
-                { title: "Nem Nướng Ninh Hòa", loc: "Khánh Hòa", price: "65.000đ/phần", desc: "Nem nướng thơm phức cuốn bánh tráng chiên giòn, rau sống chấm nước tương nếp thịt.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Căn Nha Trang", loc: "Nha Trang", price: "45.000đ/đĩa", desc: "Bánh căn nướng lò đất nhân trứng mực chấm mắm nêm hoặc xíu mại mỡ hành.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Xèo Mực", loc: "Khánh Hòa", price: "40.000đ", desc: "Bánh xèo giòn rụm ôm trọn con mực sữa tươi còn nguyên túi mật béo ngọt.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" }
+                { id: "py_1", rawPrice: 55000, title: "Mắt Cá Ngừ Đại Dương", loc: "Phú Yên", price: "55.000đ", desc: "Mắt cá ngừ tiềm thuốc bắc trong thố đất, nước dùng béo ngọt thơm ngát lá tía tô.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
+                { id: "py_2", rawPrice: 45000, title: "Bún Mực Phú Yên", loc: "Phú Yên", price: "45.000đ", desc: "Mực cơm tươi ngọt giòn sần sật nấu với cà chua thơm dứa chua thanh mát.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
+                { id: "py_3", rawPrice: 35000, title: "Bánh Canh Hẹ", loc: "Tuy Hòa", price: "35.000đ", desc: "Tô bánh canh phủ xanh mướt ngập tràn lá hẹ tươi thái nhỏ cùng chả cá biển dai ngọt.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
+                { id: "py_4", rawPrice: 50000, title: "Cơm Gà Phú Yên", loc: "Phú Yên", price: "50.000đ", desc: "Hạt cơm vàng thơm ngậy mỡ gà ăn kèm đùi gà ta xé chấm nước mắm gừng sệt.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { id: "py_5", rawPrice: 70000, title: "Gỏi Cá Mai", loc: "Nha Trang", price: "70.000đ", desc: "Cá mai tươi rói rút xương bóp chanh rắc đậu phộng cuốn bánh tráng chấm tương ớt.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { id: "py_6", rawPrice: 40000, title: "Bún Cá Nha Trang", loc: "Nha Trang", price: "40.000đ", desc: "Chả cá hấp giòn sần sật, sứa biển tươi giòn ngọt nước lèo thanh tao.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
+                { id: "py_7", rawPrice: 65000, title: "Nem Nướng Ninh Hòa", loc: "Khánh Hòa", price: "65.000đ", desc: "Nem nướng thơm phức cuốn bánh tráng chiên giòn, rau sống chấm nước tương nếp thịt.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+                { id: "py_8", rawPrice: 45000, title: "Bánh Căn Nha Trang", loc: "Nha Trang", price: "45.000đ", desc: "Bánh căn nướng lò đất nhân trứng mực chấm mắm nêm hoặc xíu mại mỡ hành.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { id: "py_9", rawPrice: 40000, title: "Bánh Xèo Mực", loc: "Khánh Hòa", price: "40.000đ", desc: "Bánh xèo giòn rụm ôm trọn con mực sữa tươi còn nguyên túi mật béo ngọt.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" }
             ],
             bactrungbo: [
-                { title: "Cháo Lươn Nghệ An", loc: "Nghệ An", price: "45.000đ", desc: "Lươn đồng xào nghệ cay nồng, cháo hạt nở đều thơm mùi hành tăm đặc sản xứ Nghệ.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
-                { title: "Súp Lươn Nghệ An", loc: "Nghệ An", price: "50.000đ", desc: "Nước súp lươn sóng sánh cay bỏng lưỡi chấm bánh mì giòn hoặc bánh mướt nóng.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
-                { title: "Miến Lươn", loc: "Nghệ An", price: "45.000đ", desc: "Miến dong dai mềm kết hợp lươn đồng xào cay hoặc lươn chiên giòn tan.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Mướt Xứ Nghệ", loc: "Nghệ An", price: "30.000đ", desc: "Bánh tráng mỏng mềm mướt phủ hành tăm phi thơm lừng chấm mắm chanh ớt.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Nhút Thanh Chương", loc: "Nghệ An", price: "40.000đ/hũ", desc: "Xơ mít non muối chua mặn đậm đà, món ăn chống đói truyền thống trứ danh.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Đa Xúc Hến", loc: "Sông Lam", price: "40.000đ", desc: "Hến sông Lam xào hành tăm ớt cay xúc bánh đa Đô Lương giòn tan rụm.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Kẹo Cu Đơ Hà Tĩnh", loc: "Hà Tĩnh", price: "35.000đ/gói", desc: "Mật mía dẻo quánh quện đậu phộng bùi và gừng tươi kẹp bánh tráng nướng giòn.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
-                { title: "Cháo Canh Quảng Bình", loc: "Quảng Bình", price: "35.000đ", desc: "Sợi bột nhào dai mềm nấu cá lóc đồng, chả cá ngọt lịm thơm hành hẹ.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Bột Lọc Quảng Bình", loc: "Quảng Bình", price: "35.000đ/đĩa", desc: "Bánh lọc trần chấm mắm ruốc ớt cay nồng đậm chất miền cát trắng.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Khoái Quảng Bình", loc: "Đồng Hới", price: "35.000đ", desc: "Vỏ bánh dày giòn rụm nhân tôm thịt chấm nước lèo gan heo sánh béo.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bún Hến Mai Xá", loc: "Gio Linh - Quảng Trị", price: "30.000đ", desc: "Bún chắt chắt ngọt lịm béo ngậy kèm rau thơm và gừng tươi cay nồng.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
-                { title: "Bánh Ướt Phương Lang", loc: "Hải Lăng - Quảng Trị", price: "35.000đ/đĩa", desc: "Bánh ướt gạo dẻo cuốn thịt heo nướng chấm nước lèo tương ớt Quảng Trị cay xé.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" }
+                { id: "btb_1", rawPrice: 45000, title: "Cháo Lươn Nghệ An", loc: "Nghệ An", price: "45.000đ", desc: "Lươn đồng xào nghệ cay nồng, cháo hạt nở đều thơm mùi hành tăm đặc sản xứ Nghệ.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
+                { id: "btb_2", rawPrice: 50000, title: "Súp Lươn Nghệ An", loc: "Nghệ An", price: "50.000đ", desc: "Nước súp lươn sóng sánh cay bỏng lưỡi chấm bánh mì giòn hoặc bánh mướt nóng.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
+                { id: "btb_3", rawPrice: 45000, title: "Miến Lươn", loc: "Nghệ An", price: "45.000đ", desc: "Miến dong dai mềm kết hợp lươn đồng xào cay hoặc lươn chiên giòn tan.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
+                { id: "btb_4", rawPrice: 30000, title: "Bánh Mướt Xứ Nghệ", loc: "Nghệ An", price: "30.000đ", desc: "Bánh tráng mỏng mềm mướt phủ hành tăm phi thơm lừng chấm mắm chanh ớt.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { id: "btb_5", rawPrice: 40000, title: "Nhút Thanh Chương", loc: "Nghệ An", price: "40.000đ", desc: "Xơ mít non muối chua mặn đậm đà, món ăn chống đói truyền thống trứ danh.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { id: "btb_6", rawPrice: 40000, title: "Bánh Đa Xúc Hến", loc: "Sông Lam", price: "40.000đ", desc: "Hến sông Lam xào hành tăm ớt cay xúc bánh đa Đô Lương giòn tan rụm.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { id: "btb_7", rawPrice: 35000, title: "Kẹo Cu Đơ Hà Tĩnh", loc: "Hà Tĩnh", price: "35.000đ", desc: "Mật mía dẻo quánh quện đậu phộng bùi và gừng tươi kẹp bánh tráng nướng giòn.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" },
+                { id: "btb_8", rawPrice: 35000, title: "Cháo Canh Quảng Bình", loc: "Quảng Bình", price: "35.000đ", desc: "Sợi bột nhào dai mềm nấu cá lóc đồng, chả cá ngọt lịm thơm hành hẹ.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" },
+                { id: "btb_9", rawPrice: 35000, title: "Bánh Bột Lọc", loc: "Quảng Bình", price: "35.000đ", desc: "Bánh lọc trần chấm mắm ruốc ớt cay nồng đậm chất miền cát trắng.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { id: "btb_10", rawPrice: 35000, title: "Bánh Khoái", loc: "Đồng Hới", price: "35.000đ", desc: "Vỏ bánh dày giòn rụm nhân tôm thịt chấm nước lèo gan heo sánh béo.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+                { id: "btb_11", rawPrice: 30000, title: "Bún Hến Mai Xá", loc: "Gio Linh - Quảng Trị", price: "30.000đ", desc: "Bún chắt chắt ngọt lịm béo ngậy kèm rau thơm và gừng tươi cay nồng.", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80" },
+                { id: "btb_12", rawPrice: 35000, title: "Bánh Ướt Phương Lang", loc: "Hải Lăng - Quảng Trị", price: "35.000đ", desc: "Bánh ướt gạo dẻo cuốn thịt heo nướng chấm nước lèo tương ớt Quảng Trị cay xé.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" }
             ]
         };
 
@@ -837,6 +1055,88 @@
         Object.keys(menuData).forEach(key => {
             menuData[key].forEach(food => allFoods.push(food));
         });
+
+        // QUẢN LÝ DỮ LIỆU GIỎ HÀNG
+        let myCart = {};
+
+        function addToCart(foodItem) {
+            initAudioContext();
+            if (myCart[foodItem.id]) {
+                myCart[foodItem.id].qty += 1;
+            } else {
+                myCart[foodItem.id] = { ...foodItem, qty: 1 };
+            }
+            playAddToCartSound();
+            animateCartZone();
+            updateCartBadge();
+        }
+
+        function updateCartQty(foodId, delta) {
+            if (myCart[foodId]) {
+                myCart[foodId].qty += delta;
+                if (myCart[foodId].qty <= 0) {
+                    delete myCart[foodId];
+                }
+                updateCartBadge();
+                renderCartModal();
+            }
+        }
+
+        function animateCartZone() {
+            const cart = document.getElementById('bamboo-cart-zone');
+            cart.classList.remove('item-dropped');
+            void cart.offsetWidth; // Trigger reflow
+            cart.classList.add('item-dropped');
+        }
+
+        function updateCartBadge() {
+            let totalQty = 0;
+            Object.values(myCart).forEach(item => totalQty += item.qty);
+            document.getElementById('cartBadgeCount').innerText = totalQty;
+            document.getElementById('cartTotalItems').innerText = totalQty;
+        }
+
+        function renderCartModal() {
+            const container = document.getElementById('cartItemsContainer');
+            container.innerHTML = '';
+            let total = 0;
+
+            const items = Object.values(myCart);
+            if (items.length === 0) {
+                container.innerHTML = '<p style="text-align:center; padding:20px; color:#888; font-size:0.85rem;">Giỏ nan tre đang trống.<br>Hãy kéo món thả vào giỏ nhé!</p>';
+            } else {
+                items.forEach(item => {
+                    total += item.rawPrice * item.qty;
+                    const row = document.createElement('div');
+                    row.className = 'cart-item-row';
+                    row.innerHTML = `
+                        <div class="cart-item-info">
+                            <h4>${item.title}</h4>
+                            <span>${item.price}</span>
+                        </div>
+                        <div class="cart-item-qty">
+                            <button class="qty-btn" onclick="updateCartQty('${item.id}', -1)">-</button>
+                            <span style="font-size:0.85rem; font-weight:700;">${item.qty}</span>
+                            <button class="qty-btn" onclick="updateCartQty('${item.id}', 1)">+</button>
+                        </div>
+                    `;
+                    container.appendChild(row);
+                });
+            }
+            document.getElementById('cartTotalPrice').innerText = total.toLocaleString('vi-VN') + 'đ';
+        }
+
+        function openCartModal() {
+            initAudioContext();
+            isModalOpen = true;
+            renderCartModal();
+            document.getElementById('cartModalOverlay').classList.add('active');
+        }
+
+        function closeCartModal() {
+            document.getElementById('cartModalOverlay').classList.remove('active');
+            isModalOpen = false;
+        }
 
         // TOPPING
         const isMobile = window.innerWidth < 768;
@@ -856,7 +1156,7 @@
         }
 
         // ==========================================
-        // 4. THIẾT LẬP VẬT LÝ
+        // 4. THIẾT LẬP VẬT LÝ & KÉO THẢ VÀO GIỎ
         // ==========================================
         const { Engine, Runner, Bodies, Composite, Mouse, MouseConstraint, Events, Query } = Matter;
         const engine = Engine.create();
@@ -917,7 +1217,7 @@
                     </div>
                     <div class="food-footer">
                         <span class="food-price">${item.price}</span>
-                        <span class="hint-badge">Xem Món 🔍</span>
+                        <span class="hint-badge">Xem Chi Tiết 🔍</span>
                     </div>
                 `;
                 cardsContainer.appendChild(card);
@@ -934,6 +1234,7 @@
                 });
 
                 body.customData = card;
+                body.foodRawData = item;
                 body.renderOrder = index;
 
                 cardBodies.push({ element: card, body: body });
@@ -958,33 +1259,103 @@
         let startPoint = { x: 0, y: 0 };
         let startTime = 0;
         let isModalOpen = false;
+        let draggedBody = null;
 
-        Events.on(mouseConstraint, 'startdrag', () => {
+        const cartElement = document.getElementById('bamboo-cart-zone');
+
+        Events.on(mouseConstraint, 'startdrag', (evt) => {
             initAudioContext();
             startPoint = { x: mouse.position.x, y: mouse.position.y };
             startTime = Date.now();
+            draggedBody = evt.body;
+            if (draggedBody && draggedBody.customData) {
+                draggedBody.customData.classList.add('dragging-to-cart');
+            }
+        });
+
+        // Kiểm tra xem vị trí chuột/thẻ có rơi trúng giỏ nan tre không
+        Events.on(engine, 'afterUpdate', () => {
+            if (draggedBody) {
+                const cartRect = cartElement.getBoundingClientRect();
+                const mouseX = mouse.position.x;
+                const mouseY = mouse.position.y;
+                
+                // Mở rộng vùng hứng giỏ tre để bắt dính mượt mà
+                const isHoveringCart = (
+                    mouseX >= cartRect.left - 25 &&
+                    mouseX <= cartRect.right + 25 &&
+                    mouseY >= cartRect.top - 25 &&
+                    mouseY <= cartRect.bottom + 25
+                );
+
+                if (isHoveringCart) {
+                    cartElement.classList.add('drag-hover');
+                } else {
+                    cartElement.classList.remove('drag-hover');
+                }
+            }
         });
 
         Events.on(mouseConstraint, 'enddrag', () => {
             if (isModalOpen) return;
 
-            const distanceMoved = Math.hypot(
-                mouse.position.x - startPoint.x,
-                mouse.position.y - startPoint.y
-            );
-            const duration = Date.now() - startTime;
+            const cartRect = cartElement.getBoundingClientRect();
+            const mouseX = mouse.position.x;
+            const mouseY = mouse.position.y;
 
-            if (distanceMoved < 15 && duration < 350) {
-                const allUnderCursor = Query.point(cardBodies.map(cb => cb.body), mouse.position);
+            const isDroppedIntoCart = (
+                mouseX >= cartRect.left - 25 &&
+                mouseX <= cartRect.right + 25 &&
+                mouseY >= cartRect.top - 25 &&
+                mouseY <= cartRect.bottom + 25
+            );
+
+            // NẾU THẢ VÀO GIỎ NAN TRE
+            if (draggedBody && isDroppedIntoCart && draggedBody.foodRawData) {
+                addToCart(draggedBody.foodRawData);
                 
-                if (allUnderCursor.length > 0) {
-                    allUnderCursor.sort((a, b) => b.renderOrder - a.renderOrder);
-                    const topmostBody = allUnderCursor[0];
-                    if (topmostBody && topmostBody.customData) {
-                        openModal(topmostBody.customData);
+                // Hiệu ứng hút thẻ vào giỏ tre
+                const el = draggedBody.customData;
+                if (el) {
+                    el.style.transition = 'all 0.25s ease-in';
+                    el.style.transform = `translate3d(${cartRect.left}px, ${cartRect.top}px, 0) scale(0.1)`;
+                    el.style.opacity = '0';
+                    setTimeout(() => {
+                        el.style.transition = '';
+                        el.style.opacity = '1';
+                        // Đưa vật thể về lại vị trí ngẫu nhiên trên cao
+                        Matter.Body.setPosition(draggedBody, {
+                            x: Math.random() * (width - 200) + 100,
+                            y: 100
+                        });
+                        Matter.Body.setVelocity(draggedBody, { x: 0, y: 0 });
+                    }, 300);
+                }
+            } else {
+                // NẾU CHỈ LÀ THAO TÁC CHẠM (CLICK) ĐỂ XEM CHI TIẾT
+                const distanceMoved = Math.hypot(
+                    mouse.position.x - startPoint.x,
+                    mouse.position.y - startPoint.y
+                );
+                const duration = Date.now() - startTime;
+
+                if (distanceMoved < 15 && duration < 350) {
+                    const allUnderCursor = Query.point(cardBodies.map(cb => cb.body), mouse.position);
+                    if (allUnderCursor.length > 0) {
+                        allUnderCursor.sort((a, b) => b.renderOrder - a.renderOrder);
+                        const topmostBody = allUnderCursor[0];
+                        if (topmostBody && topmostBody.customData) {
+                            openModal(topmostBody.customData, topmostBody.foodRawData);
+                        }
                     }
                 }
             }
+
+            if (draggedBody && draggedBody.customData) {
+                draggedBody.customData.classList.remove('dragging-to-cart');
+            }
+            cartElement.classList.remove('drag-hover');
+            draggedBody = null;
         });
 
         const runner = Runner.create();
@@ -995,9 +1366,11 @@
 
         Events.on(engine, 'afterUpdate', () => {
             cardBodies.forEach(({ element, body }) => {
-                const { x, y } = body.position;
-                const angle = body.angle;
-                element.style.transform = `translate3d(${x - halfW}px, ${y - halfH}px, 0) rotate(${angle}rad)`;
+                if (!element.style.transition) {
+                    const { x, y } = body.position;
+                    const angle = body.angle;
+                    element.style.transform = `translate3d(${x - halfW}px, ${y - halfH}px, 0) rotate(${angle}rad)`;
+                }
             });
         });
 
@@ -1111,17 +1484,20 @@
         }
 
         // ==========================================
-        // 6. POPUP CHI TIẾT
+        // 6. POPUP CHI TIẾT & NÚT THÊM GIỎ HÀNG
         // ==========================================
         const modalOverlay = document.getElementById('modalOverlay');
         const modalImg = document.getElementById('modalImg');
         const modalTitle = document.getElementById('modalTitle');
         const modalPrice = document.getElementById('modalPrice');
         const modalDesc = document.getElementById('modalDesc');
+        const addDirectBtn = document.getElementById('addDirectBtn');
+        let currentModalFood = null;
 
-        function openModal(cardElement) {
+        function openModal(cardElement, foodRawData) {
             initAudioContext();
             isModalOpen = true;
+            currentModalFood = foodRawData;
             modalImg.src = cardElement.getAttribute('data-img');
             modalTitle.innerText = cardElement.getAttribute('data-title');
             modalPrice.innerText = cardElement.getAttribute('data-price');
@@ -1132,12 +1508,20 @@
         function openDirectModal(foodObj) {
             initAudioContext();
             isModalOpen = true;
+            currentModalFood = foodObj;
             modalImg.src = foodObj.img;
             modalTitle.innerText = "🏮 Gợi Ý: " + foodObj.title;
             modalPrice.innerText = foodObj.price;
             modalDesc.innerText = `[${foodObj.loc}] - ${foodObj.desc}`;
             modalOverlay.classList.add('active');
         }
+
+        addDirectBtn.addEventListener('click', () => {
+            if (currentModalFood) {
+                addToCart(currentModalFood);
+                closeModal();
+            }
+        });
 
         function closeModal() {
             modalOverlay.classList.remove('active');
@@ -1148,6 +1532,7 @@
             if (e.key === 'Escape') {
                 closeModal();
                 closeWheelModal();
+                closeCartModal();
             }
         });
 
