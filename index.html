@@ -72,13 +72,13 @@
         .header-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         .music-btn {
             background: rgba(255, 255, 255, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.4);
             color: #ffffff;
-            padding: 5px 12px;
+            padding: 5px 10px;
             border-radius: 16px;
             font-size: 0.78rem;
             font-weight: 600;
@@ -92,6 +92,23 @@
             background: #f5c542;
             color: #4a120e;
             border-color: #f5c542;
+        }
+        .wheel-nav-btn {
+            background: linear-gradient(135deg, #ff9f43, #ee5253);
+            border: 1px solid #ffeaa7;
+            color: #ffffff;
+            padding: 5px 12px;
+            border-radius: 16px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            animation: pulseBtn 2s infinite;
+        }
+        @keyframes pulseBtn {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
         .contact-btn {
             background: #f5c542;
@@ -197,7 +214,111 @@
             font-weight: 600;
         }
 
-        /* 4. POPUP MODAL ĐƯỢC TỐI ƯU CƠ CHẾ CLICK */
+        /* 4. MODAL VÒNG QUAY "HÔM NAY ĂN GÌ?" */
+        .wheel-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99998;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 15px;
+        }
+        .wheel-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .wheel-modal-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 380px;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .wheel-modal-overlay.active .wheel-modal-card {
+            transform: scale(1);
+        }
+        .wheel-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #b8332a;
+            margin-bottom: 4px;
+        }
+        .wheel-subtitle {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .wheel-wrapper {
+            position: relative;
+            width: 290px;
+            height: 290px;
+            margin: 0 auto 15px;
+        }
+        #wheelCanvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 4s cubic-bezier(0.15, 0.9, 0.2, 1);
+        }
+        .wheel-pointer {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-top: 24px solid #e74c3c;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+            z-index: 10;
+        }
+        .spin-action-btn {
+            background: linear-gradient(135deg, #b8332a, #e74c3c);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(184, 51, 42, 0.4);
+            transition: transform 0.1s;
+        }
+        .spin-action-btn:active {
+            transform: scale(0.96);
+        }
+        .spin-action-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .close-wheel-btn {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            color: #888;
+            cursor: pointer;
+        }
+
+        /* 5. POPUP CHI TIẾT MÓN ĂN */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -208,7 +329,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 99999; /* Đảm bảo nổi lên trên cùng */
+            z-index: 99999;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.25s ease;
@@ -216,7 +337,7 @@
         }
         .modal-overlay.active {
             opacity: 1;
-            pointer-events: auto; /* Bật nhận sự kiện click */
+            pointer-events: auto;
         }
         .modal-content {
             background: #ffffff;
@@ -300,7 +421,7 @@
 </head>
 <body>
 
-    <!-- THẺ AUDIO: Sử dụng file nhac-mien-trung.mp3.mp3 theo đúng tên của bạn -->
+    <!-- THẺ AUDIO: File nhạc nền -->
     <audio id="bgMusic" loop preload="auto">
         <source src="./nhac-mien-trung.mp3.mp3" type="audio/mpeg">
     </audio>
@@ -311,8 +432,10 @@
         <div class="top-bar">
             <h1>ẨM THỰC O HUỆ - MIỀN TRUNG</h1>
             <div class="header-controls">
+                <!-- NÚT VÒNG QUAY "HÔM NAY ĂN GÌ?" -->
+                <button class="wheel-nav-btn" onclick="openWheelModal()">🎁 Hôm Nay Ăn Gì?</button>
                 <button class="music-btn" id="musicToggleBtn" onclick="toggleMusic()">
-                    <span id="musicIcon">🔈</span> <span id="musicText">Bật Nhạc Huế</span>
+                    <span id="musicIcon">🔈</span> <span id="musicText">Bật Nhạc</span>
                 </button>
                 <a href="tel:0900000000" class="contact-btn">Đặt Món</a>
             </div>
@@ -330,7 +453,21 @@
 
     <div id="cards-container"></div>
 
-    <!-- POPUP XEM CHI TIẾT ĐÃ FIX NÚT ĐÓNG -->
+    <!-- MODAL VÒNG QUAY RANDOM -->
+    <div id="wheelModalOverlay" class="wheel-modal-overlay" onclick="closeWheelModal(event)">
+        <div class="wheel-modal-card" onclick="event.stopPropagation()">
+            <button class="close-wheel-btn" onclick="closeWheelModal()">&times;</button>
+            <h2 class="wheel-title">🎡 HÔM NAY ĂN GÌ?</h2>
+            <p class="wheel-subtitle">Phân vân chưa biết chọn gì? Hãy để O Huệ chọn giúp bạn!</p>
+            <div class="wheel-wrapper">
+                <div class="wheel-pointer"></div>
+                <canvas id="wheelCanvas" width="600" height="600"></canvas>
+            </div>
+            <button class="spin-action-btn" id="spinBtn" onclick="spinWheel()">QUAY NGAY 🎯</button>
+        </div>
+    </div>
+
+    <!-- POPUP XEM CHI TIẾT MÓN ĂN -->
     <div id="modalOverlay" class="modal-overlay">
         <div class="modal-content" onclick="event.stopPropagation()">
             <img id="modalImg" class="modal-img" src="" alt="Món ăn">
@@ -350,7 +487,7 @@
 
     <script>
         // ==========================================
-        // 1. TIẾNG GÕ VA CHẠM (WEB AUDIO API)
+        // 1. TỔNG HỢP ÂM THANH (WEB AUDIO API)
         // ==========================================
         let audioCtx = null;
         let lastSoundTime = 0;
@@ -365,6 +502,7 @@
             }
         }
 
+        // Tiếng va chạm "bụp"
         function playCollisionSound(intensity = 1) {
             if (!audioCtx) return;
             const now = Date.now();
@@ -391,6 +529,44 @@
             } catch (e) {}
         }
 
+        // Tiếng tạch tạch khi quay (Tick sound)
+        function playTickSound() {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.04);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            } catch (e) {}
+        }
+
+        // Nhạc hiệu chiến thắng khi quay trúng món (Fanfare)
+        function playWinSound() {
+            if (!audioCtx) return;
+            try {
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // Đô - Mi - Sol - Đố
+                notes.forEach((freq, index) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + index * 0.1);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime + index * 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + index * 0.1 + 0.35);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(audioCtx.currentTime + index * 0.1);
+                    osc.stop(audioCtx.currentTime + index * 0.1 + 0.4);
+                });
+            } catch (e) {}
+        }
+
         // ==========================================
         // 2. NHẠC NỀN MIỀN TRUNG
         // ==========================================
@@ -408,7 +584,7 @@
             } else {
                 musicToggleBtn.classList.remove('playing');
                 musicIcon.innerText = '🔈';
-                musicText.innerText = 'Bật Nhạc Huế';
+                musicText.innerText = 'Bật Nhạc';
             }
         }
 
@@ -423,9 +599,7 @@
                 bgMusic.play().then(() => {
                     isMusicPlaying = true;
                     updateMusicUI(true);
-                }).catch(err => {
-                    console.log("Cần tương tác để phát nhạc:", err);
-                });
+                }).catch(err => console.log("Lỗi nhạc:", err));
             }
         }
 
@@ -443,7 +617,7 @@
         window.addEventListener('pointerdown', autoPlayOnFirstTouch, { once: true });
 
         // ==========================================
-        // 3. DỮ LIỆU MÓN ĂN 5 KHU VỰC
+        // 3. DỮ LIỆU ĐẦY ĐỦ 44 MÓN ĂN
         // ==========================================
         const menuData = {
             danang_quangnam: [
@@ -508,6 +682,12 @@
                 { title: "Bánh Ướt Phương Lang", loc: "Hải Lăng - Quảng Trị", price: "35.000đ/đĩa", desc: "Bánh ướt gạo dẻo cuốn thịt heo nướng chấm nước lèo tương ớt Quảng Trị cay xé.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" }
             ]
         };
+
+        // Gom tất cả 44 món vào một mảng duy nhất để quay thưởng
+        const allFoods = [];
+        Object.keys(menuData).forEach(key => {
+            menuData[key].forEach(food => allFoods.push(food));
+        });
 
         // TOPPING NỀN
         const toppingLayer = document.getElementById('topping-layer');
@@ -652,7 +832,128 @@
         });
 
         // ==========================================
-        // 5. XỬ LÝ POPUP & SỬA LỖI NÚT ĐÓNG DỨT ĐIỂM
+        // 5. XỬ LÝ VÒNG QUAY "HÔM NAY ĂN GÌ?"
+        // ==========================================
+        const wheelModalOverlay = document.getElementById('wheelModalOverlay');
+        const wheelCanvas = document.getElementById('wheelCanvas');
+        const ctx = wheelCanvas.getContext('2d');
+        const spinBtn = document.getElementById('spinBtn');
+        let currentWheelAngle = 0;
+        let isSpinning = false;
+
+        const wheelColors = ['#f39c12', '#e74c3c', '#27ae60', '#2980b9', '#8e44ad', '#d35400', '#16a085'];
+
+        function drawWheel() {
+            const numSegments = allFoods.length;
+            const arcSize = (2 * Math.PI) / numSegments;
+            const radius = 300;
+            ctx.clearRect(0, 0, 600, 600);
+
+            for (let i = 0; i < numSegments; i++) {
+                const angle = i * arcSize;
+                ctx.beginPath();
+                ctx.fillStyle = wheelColors[i % wheelColors.length];
+                ctx.moveTo(300, 300);
+                ctx.arc(300, 300, radius, angle, angle + arcSize);
+                ctx.fill();
+                ctx.stroke();
+
+                // Vẽ tên món ăn trên nan quạt
+                ctx.save();
+                ctx.translate(300, 300);
+                ctx.rotate(angle + arcSize / 2);
+                ctx.textAlign = 'right';
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 12px Arial';
+                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                ctx.shadowBlur = 3;
+                // Rút ngắn tên nếu quá dài để vừa nan quạt
+                const text = allFoods[i].title.length > 14 ? allFoods[i].title.substring(0, 13) + '..' : allFoods[i].title;
+                ctx.fillText(text, radius - 20, 4);
+                ctx.restore();
+            }
+
+            // Vẽ tâm vòng quay
+            ctx.beginPath();
+            ctx.arc(300, 300, 35, 0, 2 * Math.PI);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = '#b8332a';
+            ctx.stroke();
+
+            ctx.fillStyle = '#b8332a';
+            ctx.font = 'bold 14px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('O HUỆ', 300, 305);
+        }
+
+        drawWheel();
+
+        function openWheelModal() {
+            initAudioContext();
+            wheelModalOverlay.classList.add('active');
+        }
+
+        function closeWheelModal(e) {
+            if (isSpinning) return; // Không cho đóng khi đang quay
+            if (e) {
+                e.stopPropagation();
+            }
+            wheelModalOverlay.classList.remove('active');
+        }
+
+        function spinWheel() {
+            if (isSpinning) return;
+            initAudioContext();
+            isSpinning = true;
+            spinBtn.disabled = true;
+
+            const numSegments = allFoods.length;
+            const arcDegree = 360 / numSegments;
+
+            // Chọn ngẫu nhiên 1 món ăn trong 44 món
+            const winningIndex = Math.floor(Math.random() * numSegments);
+            const winningFood = allFoods[winningIndex];
+
+            // Tính số vòng quay ngẫu nhiên (từ 5 đến 8 vòng) + góc rơi đúng mũi tên trên đỉnh (270 độ)
+            const extraRounds = 360 * (5 + Math.floor(Math.random() * 3));
+            // Góc của phần thưởng (tính từ 0 rad chuẩn)
+            const stopAngle = 270 - (winningIndex * arcDegree + arcDegree / 2);
+            const totalRotation = currentWheelAngle + extraRounds + (stopAngle - (currentWheelAngle % 360));
+
+            currentWheelAngle = totalRotation;
+            wheelCanvas.style.transform = `rotate(${currentWheelAngle}deg)`;
+
+            // Hiệu ứng âm thanh "tạch tạch" mô phỏng theo tốc độ quay giảm dần
+            let tickInterval = 60;
+            let tickTimer = null;
+            const runTicks = () => {
+                playTickSound();
+                tickInterval *= 1.05;
+                if (tickInterval < 450) {
+                    tickTimer = setTimeout(runTicks, tickInterval);
+                }
+            };
+            runTicks();
+
+            // Khi quay xong (sau 4 giây)
+            setTimeout(() => {
+                clearTimeout(tickTimer);
+                isSpinning = false;
+                spinBtn.disabled = false;
+                playWinSound();
+
+                // Đóng bảng vòng quay và hiện Popup trúng thưởng
+                setTimeout(() => {
+                    wheelModalOverlay.classList.remove('active');
+                    openDirectModal(winningFood);
+                }, 700);
+            }, 4100);
+        }
+
+        // ==========================================
+        // 6. XỬ LÝ POPUP CHI TIẾT
         // ==========================================
         const modalOverlay = document.getElementById('modalOverlay');
         const modalImg = document.getElementById('modalImg');
@@ -670,6 +971,15 @@
             modalOverlay.classList.add('active');
         }
 
+        function openDirectModal(foodObj) {
+            initAudioContext();
+            modalImg.src = foodObj.img;
+            modalTitle.innerText = "🎉 Gợi Ý: " + foodObj.title;
+            modalPrice.innerText = foodObj.price;
+            modalDesc.innerText = `[${foodObj.loc}] - ${foodObj.desc}`;
+            modalOverlay.classList.add('active');
+        }
+
         function closeModal(e) {
             if (e) {
                 e.stopPropagation();
@@ -678,17 +988,16 @@
             modalOverlay.classList.remove('active');
         }
 
-        // Bắt mọi sự kiện đóng (Click, Chạm, Phím Esc)
         closeBtn.addEventListener('click', closeModal);
         closeBtn.addEventListener('touchend', closeModal);
-        
         modalOverlay.addEventListener('click', (e) => {
             if (e.target === modalOverlay) closeModal(e);
         });
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+            if (e.key === 'Escape') {
                 closeModal();
+                closeWheelModal();
             }
         });
 
