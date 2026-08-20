@@ -13,25 +13,25 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ẩm Thực O Huệ - Đượm Vị Quê Hương Miền Trung</title>
+    <title>Ẩm Thực O Huệ - Tinh Hoa Ẩm Thực Miền Trung</title>
     
-    <!-- Google Fonts: Playfair Display & Quicksand -->
+    <!-- Phông chữ chuẩn hóa tiếng Việt Be Vietnam Pro & Merriweather -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Merriweather:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
     
     <!-- Thư viện vật lý Matter.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     
     <style>
         :root {
-            --primary: #8c2d19;       /* Đỏ nâu đất nung Cố Đô */
-            --primary-dark: #5c180a;  /* Nâu gỗ gụ trầm */
-            --accent: #d4a359;        /* Vàng lúa chín / rơm rạ */
-            --accent-light: #f3dfb4;  /* Màu mây tre đan nhạt */
-            --leaf: #2d5a27;          /* Xanh lá chuối nếp */
-            --bg-paper: #f7f2e7;      /* Màu giấy dó truyền thống */
-            --text-main: #2c2523;     /* Đen mun than củi */
+            --hoian-yellow: #E5A93C;      /* Vàng ấm tường cổ Hội An */
+            --hoian-yellow-light: #FBF4E6;/* Kem giấy dó ngả vàng ấm */
+            --burgundy: #8E2824;          /* Đỏ đô trầm cung đình */
+            --burgundy-dark: #5C1512;     /* Đỏ đô thẫm gỗ gụ */
+            --teal-blue: #1C4E5B;         /* Xanh cổ vịt (Teal Blue) */
+            --teal-dark: #10323B;         /* Xanh cổ vịt trầm sâu */
+            --charcoal: #2A2421;          /* Đen mun than củi */
         }
 
         * {
@@ -48,12 +48,12 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: var(--bg-paper);
-            font-family: 'Quicksand', sans-serif;
-            color: var(--text-main);
+            background-color: var(--hoian-yellow-light);
+            font-family: 'Be Vietnam Pro', sans-serif;
+            color: var(--charcoal);
         }
 
-        /* 1. KHÔNG GIAN ĐỒNG QUÊ CHÂN THỰC Ở NỀN */
+        /* 1. KHÔNG GIAN HỘI AN HOÀNG HÔN NỀN NÃ */
         .scenery-background {
             position: absolute;
             top: 0;
@@ -61,9 +61,9 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 50% 30%, rgba(247, 242, 231, 0.4) 0%, rgba(218, 197, 163, 0.75) 100%),
+                radial-gradient(circle at 50% 35%, rgba(251, 244, 230, 0.45) 0%, rgba(28, 78, 91, 0.75) 100%),
                 url('https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1800&q=80') center center / cover no-repeat;
-            filter: saturate(0.85) contrast(1.05);
+            filter: saturate(0.9) brightness(0.95);
             pointer-events: none;
             z-index: 0;
         }
@@ -74,9 +74,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: radial-gradient(#8c2d19 0.75px, transparent 0.75px);
-            background-size: 24px 24px;
-            opacity: 0.08;
+            background-image: radial-gradient(var(--teal-blue) 0.6px, transparent 0.6px);
+            background-size: 20px 20px;
+            opacity: 0.1;
             pointer-events: none;
             z-index: 1;
         }
@@ -93,27 +93,27 @@
         }
         .topping-item {
             position: absolute;
-            font-size: 1.6rem;
-            opacity: 0.55;
+            font-size: 1.5rem;
+            opacity: 0.5;
             animation: floatAround linear infinite;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.12));
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.12));
             will-change: transform;
         }
         @keyframes floatAround {
-            0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.95); }
-            50% { transform: translate3d(45px, 20px, 0) rotate(180deg) scale(1.05); }
-            100% { transform: translate3d(0, 0, 0) rotate(360deg) scale(0.95); }
+            0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+            50% { transform: translate3d(40px, 20px, 0) rotate(180deg); }
+            100% { transform: translate3d(0, 0, 0) rotate(360deg); }
         }
 
-        /* 2. THANH HEADER */
+        /* 2. THANH HEADER: PHONG CÁCH XANH CỔ VỊT & ĐỎ ĐÔ ĐÔNG DƯƠNG */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%);
-            border-bottom: 2px solid var(--accent);
-            box-shadow: 0 4px 15px rgba(44, 24, 16, 0.35);
+            background: linear-gradient(180deg, var(--teal-dark) 0%, var(--teal-blue) 100%);
+            border-bottom: 2px solid var(--hoian-yellow);
+            box-shadow: 0 4px 16px rgba(16, 50, 59, 0.35);
             z-index: 1000;
             pointer-events: auto !important;
         }
@@ -122,33 +122,31 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(212, 163, 89, 0.25);
+            border-bottom: 1px solid rgba(229, 169, 60, 0.25);
         }
         .brand-block {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
         .brand-logo-icon {
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
         .brand-name {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Merriweather', serif;
             font-size: 1.15rem;
-            font-weight: 800;
-            color: #fff9eb;
+            font-weight: 900;
+            color: #FFFFFF;
             letter-spacing: 0.5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
         }
         .brand-sub {
             font-size: 0.65rem;
-            color: var(--accent-light);
+            color: var(--hoian-yellow);
             display: block;
-            margin-top: -2px;
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 600;
-            letter-spacing: 0.5px;
+            margin-top: -1px;
+            font-weight: 500;
+            letter-spacing: 0.4px;
         }
         .header-controls {
             display: flex;
@@ -156,23 +154,23 @@
             gap: 8px;
         }
         .wheel-nav-btn {
-            background: linear-gradient(135deg, #c0392b, #d35400);
-            border: 1px solid var(--accent);
+            background: linear-gradient(135deg, var(--burgundy), #A8322D);
+            border: 1px solid var(--hoian-yellow);
             color: #ffffff;
             padding: 6px 12px;
             border-radius: 18px;
             font-weight: 700;
             font-size: 0.75rem;
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            box-shadow: 0 2px 8px rgba(142, 40, 36, 0.3);
             display: flex;
             align-items: center;
             gap: 4px;
         }
         .music-btn {
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(212, 163, 89, 0.4);
-            color: #fff9eb;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(229, 169, 60, 0.4);
+            color: #FFFFFF;
             padding: 6px 10px;
             border-radius: 18px;
             font-size: 0.75rem;
@@ -180,21 +178,21 @@
             cursor: pointer;
         }
         .music-btn.playing {
-            background: var(--accent);
-            color: var(--primary-dark);
+            background: var(--hoian-yellow);
+            color: var(--teal-dark);
             border-color: #fff;
             font-weight: 700;
         }
         .contact-btn {
-            background: var(--accent);
-            color: var(--primary-dark);
-            padding: 6px 12px;
+            background: var(--hoian-yellow);
+            color: var(--teal-dark);
+            padding: 6px 14px;
             border-radius: 18px;
-            font-weight: 800;
+            font-weight: 700;
             font-size: 0.75rem;
             text-decoration: none;
-            border: 1px solid #fff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            border: 1px solid #FFFFFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
         }
 
         /* Menu tỉnh thành */
@@ -208,15 +206,15 @@
             scrollbar-width: none;
             pointer-events: auto !important;
             touch-action: pan-x !important;
-            background: rgba(44, 24, 16, 0.35);
+            background: rgba(16, 50, 59, 0.4);
         }
         .category-menu::-webkit-scrollbar {
             display: none;
         }
         .cat-btn {
-            background: rgba(247, 242, 231, 0.15);
-            border: 1px solid rgba(212, 163, 89, 0.4);
-            color: #fff9eb;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(229, 169, 60, 0.35);
+            color: #FFFFFF;
             padding: 5px 14px;
             border-radius: 14px;
             font-size: 0.75rem;
@@ -226,11 +224,11 @@
             transition: all 0.2s ease;
         }
         .cat-btn.active {
-            background: linear-gradient(180deg, #f3dfb4 0%, var(--accent) 100%);
-            color: var(--primary-dark);
-            border-color: #ffffff;
-            font-weight: 800;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            background: var(--hoian-yellow);
+            color: var(--teal-dark);
+            border-color: #FFFFFF;
+            font-weight: 700;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
 
         .instruction {
@@ -238,9 +236,9 @@
             bottom: 12px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(44, 24, 16, 0.85);
-            border: 1px solid var(--accent);
-            color: #fff9eb;
+            background: rgba(18, 53, 62, 0.88);
+            border: 1px solid var(--hoian-yellow);
+            color: #FFFFFF;
             padding: 6px 16px;
             border-radius: 20px;
             font-size: 0.72rem;
@@ -248,7 +246,7 @@
             pointer-events: none;
             z-index: 100;
             white-space: nowrap;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
         }
 
         /* 3. KHUNG VẬT LÝ */
@@ -262,31 +260,29 @@
             touch-action: none;
         }
 
-        /* 4. THẺ MÓN ĂN */
+        /* 4. THẺ MÓN ĂN: NỀN KEM ẤM - VIỀN ĐỒNG & XANH TEAL */
         .food-card {
             position: absolute;
-            background: #fffdf9;
-            border: 2px solid var(--accent);
+            background: #FFFDF9;
+            border: 1.5px solid var(--hoian-yellow);
             border-radius: 12px;
             padding: 8px 10px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 6px 14px rgba(60, 30, 15, 0.2), inset 0 0 0 1px rgba(140, 45, 25, 0.1);
+            box-shadow: 0 5px 12px rgba(28, 78, 91, 0.18), inset 0 0 0 1px rgba(229, 169, 60, 0.2);
             pointer-events: none;
             z-index: 20;
             will-change: transform;
             width: 155px;
             height: 90px;
-            background-image: radial-gradient(#d4a359 0.5px, transparent 0.5px);
-            background-size: 8px 8px;
         }
         @media (min-width: 768px) {
             .food-card {
                 width: 195px;
                 height: 110px;
                 padding: 10px 12px;
-                border-width: 2.5px;
+                border-width: 2px;
             }
         }
         .food-card-header {
@@ -294,20 +290,20 @@
             flex-direction: column;
         }
         .food-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 0.88rem;
-            font-weight: 800;
-            color: var(--primary);
+            font-family: 'Merriweather', serif;
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: var(--burgundy);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         @media (min-width: 768px) {
-            .food-title { font-size: 1rem; }
+            .food-title { font-size: 0.96rem; }
         }
         .food-location {
             font-size: 0.65rem;
-            color: #7d6b5c;
+            color: var(--teal-blue);
             font-weight: 600;
             display: flex;
             align-items: center;
@@ -317,33 +313,33 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px dashed #d9c8b4;
+            border-top: 1px dashed #E2D7C5;
             padding-top: 4px;
         }
         .food-price {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Be Vietnam Pro', sans-serif;
             font-size: 0.82rem;
-            font-weight: 800;
-            color: var(--leaf);
+            font-weight: 700;
+            color: var(--teal-blue);
         }
         .hint-badge {
-            background: #fbf1e0;
-            color: var(--primary);
-            border: 1px solid var(--accent);
+            background: var(--hoian-yellow-light);
+            color: var(--burgundy);
+            border: 1px solid rgba(229, 169, 60, 0.6);
             font-size: 0.62rem;
             padding: 2px 5px;
             border-radius: 4px;
             font-weight: 700;
         }
 
-        /* 5. MODAL VÒNG QUAY */
+        /* 5. MODAL VÒNG QUAY "HÔM NAY ĂN GÌ?" */
         .wheel-modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(35, 18, 11, 0.85);
+            background: rgba(16, 50, 59, 0.85);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -359,35 +355,33 @@
             pointer-events: auto;
         }
         .wheel-modal-card {
-            background: #fdfbf7;
+            background: #FFFDF9;
             width: 100%;
             max-width: 350px;
             border-radius: 20px;
-            border: 3px solid var(--accent);
+            border: 2.5px solid var(--hoian-yellow);
             padding: 20px 16px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             position: relative;
             transform: scale(0.95);
             transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background-image: radial-gradient(#d4a359 0.75px, transparent 0.75px);
-            background-size: 16px 16px;
         }
         .wheel-modal-overlay.active .wheel-modal-card {
             transform: scale(1);
         }
         .wheel-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.35rem;
-            font-weight: 800;
-            color: var(--primary);
+            font-family: 'Merriweather', serif;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--burgundy);
             margin-bottom: 2px;
         }
         .wheel-subtitle {
             font-size: 0.78rem;
-            color: #6d5849;
+            color: var(--teal-blue);
             margin-bottom: 12px;
-            font-weight: 600;
+            font-weight: 500;
         }
         .wheel-wrapper {
             position: relative;
@@ -402,8 +396,8 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            box-shadow: 0 8px 20px rgba(60, 30, 15, 0.35);
-            border: 3px solid var(--accent);
+            box-shadow: 0 8px 20px rgba(28, 78, 91, 0.25);
+            border: 3px solid var(--hoian-yellow);
             transition: transform 4s cubic-bezier(0.15, 0.9, 0.2, 1);
             will-change: transform;
         }
@@ -416,26 +410,24 @@
             height: 0;
             border-left: 14px solid transparent;
             border-right: 14px solid transparent;
-            border-top: 24px solid var(--primary);
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+            border-top: 24px solid var(--burgundy);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
             z-index: 10;
         }
         .spin-action-btn {
-            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: #fff9eb;
-            border: 2px solid var(--accent);
+            background: linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+            color: #FFFFFF;
+            border: 1.5px solid var(--hoian-yellow);
             padding: 11px 28px;
             border-radius: 25px;
             font-size: 0.95rem;
-            font-weight: 800;
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 0.5px;
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(92, 24, 10, 0.4);
+            box-shadow: 0 4px 12px rgba(142, 40, 36, 0.35);
         }
         .spin-action-btn:disabled {
-            background: #9e8d83;
-            border-color: #ccc;
+            background: #A09890;
+            border-color: #CCC;
             box-shadow: none;
         }
         .close-wheel-btn {
@@ -445,7 +437,7 @@
             background: none;
             border: none;
             font-size: 1.8rem;
-            color: #8c7362;
+            color: var(--teal-blue);
             cursor: pointer;
             line-height: 1;
             z-index: 20;
@@ -458,7 +450,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(35, 18, 11, 0.85);
+            background: rgba(16, 50, 59, 0.85);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -474,13 +466,13 @@
             pointer-events: auto;
         }
         .modal-content {
-            background: #fffdf9;
+            background: #FFFDF9;
             width: 100%;
             max-width: 350px;
             border-radius: 20px;
-            border: 2.5px solid var(--accent);
+            border: 2px solid var(--hoian-yellow);
             overflow: hidden;
-            box-shadow: 0 20px 45px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.4);
             transform: scale(0.95);
             transition: transform 0.25s ease;
             position: relative;
@@ -496,9 +488,9 @@
             right: 10px;
             width: 36px;
             height: 36px;
-            background: rgba(44, 24, 16, 0.75);
-            border: 1.5px solid var(--accent);
-            color: #fff9eb;
+            background: rgba(28, 78, 91, 0.85);
+            border: 1.5px solid var(--hoian-yellow);
+            color: #FFFFFF;
             border-radius: 50%;
             font-size: 1.4rem;
             font-weight: bold;
@@ -507,11 +499,11 @@
             align-items: center;
             cursor: pointer;
             z-index: 100;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
             pointer-events: auto !important;
         }
         .modal-close-x:active {
-            background: var(--primary-dark);
+            background: var(--burgundy);
             transform: scale(0.92);
         }
 
@@ -520,7 +512,7 @@
             height: 195px;
             object-fit: cover;
             display: block;
-            border-bottom: 2px solid var(--accent);
+            border-bottom: 2px solid var(--hoian-yellow);
         }
         .modal-body {
             padding: 16px;
@@ -532,20 +524,20 @@
             margin-bottom: 6px;
         }
         .modal-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: var(--primary);
+            font-family: 'Merriweather', serif;
+            font-size: 1.12rem;
+            font-weight: 700;
+            color: var(--burgundy);
         }
         .modal-price {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--leaf);
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--teal-blue);
         }
         .modal-desc {
             font-size: 0.82rem;
-            color: #554438;
+            color: #4A403A;
             line-height: 1.45;
             margin-bottom: 16px;
             font-weight: 500;
@@ -553,18 +545,16 @@
         .order-btn-full {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
-            border: 1.5px solid var(--accent);
-            color: #fff9eb;
+            background: linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+            border: 1.5px solid var(--hoian-yellow);
+            color: #FFFFFF;
             border-radius: 12px;
-            font-weight: 800;
-            font-size: 0.95rem;
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 0.5px;
+            font-weight: 700;
+            font-size: 0.92rem;
             text-align: center;
             text-decoration: none;
             display: block;
-            box-shadow: 0 4px 10px rgba(92, 24, 10, 0.3);
+            box-shadow: 0 4px 10px rgba(142, 40, 36, 0.3);
         }
         .order-btn-full:active {
             transform: scale(0.98);
@@ -578,19 +568,19 @@
         <source src="./nhac-mien-trung.mp3.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- NỀN ĐỒNG QUÊ MỘC MẠC -->
+    <!-- NỀN HỘI AN HOÀNG HÔN NỀN NÃ -->
     <div class="scenery-background"></div>
     <div class="scenery-overlay"></div>
     <div id="topping-layer"></div>
 
-    <!-- HEADER -->
+    <!-- HEADER XANH CỔ VỊT - ĐỎ ĐÔ - VÀNG ẤM -->
     <header>
         <div class="top-bar">
             <div class="brand-block">
                 <span class="brand-logo-icon">🏮</span>
                 <div>
                     <h1 class="brand-name">Ẩm Thực O Huệ</h1>
-                    <span class="brand-sub">Hương Vị Quê Nhà Miền Trung</span>
+                    <span class="brand-sub">Hương Vị Cố Đô & Miền Trung</span>
                 </div>
             </div>
             <div class="header-controls">
@@ -601,6 +591,7 @@
                 <a href="tel:0900000000" class="contact-btn">Đặt Món</a>
             </div>
         </div>
+        <!-- MENU TỈNH THÀNH -->
         <div class="category-menu">
             <button class="cat-btn active" onclick="switchRegion('danang_quangnam', this)">Đà Nẵng – Quảng Nam</button>
             <button class="cat-btn" onclick="switchRegion('hue', this)">Xứ Huế Cố Đô</button>
@@ -610,7 +601,7 @@
         </div>
     </header>
 
-    <div class="instruction">🌾 Chạm xem chi tiết món • Cầm ném tự do</div>
+    <div class="instruction">💡 Chạm xem chi tiết món • Cầm ném tự do</div>
 
     <!-- KHUNG VẬT LÝ -->
     <div id="physics-container">
@@ -622,7 +613,7 @@
         <div class="wheel-modal-card">
             <button class="close-wheel-btn" onclick="closeWheelModal()">&times;</button>
             <h2 class="wheel-title">🎡 Hôm Nay Ăn Gì?</h2>
-            <p class="wheel-subtitle">Để O Huệ chọn giúp bạn món ngon đượm vị quê nhé!</p>
+            <p class="wheel-subtitle">Để O Huệ gợi ý món ngon cho bạn nhé!</p>
             <div class="wheel-wrapper">
                 <div class="wheel-pointer"></div>
                 <canvas id="wheelCanvas" width="600" height="600"></canvas>
@@ -674,7 +665,7 @@
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 const volume = Math.min(Math.max(intensity * 0.08, 0.02), 0.18);
-                const startFreq = 180 + Math.random() * 30;
+                const startFreq = 175 + Math.random() * 30;
 
                 osc.frequency.setValueAtTime(startFreq, audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(35, audioCtx.currentTime + 0.07);
@@ -847,11 +838,11 @@
             menuData[key].forEach(food => allFoods.push(food));
         });
 
-        // TOPPING ĐỒNG QUÊ
+        // TOPPING
         const isMobile = window.innerWidth < 768;
         const toppingLayer = document.getElementById('topping-layer');
-        const toppingIcons = ['🌾', '🍃', '🪷', '🌶️', '🦐', '🥩', '🥟', '🍋', '🥢'];
-        const totalToppings = isMobile ? 8 : 14;
+        const toppingIcons = ['🏮', '🪷', '🌶️', '🦐', '🥟', '🥢', '🌿'];
+        const totalToppings = isMobile ? 7 : 12;
 
         for (let i = 0; i < totalToppings; i++) {
             const item = document.createElement('div');
@@ -1020,7 +1011,7 @@
         let currentWheelAngle = 0;
         let isSpinning = false;
 
-        const wheelColors = ['#8c2d19', '#d4a359', '#2d5a27', '#a04000', '#6c3483', '#117864', '#b9770e'];
+        const wheelColors = ['#8E2824', '#E5A93C', '#1C4E5B', '#A8322D', '#2A6877', '#D49326', '#5C1512'];
 
         function drawWheel() {
             const numSegments = allFoods.length;
@@ -1041,8 +1032,8 @@
                 ctx.translate(300, 300);
                 ctx.rotate(angle + arcSize / 2);
                 ctx.textAlign = 'right';
-                ctx.fillStyle = '#fff9eb';
-                ctx.font = 'bold 12px Quicksand, sans-serif';
+                ctx.fillStyle = '#FFFDF9';
+                ctx.font = 'bold 12px "Be Vietnam Pro", sans-serif';
                 const text = allFoods[i].title.length > 13 ? allFoods[i].title.substring(0, 12) + '..' : allFoods[i].title;
                 ctx.fillText(text, radius - 20, 4);
                 ctx.restore();
@@ -1050,14 +1041,14 @@
 
             ctx.beginPath();
             ctx.arc(300, 300, 38, 0, 2 * Math.PI);
-            ctx.fillStyle = '#fffdf9';
+            ctx.fillStyle = '#FFFDF9';
             ctx.fill();
             ctx.lineWidth = 4;
-            ctx.strokeStyle = '#d4a359';
+            ctx.strokeStyle = '#E5A93C';
             ctx.stroke();
 
-            ctx.fillStyle = '#8c2d19';
-            ctx.font = 'bold 15px Playfair Display, serif';
+            ctx.fillStyle = '#8E2824';
+            ctx.font = 'bold 15px "Merriweather", serif';
             ctx.textAlign = 'center';
             ctx.fillText('O HUỆ', 300, 305);
         }
@@ -1142,7 +1133,7 @@
             initAudioContext();
             isModalOpen = true;
             modalImg.src = foodObj.img;
-            modalTitle.innerText = "🌾 Gợi Ý: " + foodObj.title;
+            modalTitle.innerText = "🏮 Gợi Ý: " + foodObj.title;
             modalPrice.innerText = foodObj.price;
             modalDesc.innerText = `[${foodObj.loc}] - ${foodObj.desc}`;
             modalOverlay.classList.add('active');
