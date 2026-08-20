@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Ẩm Thực Miền Trung - Cửa Hàng O Huệ</title>
     <!-- Thư viện vật lý Matter.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
@@ -13,15 +13,17 @@
             padding: 0;
             user-select: none;
             -webkit-user-select: none;
+            -webkit-touch-callout: none;
             -webkit-tap-highlight-color: transparent;
         }
-        body {
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: fixed; /* Khóa hoàn toàn rung màn hình trên iOS/Android */
+            touch-action: none;
             background-color: #fcf8f2;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            overflow: hidden;
-            width: 100vw;
-            height: 100vh;
-            position: relative;
         }
 
         /* 1. LỚP TOPPING NỀN */
@@ -37,15 +39,16 @@
         }
         .topping-item {
             position: absolute;
-            font-size: 2rem;
-            opacity: 0.6;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.08));
+            font-size: 1.6rem;
+            opacity: 0.5;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.06));
             animation: floatAround linear infinite;
+            will-change: transform;
         }
         @keyframes floatAround {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(100px, 40px) rotate(180deg); }
-            100% { transform: translate(0, 0) rotate(360deg); }
+            0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+            50% { transform: translate3d(60px, 30px, 0) rotate(180deg); }
+            100% { transform: translate3d(0, 0, 0) rotate(360deg); }
         }
 
         /* 2. THANH HEADER */
@@ -56,142 +59,148 @@
             width: 100%;
             background: #b8332a;
             color: #ffffff;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             z-index: 100;
         }
         .top-bar {
-            padding: 10px 20px;
+            padding: 8px 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
+            border-bottom: 1px solid rgba(255,255,255,0.12);
         }
         .top-bar h1 {
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             font-weight: 700;
+            letter-spacing: 0.2px;
         }
         .header-controls {
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-        .music-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            color: #ffffff;
-            padding: 5px 10px;
-            border-radius: 16px;
-            font-size: 0.78rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            transition: all 0.2s ease;
-        }
-        .music-btn.playing {
-            background: #f5c542;
-            color: #4a120e;
-            border-color: #f5c542;
+            gap: 6px;
         }
         .wheel-nav-btn {
             background: linear-gradient(135deg, #ff9f43, #ee5253);
             border: 1px solid #ffeaa7;
             color: #ffffff;
-            padding: 5px 12px;
-            border-radius: 16px;
+            padding: 5px 10px;
+            border-radius: 14px;
             font-weight: bold;
-            font-size: 0.8rem;
+            font-size: 0.72rem;
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-            animation: pulseBtn 2s infinite;
         }
-        @keyframes pulseBtn {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .music-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            padding: 5px 8px;
+            border-radius: 14px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .music-btn.playing {
+            background: #f5c542;
+            color: #4a120e;
         }
         .contact-btn {
             background: #f5c542;
             color: #4a120e;
-            padding: 5px 12px;
-            border-radius: 16px;
+            padding: 5px 10px;
+            border-radius: 14px;
             font-weight: bold;
-            font-size: 0.8rem;
+            font-size: 0.72rem;
             text-decoration: none;
         }
 
+        /* Menu tỉnh thành hỗ trợ vuốt mượt trên mobile */
         .category-menu {
             display: flex;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
             white-space: nowrap;
-            padding: 8px 12px;
-            gap: 8px;
+            padding: 6px 10px;
+            gap: 6px;
             scrollbar-width: none;
+            touch-action: pan-x; /* Cho phép vuốt menu ngang tự nhiên */
         }
         .category-menu::-webkit-scrollbar {
             display: none;
         }
         .cat-btn {
-            background: rgba(255, 255, 255, 0.18);
-            border: 1px solid rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: #ffffff;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.82rem;
+            padding: 5px 12px;
+            border-radius: 16px;
+            font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
         }
         .cat-btn.active {
             background: #f5c542;
             color: #4a120e;
             border-color: #f5c542;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            font-weight: bold;
         }
 
         .instruction {
             position: fixed;
-            bottom: 15px;
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(0, 0, 0, 0.75);
             color: #ffffff;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.75rem;
+            padding: 5px 12px;
+            border-radius: 16px;
+            font-size: 0.7rem;
             pointer-events: none;
             z-index: 100;
-            text-align: center;
+            white-space: nowrap;
         }
 
-        /* 3. THẺ MÓN ĂN */
+        /* 3. THẺ MÓN ĂN - THIẾT KẾ ĐO LIỀNG RIÊNG CHO MOBILE & DESKTOP */
         .food-card {
             position: absolute;
-            width: 190px;
-            height: 105px;
             background: #ffffff;
-            border: 2px solid #b8332a;
+            border: 1.5px solid #b8332a;
             border-radius: 10px;
-            padding: 8px 10px;
+            padding: 6px 8px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
             pointer-events: none;
             z-index: 20;
             will-change: transform;
+            /* Mobile mặc định */
+            width: 145px;
+            height: 85px;
+        }
+        @media (min-width: 768px) {
+            .food-card {
+                width: 190px;
+                height: 105px;
+                padding: 8px 10px;
+                border-width: 2px;
+            }
         }
         .food-title {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: bold;
             color: #b8332a;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        @media (min-width: 768px) {
+            .food-title { font-size: 0.9rem; }
+        }
         .food-location {
-            font-size: 0.68rem;
+            font-size: 0.62rem;
             color: #888;
             font-weight: 500;
         }
@@ -200,23 +209,23 @@
             justify-content: space-between;
             align-items: center;
             border-top: 1px dashed #eee;
-            padding-top: 4px;
+            padding-top: 3px;
         }
         .food-price {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: bold;
             color: #27ae60;
         }
         .hint-badge {
             background: #fdf2e9;
             color: #d35400;
-            font-size: 0.65rem;
-            padding: 2px 5px;
-            border-radius: 4px;
+            font-size: 0.6rem;
+            padding: 1px 4px;
+            border-radius: 3px;
             font-weight: 600;
         }
 
-        /* 4. MODAL VÒNG QUAY "HÔM NAY ĂN GÌ?" */
+        /* 4. MODAL VÒNG QUAY */
         .wheel-modal-overlay {
             position: fixed;
             top: 0;
@@ -230,8 +239,9 @@
             z-index: 99998;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.25s ease;
-            padding: 15px;
+            transition: opacity 0.2s ease;
+            padding: 12px;
+            backdrop-filter: blur(2px);
         }
         .wheel-modal-overlay.active {
             opacity: 1;
@@ -240,88 +250,87 @@
         .wheel-modal-card {
             background: #ffffff;
             width: 100%;
-            max-width: 380px;
-            border-radius: 20px;
-            padding: 20px;
+            max-width: 340px;
+            border-radius: 18px;
+            padding: 16px;
             text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
             position: relative;
-            transform: scale(0.9);
-            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: scale(0.95);
+            transition: transform 0.2s ease;
         }
         .wheel-modal-overlay.active .wheel-modal-card {
             transform: scale(1);
         }
         .wheel-title {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: 800;
             color: #b8332a;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .wheel-subtitle {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #666;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         .wheel-wrapper {
             position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 0 auto 15px;
+            width: 240px;
+            height: 240px;
+            margin: 0 auto 12px;
+        }
+        @media (min-width: 768px) {
+            .wheel-wrapper { width: 280px; height: 280px; }
         }
         #wheelCanvas {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transition: transform 4s cubic-bezier(0.15, 0.9, 0.2, 1);
+            will-change: transform;
         }
         .wheel-pointer {
             position: absolute;
-            top: -12px;
+            top: -10px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 14px solid transparent;
-            border-right: 14px solid transparent;
-            border-top: 24px solid #e74c3c;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 20px solid #e74c3c;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
             z-index: 10;
         }
         .spin-action-btn {
             background: linear-gradient(135deg, #b8332a, #e74c3c);
             color: white;
             border: none;
-            padding: 12px 28px;
-            border-radius: 25px;
-            font-size: 1rem;
+            padding: 10px 24px;
+            border-radius: 20px;
+            font-size: 0.95rem;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(184, 51, 42, 0.4);
-            transition: transform 0.1s;
-        }
-        .spin-action-btn:active {
-            transform: scale(0.96);
+            box-shadow: 0 3px 10px rgba(184, 51, 42, 0.35);
         }
         .spin-action-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
+            background: #bbb;
             box-shadow: none;
         }
         .close-wheel-btn {
             position: absolute;
-            top: 10px;
-            right: 15px;
+            top: 8px;
+            right: 12px;
             background: none;
             border: none;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: #888;
             cursor: pointer;
-            padding: 5px 10px;
+            padding: 5px;
         }
 
-        /* 5. POPUP CHI TIẾT MÓN ĂN (TỐI ƯU SIÊU MƯỢT) */
+        /* 5. POPUP CHI TIẾT MÓN ĂN */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -335,8 +344,8 @@
             z-index: 99999;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.2s ease-out;
-            padding: 20px;
+            transition: opacity 0.2s ease;
+            padding: 15px;
             backdrop-filter: blur(2px);
         }
         .modal-overlay.active {
@@ -346,13 +355,12 @@
         .modal-content {
             background: #ffffff;
             width: 100%;
-            max-width: 360px;
+            max-width: 340px;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-            transform: scale(0.92);
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+            transform: scale(0.95);
+            transition: transform 0.2s ease;
             pointer-events: auto;
         }
         .modal-overlay.active .modal-content {
@@ -360,73 +368,65 @@
         }
         .modal-img {
             width: 100%;
-            height: 200px;
+            height: 180px;
             object-fit: cover;
             display: block;
         }
         .modal-body {
-            padding: 16px;
+            padding: 14px;
         }
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
         .modal-title {
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             font-weight: bold;
             color: #b8332a;
         }
         .modal-price {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
             color: #27ae60;
         }
         .modal-desc {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #555;
-            line-height: 1.4;
-            margin-bottom: 16px;
+            line-height: 1.35;
+            margin-bottom: 14px;
         }
         .modal-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
         .close-btn {
             flex: 1;
-            padding: 12px;
+            padding: 11px;
             border: 1px solid #ddd;
             background: #f1f2f6;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
-            pointer-events: auto;
-            text-align: center;
-            transition: background 0.15s;
-        }
-        .close-btn:active {
-            background: #dfe4ea;
         }
         .order-btn {
             flex: 2;
-            padding: 12px;
+            padding: 11px;
             background: #b8332a;
             color: white;
             border: none;
             border-radius: 8px;
             font-weight: bold;
+            font-size: 0.85rem;
             text-align: center;
             text-decoration: none;
-            cursor: pointer;
-            pointer-events: auto;
         }
     </style>
 </head>
 <body>
 
-    <!-- THẺ AUDIO -->
     <audio id="bgMusic" loop preload="auto">
         <source src="./nhac-mien-trung.mp3.mp3" type="audio/mpeg">
     </audio>
@@ -435,11 +435,11 @@
 
     <header>
         <div class="top-bar">
-            <h1>ẨM THỰC O HUỆ - MIỀN TRUNG</h1>
+            <h1>ẨM THỰC O HUỆ</h1>
             <div class="header-controls">
                 <button class="wheel-nav-btn" onclick="openWheelModal()">🎁 Hôm Nay Ăn Gì?</button>
                 <button class="music-btn" id="musicToggleBtn" onclick="toggleMusic()">
-                    <span id="musicIcon">🔈</span> <span id="musicText">Bật Nhạc</span>
+                    <span id="musicIcon">🔈</span> <span id="musicText">Nhạc</span>
                 </button>
                 <a href="tel:0900000000" class="contact-btn">Đặt Món</a>
             </div>
@@ -453,16 +453,16 @@
         </div>
     </header>
 
-    <div class="instruction">👆 Chọn Tỉnh • Chạm thẻ xem ảnh • Kéo ném tự do</div>
+    <div class="instruction">👆 Chạm xem ảnh • Kéo ném tự do</div>
 
     <div id="cards-container"></div>
 
-    <!-- MODAL VÒNG QUAY RANDOM -->
+    <!-- MODAL VÒNG QUAY -->
     <div id="wheelModalOverlay" class="wheel-modal-overlay">
         <div class="wheel-modal-card">
             <button class="close-wheel-btn" id="closeWheelBtn">&times;</button>
             <h2 class="wheel-title">🎡 HÔM NAY ĂN GÌ?</h2>
-            <p class="wheel-subtitle">Phân vân chưa biết chọn gì? Hãy để O Huệ chọn giúp bạn!</p>
+            <p class="wheel-subtitle">Để O Huệ gợi ý món ngon cho bạn nhé!</p>
             <div class="wheel-wrapper">
                 <div class="wheel-pointer"></div>
                 <canvas id="wheelCanvas" width="600" height="600"></canvas>
@@ -471,7 +471,7 @@
         </div>
     </div>
 
-    <!-- POPUP XEM CHI TIẾT MÓN ĂN (ĐÃ FIX LỖI ĐÓNG) -->
+    <!-- POPUP CHI TIẾT -->
     <div id="modalOverlay" class="modal-overlay">
         <div class="modal-content">
             <img id="modalImg" class="modal-img" src="" alt="Món ăn">
@@ -509,26 +509,26 @@
         function playCollisionSound(intensity = 1) {
             if (!audioCtx) return;
             const now = Date.now();
-            if (now - lastSoundTime < 40) return;
+            if (now - lastSoundTime < 60) return; // Throttling nhẹ hơn cho mobile
             lastSoundTime = now;
 
             try {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-                const volume = Math.min(Math.max(intensity * 0.12, 0.03), 0.25);
-                const startFreq = 160 + Math.random() * 40;
+                const volume = Math.min(Math.max(intensity * 0.08, 0.02), 0.18);
+                const startFreq = 160 + Math.random() * 30;
 
                 osc.frequency.setValueAtTime(startFreq, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.08);
+                osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.07);
 
                 gain.gain.setValueAtTime(volume, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.07);
 
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
 
                 osc.start();
-                osc.stop(audioCtx.currentTime + 0.09);
+                osc.stop(audioCtx.currentTime + 0.08);
             } catch (e) {}
         }
 
@@ -538,14 +538,14 @@
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.04);
-                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+                osc.frequency.setValueAtTime(550, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.03);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start();
-                osc.stop(audioCtx.currentTime + 0.05);
+                osc.stop(audioCtx.currentTime + 0.04);
             } catch (e) {}
         }
 
@@ -557,13 +557,13 @@
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + index * 0.1);
-                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime + index * 0.1);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + index * 0.1 + 0.35);
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + index * 0.08);
+                    gain.gain.setValueAtTime(0.18, audioCtx.currentTime + index * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + index * 0.08 + 0.3);
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
-                    osc.start(audioCtx.currentTime + index * 0.1);
-                    osc.stop(audioCtx.currentTime + index * 0.1 + 0.4);
+                    osc.start(audioCtx.currentTime + index * 0.08);
+                    osc.stop(audioCtx.currentTime + index * 0.08 + 0.35);
                 });
             } catch (e) {}
         }
@@ -581,11 +581,11 @@
             if (playing) {
                 musicToggleBtn.classList.add('playing');
                 musicIcon.innerText = '🔊';
-                musicText.innerText = 'Tắt Nhạc';
+                musicText.innerText = 'Tắt';
             } else {
                 musicToggleBtn.classList.remove('playing');
                 musicIcon.innerText = '🔈';
-                musicText.innerText = 'Bật Nhạc';
+                musicText.innerText = 'Nhạc';
             }
         }
 
@@ -600,7 +600,7 @@
                 bgMusic.play().then(() => {
                     isMusicPlaying = true;
                     updateMusicUI(true);
-                }).catch(err => console.log("Lỗi nhạc:", err));
+                }).catch(() => {});
             }
         }
 
@@ -689,36 +689,39 @@
             menuData[key].forEach(food => allFoods.push(food));
         });
 
-        // TOPPING NỀN
+        // TOPPING NỀN: Giảm số lượng để máy nhẹ
+        const isMobile = window.innerWidth < 768;
         const toppingLayer = document.getElementById('topping-layer');
         const toppingIcons = ['🦐', '🥩', '🌶️', '🥟', '🍋', '🌿', '🧄', '🥢', '🍘'];
-        for (let i = 0; i < 14; i++) {
+        const totalToppings = isMobile ? 8 : 14;
+
+        for (let i = 0; i < totalToppings; i++) {
             const item = document.createElement('div');
             item.className = 'topping-item';
             item.innerText = toppingIcons[i % toppingIcons.length];
-            item.style.left = Math.random() * 90 + 'vw';
-            item.style.top = Math.random() * 85 + 'vh';
-            item.style.animationDuration = (Math.random() * 8 + 8) + 's';
+            item.style.left = Math.random() * 88 + 'vw';
+            item.style.top = Math.random() * 80 + 'vh';
+            item.style.animationDuration = (Math.random() * 8 + 10) + 's';
             item.style.animationDelay = '-' + (Math.random() * 5) + 's';
             toppingLayer.appendChild(item);
         }
 
         // ==========================================
-        // 4. THIẾT LẬP VẬT LÝ & FIX LỖI CHỒNG CLICK
+        // 4. THIẾT LẬP VẬT LÝ & TỐI ƯU CẢM ỨNG DI ĐỘNG
         // ==========================================
         const { Engine, Runner, Bodies, Composite, Mouse, MouseConstraint, Events, Query } = Matter;
         const engine = Engine.create();
         const world = engine.world;
-        engine.world.gravity.y = 0.8;
+        engine.world.gravity.y = isMobile ? 0.7 : 0.8;
 
         const width = window.innerWidth;
         const height = window.innerHeight;
 
         const wallOptions = { isStatic: true, render: { visible: false } };
-        const ground = Bodies.rectangle(width / 2, height + 30, width * 2, 60, wallOptions);
-        const leftWall = Bodies.rectangle(-30, height / 2, 60, height * 2, wallOptions);
-        const rightWall = Bodies.rectangle(width + 30, height / 2, 60, height * 2, wallOptions);
-        const ceiling = Bodies.rectangle(width / 2, 85, width * 2, 10, wallOptions);
+        const ground = Bodies.rectangle(width / 2, height + 25, width * 2, 50, wallOptions);
+        const leftWall = Bodies.rectangle(-25, height / 2, 50, height * 2, wallOptions);
+        const rightWall = Bodies.rectangle(width + 25, height / 2, 50, height * 2, wallOptions);
+        const ceiling = Bodies.rectangle(width / 2, 75, width * 2, 10, wallOptions);
 
         Composite.add(world, [ground, leftWall, rightWall, ceiling]);
 
@@ -729,15 +732,18 @@
                 const speedB = bodyB.speed || 0;
                 const relativeSpeed = Math.max(speedA, speedB);
 
-                if (relativeSpeed > 1.2) {
+                if (relativeSpeed > 1.5) {
                     playCollisionSound(relativeSpeed);
                 }
             });
         });
 
         let cardBodies = [];
-        let cardIdCounter = 0;
         const cardsContainer = document.getElementById('cards-container');
+
+        // Kích thước thẻ theo từng loại thiết bị
+        const cardW = isMobile ? 145 : 190;
+        const cardH = isMobile ? 85 : 105;
 
         function loadRegionFoods(regionKey) {
             initAudioContext();
@@ -746,9 +752,9 @@
             cardBodies = [];
 
             const foods = menuData[regionKey] || [];
+            const cols = isMobile ? 2 : 4;
 
             foods.forEach((item, index) => {
-                cardIdCounter++;
                 const card = document.createElement('div');
                 card.className = 'food-card';
                 card.style.zIndex = 20 + index;
@@ -769,17 +775,19 @@
                 `;
                 cardsContainer.appendChild(card);
 
-                const startX = 80 + (index % 5) * ((width - 200) / 4);
-                const startY = 105 + Math.floor(index / 5) * 50;
+                const colIdx = index % cols;
+                const rowIdx = Math.floor(index / cols);
+                const startX = (width / (cols + 1)) * (colIdx + 1);
+                const startY = 90 + rowIdx * 45;
 
-                const body = Bodies.rectangle(startX, startY, 190, 105, {
-                    restitution: 0.45,
-                    friction: 0.3,
+                const body = Bodies.rectangle(startX, startY, cardW, cardH, {
+                    restitution: 0.4,
+                    friction: 0.35,
                     density: 0.002
                 });
 
                 body.customData = card;
-                body.renderOrder = index; // Ghi nhớ thứ tự tạo
+                body.renderOrder = index;
 
                 cardBodies.push({ element: card, body: body });
                 Composite.add(world, body);
@@ -795,7 +803,7 @@
         const mouse = Mouse.create(document.body);
         const mouseConstraint = MouseConstraint.create(engine, {
             mouse: mouse,
-            constraint: { stiffness: 0.2, render: { visible: false } }
+            constraint: { stiffness: 0.25, render: { visible: false } }
         });
         Composite.add(world, mouseConstraint);
 
@@ -803,14 +811,13 @@
         let startTime = 0;
         let isModalOpen = false;
 
-        Events.on(mouseConstraint, 'startdrag', (evt) => {
+        Events.on(mouseConstraint, 'startdrag', () => {
             initAudioContext();
             startPoint = { x: mouse.position.x, y: mouse.position.y };
             startTime = Date.now();
         });
 
-        // XỬ LÝ CHỌN CHÍNH XÁC THẺ TRÊN CÙNG KHI CHẠM
-        Events.on(mouseConstraint, 'enddrag', (evt) => {
+        Events.on(mouseConstraint, 'enddrag', () => {
             if (isModalOpen) return;
 
             const distanceMoved = Math.hypot(
@@ -819,16 +826,12 @@
             );
             const duration = Date.now() - startTime;
 
-            // Nếu chỉ là thao tác chạm nhẹ (< 15px và < 350ms)
             if (distanceMoved < 15 && duration < 350) {
-                // Quét tất cả vật thể nằm ngay vị trí con trỏ chuột
                 const allUnderCursor = Query.point(cardBodies.map(cb => cb.body), mouse.position);
                 
                 if (allUnderCursor.length > 0) {
-                    // Lọc lấy vật thể ở lớp trên cùng (renderOrder lớn nhất)
                     allUnderCursor.sort((a, b) => b.renderOrder - a.renderOrder);
                     const topmostBody = allUnderCursor[0];
-                    
                     if (topmostBody && topmostBody.customData) {
                         openModal(topmostBody.customData);
                     }
@@ -839,16 +842,20 @@
         const runner = Runner.create();
         Runner.run(runner, engine);
 
+        // Render tối ưu GPU bằng translate3d
+        const halfW = cardW / 2;
+        const halfH = cardH / 2;
+
         Events.on(engine, 'afterUpdate', () => {
             cardBodies.forEach(({ element, body }) => {
                 const { x, y } = body.position;
                 const angle = body.angle;
-                element.style.transform = `translate(${x - 95}px, ${y - 52.5}px) rotate(${angle}rad)`;
+                element.style.transform = `translate3d(${x - halfW}px, ${y - halfH}px, 0) rotate(${angle}rad)`;
             });
         });
 
         // ==========================================
-        // 5. XỬ LÝ VÒNG QUAY RANDOM
+        // 5. VÒNG QUAY
         // ==========================================
         const wheelModalOverlay = document.getElementById('wheelModalOverlay');
         const wheelCanvas = document.getElementById('wheelCanvas');
@@ -881,9 +888,7 @@
                 ctx.textAlign = 'right';
                 ctx.fillStyle = '#ffffff';
                 ctx.font = 'bold 12px Arial';
-                ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                ctx.shadowBlur = 3;
-                const text = allFoods[i].title.length > 14 ? allFoods[i].title.substring(0, 13) + '..' : allFoods[i].title;
+                const text = allFoods[i].title.length > 13 ? allFoods[i].title.substring(0, 12) + '..' : allFoods[i].title;
                 ctx.fillText(text, radius - 20, 4);
                 ctx.restore();
             }
@@ -971,7 +976,7 @@
         }
 
         // ==========================================
-        // 6. XỬ LÝ POPUP CHI TIẾT (ĐÃ FIX TOÀN DIỆN NÚT ĐÓNG)
+        // 6. POPUP CHI TIẾT
         // ==========================================
         const modalOverlay = document.getElementById('modalOverlay');
         const modalImg = document.getElementById('modalImg');
@@ -1005,7 +1010,6 @@
             isModalOpen = false;
         }
 
-        // Bắt sự kiện trực tiếp bằng pointerup để loại bỏ hoàn toàn độ trễ click
         closeBtn.addEventListener('pointerup', (e) => {
             e.stopPropagation();
             e.preventDefault();
