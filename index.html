@@ -18,7 +18,7 @@
     <!-- Phông chữ chuẩn hóa tiếng Việt Be Vietnam Pro & Merriweather -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Courier+Prime:wght@400;700&family=Merriweather:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
     
     <!-- Thư viện vật lý Matter.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
@@ -26,7 +26,7 @@
     <style>
         :root {
             --hoian-yellow: #E5A93C;      /* Vàng ấm tường cổ Hội An */
-            --bg-solid: #F5EFEB;          /* NỀN TRƠN: Màu kem giấy dó ấm trang nhã */
+            --bg-solid: #F5EFEB;          /* Nền trơn kem ấm */
             --burgundy: #8E2824;          /* Đỏ đô trầm cung đình */
             --burgundy-dark: #5C1512;     /* Đỏ đô thẫm gỗ gụ */
             --teal-blue: #1C4E5B;         /* Xanh cổ vịt (Teal Blue) */
@@ -48,12 +48,12 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: var(--bg-solid); /* NỀN TRƠN NHÃ NHẶN */
+            background-color: var(--bg-solid);
             font-family: 'Be Vietnam Pro', sans-serif;
             color: var(--charcoal);
         }
 
-        /* 1. LỚP TOPPING NỀN LƠ LỬNG NHẸ */
+        /* 1. LỚP TOPPING NỀN */
         #topping-layer {
             position: absolute;
             top: 0;
@@ -196,7 +196,7 @@
         .instruction {
             position: fixed;
             bottom: 12px;
-            right: 16px;
+            right: 14px;
             background: rgba(18, 53, 62, 0.9);
             border: 1px solid var(--hoian-yellow);
             color: #FFFFFF;
@@ -232,17 +232,16 @@
             flex-direction: column;
             justify-content: space-between;
             box-shadow: 0 6px 14px rgba(42, 36, 33, 0.12), inset 0 0 0 1px rgba(229, 169, 60, 0.2);
-            pointer-events: none;
+            pointer-events: auto;
             z-index: 20;
             will-change: transform, opacity;
-            width: 155px;
-            height: 90px;
-            transition: opacity 0.2s ease, transform 0.1s linear;
+            width: 160px;
+            height: 95px;
         }
         @media (min-width: 768px) {
             .food-card {
-                width: 195px;
-                height: 110px;
+                width: 200px;
+                height: 115px;
                 padding: 10px 12px;
                 border-width: 2px;
             }
@@ -254,10 +253,11 @@
         .food-card-header {
             display: flex;
             flex-direction: column;
+            cursor: pointer;
         }
         .food-title {
             font-family: 'Merriweather', serif;
-            font-size: 0.86rem;
+            font-size: 0.84rem;
             font-weight: 700;
             color: var(--burgundy);
             white-space: nowrap;
@@ -268,7 +268,7 @@
             .food-title { font-size: 0.96rem; }
         }
         .food-location {
-            font-size: 0.65rem;
+            font-size: 0.63rem;
             color: var(--teal-blue);
             font-weight: 600;
             display: flex;
@@ -284,18 +284,28 @@
         }
         .food-price {
             font-family: 'Be Vietnam Pro', sans-serif;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             font-weight: 800;
             color: var(--teal-blue);
         }
-        .hint-badge {
-            background: #FAF3E0;
-            color: var(--burgundy);
-            border: 1px solid rgba(229, 169, 60, 0.6);
-            font-size: 0.62rem;
-            padding: 2px 5px;
-            border-radius: 4px;
+        .btn-quick-add {
+            background: linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+            color: #FFFFFF;
+            border: 1px solid var(--hoian-yellow);
+            font-size: 0.66rem;
+            padding: 3px 7px;
+            border-radius: 6px;
             font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            box-shadow: 0 2px 4px rgba(92, 24, 10, 0.2);
+            transition: transform 0.1s;
+            pointer-events: auto;
+        }
+        .btn-quick-add:active {
+            transform: scale(0.92);
         }
 
         /* 5. GIỎ NAN TRE GÓC DƯỚI BÊN TRÁI */
@@ -327,9 +337,9 @@
             }
         }
         #bamboo-cart-zone.drag-hover {
-            transform: scale(1.18) rotate(-5deg);
+            transform: scale(1.22) rotate(-6deg);
             border-color: var(--burgundy);
-            box-shadow: 0 12px 30px rgba(142, 40, 36, 0.5);
+            box-shadow: 0 12px 32px rgba(142, 40, 36, 0.55);
         }
         #bamboo-cart-zone.item-dropped {
             animation: cartBounce 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -371,7 +381,7 @@
             transition: transform 0.2s;
         }
 
-        /* 6. MODAL XEM CHI TIẾT GIỎ HÀNG */
+        /* 6. MODAL GIỎ HÀNG CHỈNH SỬA SỐ LƯỢNG */
         .cart-modal-overlay {
             position: fixed;
             top: 0;
@@ -424,7 +434,7 @@
         }
         .cart-items-list {
             overflow-y: auto;
-            max-height: 45vh;
+            max-height: 42vh;
             margin: 10px 0;
             padding-right: 4px;
         }
@@ -432,18 +442,18 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px dashed #EDE2D2;
         }
         .cart-item-info h4 {
-            font-size: 0.85rem;
+            font-size: 0.86rem;
             font-weight: 700;
             color: var(--charcoal);
         }
         .cart-item-info span {
-            font-size: 0.72rem;
+            font-size: 0.74rem;
             color: var(--teal-blue);
-            font-weight: 600;
+            font-weight: 700;
         }
         .cart-item-qty {
             display: flex;
@@ -452,12 +462,21 @@
         }
         .qty-btn {
             background: #EDE2D2;
-            border: none;
-            width: 22px;
-            height: 22px;
-            border-radius: 4px;
+            border: 1px solid #D5C6B0;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
             font-weight: bold;
+            font-size: 1rem;
+            color: var(--charcoal);
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qty-btn:active {
+            background: var(--hoian-yellow);
+            color: white;
         }
         .cart-total-bar {
             border-top: 2px solid var(--hoian-yellow);
@@ -474,22 +493,28 @@
         }
         .cart-total-val {
             font-family: 'Merriweather', serif;
-            font-size: 1.15rem;
+            font-size: 1.18rem;
             font-weight: 900;
             color: var(--burgundy);
         }
-        .checkout-btn {
+        .checkout-order-btn {
             width: 100%;
-            padding: 12px;
+            padding: 13px;
             background: linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
             border: 1.5px solid var(--hoian-yellow);
             color: #FFFFFF;
             border-radius: 12px;
             font-weight: 700;
-            font-size: 0.92rem;
+            font-size: 0.95rem;
             text-align: center;
-            text-decoration: none;
             cursor: pointer;
+            box-shadow: 0 4px 10px rgba(142, 40, 36, 0.3);
+        }
+        .checkout-order-btn:disabled {
+            background: #CCC;
+            border-color: #BBB;
+            cursor: not-allowed;
+            box-shadow: none;
         }
         .close-cart-btn {
             position: absolute;
@@ -502,7 +527,169 @@
             cursor: pointer;
         }
 
-        /* 7. MODAL VÒNG QUAY */
+        /* 7. MODAL HÓA ĐƠN BILL GIẤY CỔ ĐIỂN (VINTAGE PAPER RECEIPT) */
+        .bill-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(16, 50, 59, 0.88);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            padding: 16px;
+            backdrop-filter: blur(5px);
+        }
+        .bill-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .paper-receipt {
+            background: #FFFDF7;
+            width: 100%;
+            max-width: 360px;
+            padding: 22px 20px 28px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            position: relative;
+            font-family: 'Courier Prime', monospace; /* Phông chữ in máy hóa đơn */
+            color: #2b2b2b;
+            transform: translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 4px;
+        }
+        .bill-modal-overlay.active .paper-receipt {
+            transform: translateY(0);
+        }
+        /* Mép răng cưa xé giấy cổ điển ở đáy bill */
+        .paper-receipt::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: radial-gradient(circle, transparent, transparent 50%, #FFFDF7 50%, #FFFDF7 100%);
+            background-size: 14px 14px;
+        }
+        .receipt-header {
+            text-align: center;
+            border-bottom: 2px dashed #444;
+            padding-bottom: 12px;
+            margin-bottom: 12px;
+        }
+        .receipt-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+            color: var(--burgundy);
+        }
+        .receipt-meta {
+            font-size: 0.75rem;
+            color: #666;
+            line-height: 1.35;
+        }
+        .receipt-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+            margin-bottom: 12px;
+        }
+        .receipt-table th {
+            border-bottom: 1px dashed #777;
+            padding: 6px 0;
+            text-align: left;
+        }
+        .receipt-table td {
+            padding: 6px 0;
+            border-bottom: 1px dotted #ccc;
+        }
+        .receipt-summary {
+            border-top: 2px dashed #444;
+            border-bottom: 2px dashed #444;
+            padding: 10px 0;
+            margin-bottom: 16px;
+        }
+        .receipt-summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+        .receipt-summary-row.total {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--burgundy);
+            margin-top: 6px;
+            padding-top: 4px;
+            border-top: 1px dotted #888;
+        }
+        .payment-methods-box {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            margin-bottom: 16px;
+        }
+        .payment-methods-box h5 {
+            font-size: 0.8rem;
+            color: #555;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .pay-options {
+            display: flex;
+            gap: 8px;
+        }
+        .pay-option-btn {
+            flex: 1;
+            padding: 8px;
+            border: 1.5px solid #ccc;
+            border-radius: 8px;
+            background: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+        }
+        .pay-option-btn.active {
+            border-color: var(--burgundy);
+            background: #FDF4F4;
+            color: var(--burgundy);
+        }
+        .btn-confirm-pay {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(180deg, var(--teal-blue) 0%, var(--teal-dark) 100%);
+            border: 1.5px solid var(--hoian-yellow);
+            color: #FFFFFF;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-align: center;
+            cursor: pointer;
+            display: block;
+            box-shadow: 0 4px 10px rgba(16, 50, 59, 0.3);
+        }
+        .close-receipt-x {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            color: #888;
+            cursor: pointer;
+        }
+
+        /* 8. MODAL VÒNG QUAY */
         .wheel-modal-overlay {
             position: fixed;
             top: 0;
@@ -613,7 +800,7 @@
             z-index: 20;
         }
 
-        /* 8. POPUP CHI TIẾT */
+        /* 9. POPUP CHI TIẾT */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -760,9 +947,9 @@
         </div>
     </header>
 
-    <div class="instruction">🧺 Kéo món thả vào giỏ nan tre bên trái để chọn!</div>
+    <div class="instruction">🧺 Chạm "+ Giỏ" hoặc kéo món thả vào giỏ nan tre</div>
 
-    <!-- GIỎ NAN TRE ĐI CHỢ GÓC DƯỚI BÊN TRÁI -->
+    <!-- GIỎ NAN TRE GÓC DƯỚI BÊN TRÁI -->
     <div id="bamboo-cart-zone" onclick="openCartModal()">
         <span class="basket-icon">🧺</span>
         <span class="basket-text">Giỏ Món</span>
@@ -774,22 +961,75 @@
         <div id="cards-container"></div>
     </div>
 
-    <!-- MODAL XEM CHI TIẾT GIỎ HÀNG -->
+    <!-- MODAL GIỎ HÀNG CHỈNH SỬA SỐ LƯỢNG -->
     <div id="cartModalOverlay" class="cart-modal-overlay" onclick="closeCartModal()">
         <div class="cart-modal-card" onclick="event.stopPropagation()">
             <button class="close-cart-btn" onclick="closeCartModal()">&times;</button>
             <h3 class="cart-title">🧺 Giỏ Món O Huệ (<span id="cartTotalItems">0</span>)</h3>
             
-            <div class="cart-items-list" id="cartItemsContainer">
-                <!-- Danh sách món ăn đã chọn sẽ hiện ở đây -->
-            </div>
+            <div class="cart-items-list" id="cartItemsContainer"></div>
 
             <div class="cart-total-bar">
-                <span class="cart-total-label">Tổng thanh toán:</span>
+                <span class="cart-total-label">Tổng tiền món:</span>
                 <span class="cart-total-val" id="cartTotalPrice">0đ</span>
             </div>
 
-            <a href="tel:0900000000" class="checkout-btn">Đặt Giao Tận Nơi Ngay</a>
+            <button class="checkout-order-btn" id="btnGoToBill" onclick="proceedToReceipt()">Tiến Hành Đặt Hàng & In Bill 🧾</button>
+        </div>
+    </div>
+
+    <!-- MODAL HÓA ĐƠN BILL GIẤY CỔ ĐIỂN -->
+    <div id="billModalOverlay" class="bill-modal-overlay" onclick="closeBillModal()">
+        <div class="paper-receipt" onclick="event.stopPropagation()">
+            <button class="close-receipt-x" onclick="closeBillModal()">&times;</button>
+            
+            <div class="receipt-header">
+                <div class="receipt-title">ẨM THỰC O HUỆ</div>
+                <div class="receipt-meta">
+                    Đ/c: Đặc sản Miền Trung Cố Đô<br>
+                    Hotline: 0900.000.000<br>
+                    Mã HĐ: <strong id="billReceiptCode">#OHUE-8888</strong><br>
+                    Thời gian: <span id="billReceiptTime">--/--/---- --:--</span>
+                </div>
+            </div>
+
+            <table class="receipt-table">
+                <thead>
+                    <tr>
+                        <th style="width: 50%;">Tên Món</th>
+                        <th style="width: 15%; text-align: center;">SL</th>
+                        <th style="width: 35%; text-align: right;">T.Tiền</th>
+                    </tr>
+                </thead>
+                <tbody id="billItemsBody">
+                    <!-- Các món trong bill sẽ render ở đây -->
+                </tbody>
+            </table>
+
+            <div class="receipt-summary">
+                <div class="receipt-summary-row">
+                    <span>Tạm tính:</span>
+                    <span id="billSubTotal">0đ</span>
+                </div>
+                <div class="receipt-summary-row">
+                    <span>Phí vận chuyển:</span>
+                    <span style="color: #27ae60;">Miễn phí</span>
+                </div>
+                <div class="receipt-summary-row total">
+                    <span>TỔNG CỘNG:</span>
+                    <span id="billGrandTotal">0đ</span>
+                </div>
+            </div>
+
+            <div class="payment-methods-box">
+                <h5>Chọn phương thức thanh toán:</h5>
+                <div class="pay-options">
+                    <button class="pay-option-btn active" onclick="selectPayMethod('cod', this)">💵 Tiền Mặt (COD)</button>
+                    <button class="pay-option-btn" onclick="selectPayMethod('qr', this)">💳 Chuyển Khoản QR</button>
+                </div>
+            </div>
+
+            <button class="btn-confirm-pay" onclick="confirmPaymentAndOrder()">XÁC NHẬN THANH TOÁN & GỬI ĐƠN 🚀</button>
         </div>
     </div>
 
@@ -840,7 +1080,6 @@
             }
         }
 
-        // Âm thanh gõ va chạm
         function playCollisionSound(intensity = 1) {
             if (!audioCtx) return;
             const now = Date.now();
@@ -867,35 +1106,40 @@
             } catch (e) {}
         }
 
-        // Âm thanh thả món vào giỏ nan tre "Poof/Chime"
         function playAddToCartSound() {
             if (!audioCtx) return;
             try {
                 const now = audioCtx.currentTime;
-                // Nốt 1: Tiếng nứa gõ
                 const osc1 = audioCtx.createOscillator();
                 const gain1 = audioCtx.createGain();
                 osc1.type = 'sine';
-                osc1.frequency.setValueAtTime(440, now);
-                osc1.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+                osc1.frequency.setValueAtTime(523.25, now);
+                osc1.frequency.exponentialRampToValueAtTime(1046.50, now + 0.12);
                 gain1.gain.setValueAtTime(0.2, now);
-                gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
                 osc1.connect(gain1);
                 gain1.connect(audioCtx.destination);
                 osc1.start(now);
-                osc1.stop(now + 0.22);
+                osc1.stop(now + 0.26);
+            } catch (e) {}
+        }
 
-                // Nốt 2: Tiếng chuông vàng
-                const osc2 = audioCtx.createOscillator();
-                const gain2 = audioCtx.createGain();
-                osc2.type = 'triangle';
-                osc2.frequency.setValueAtTime(1320, now + 0.08);
-                gain2.gain.setValueAtTime(0.15, now + 0.08);
-                gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-                osc2.connect(gain2);
-                gain2.connect(audioCtx.destination);
-                osc2.start(now + 0.08);
-                osc2.stop(now + 0.38);
+        // Âm thanh in bill xé giấy
+        function playReceiptPrintSound() {
+            if (!audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.linearRampToValueAtTime(400, now + 0.2);
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.26);
             } catch (e) {}
         }
 
@@ -1056,10 +1300,11 @@
             menuData[key].forEach(food => allFoods.push(food));
         });
 
-        // QUẢN LÝ DỮ LIỆU GIỎ HÀNG
+        // QUẢN LÝ GIỎ HÀNG VÀ HÓA ĐƠN
         let myCart = {};
+        let selectedPaymentMethod = 'cod';
 
-        function addToCart(foodItem) {
+        function addToCart(foodItem, triggerElement = null) {
             initAudioContext();
             if (myCart[foodItem.id]) {
                 myCart[foodItem.id].qty += 1;
@@ -1069,6 +1314,33 @@
             playAddToCartSound();
             animateCartZone();
             updateCartBadge();
+
+            if (triggerElement) {
+                const rect = triggerElement.getBoundingClientRect();
+                const cartRect = document.getElementById('bamboo-cart-zone').getBoundingClientRect();
+                
+                const flyingDot = document.createElement('div');
+                flyingDot.innerText = '🍲';
+                flyingDot.style.position = 'fixed';
+                flyingDot.style.left = rect.left + 'px';
+                flyingDot.style.top = rect.top + 'px';
+                flyingDot.style.fontSize = '1.4rem';
+                flyingDot.style.zIndex = '9999';
+                flyingDot.style.transition = 'all 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+                flyingDot.style.pointerEvents = 'none';
+                document.body.appendChild(flyingDot);
+
+                setTimeout(() => {
+                    flyingDot.style.left = (cartRect.left + 25) + 'px';
+                    flyingDot.style.top = (cartRect.top + 25) + 'px';
+                    flyingDot.style.transform = 'scale(0.2) rotate(360deg)';
+                    flyingDot.style.opacity = '0';
+                }, 20);
+
+                setTimeout(() => {
+                    flyingDot.remove();
+                }, 450);
+            }
         }
 
         function updateCartQty(foodId, delta) {
@@ -1085,7 +1357,7 @@
         function animateCartZone() {
             const cart = document.getElementById('bamboo-cart-zone');
             cart.classList.remove('item-dropped');
-            void cart.offsetWidth; // Trigger reflow
+            void cart.offsetWidth;
             cart.classList.add('item-dropped');
         }
 
@@ -1098,13 +1370,16 @@
 
         function renderCartModal() {
             const container = document.getElementById('cartItemsContainer');
+            const btnOrder = document.getElementById('btnGoToBill');
             container.innerHTML = '';
             let total = 0;
 
             const items = Object.values(myCart);
             if (items.length === 0) {
-                container.innerHTML = '<p style="text-align:center; padding:20px; color:#888; font-size:0.85rem;">Giỏ nan tre đang trống.<br>Hãy kéo món thả vào giỏ nhé!</p>';
+                container.innerHTML = '<p style="text-align:center; padding:20px; color:#888; font-size:0.85rem;">Giỏ nan tre đang trống.<br>Hãy bấm "+ Giỏ" hoặc kéo món thả vào giỏ nhé!</p>';
+                btnOrder.disabled = true;
             } else {
+                btnOrder.disabled = false;
                 items.forEach(item => {
                     total += item.rawPrice * item.qty;
                     const row = document.createElement('div');
@@ -1112,11 +1387,11 @@
                     row.innerHTML = `
                         <div class="cart-item-info">
                             <h4>${item.title}</h4>
-                            <span>${item.price}</span>
+                            <span>${(item.rawPrice * item.qty).toLocaleString('vi-VN')}đ</span>
                         </div>
                         <div class="cart-item-qty">
                             <button class="qty-btn" onclick="updateCartQty('${item.id}', -1)">-</button>
-                            <span style="font-size:0.85rem; font-weight:700;">${item.qty}</span>
+                            <span style="font-size:0.9rem; font-weight:800; min-width:18px; text-align:center;">${item.qty}</span>
                             <button class="qty-btn" onclick="updateCartQty('${item.id}', 1)">+</button>
                         </div>
                     `;
@@ -1138,6 +1413,71 @@
             isModalOpen = false;
         }
 
+        // ==========================================
+        // QUY TRÌNH HÓA ĐƠN BILL GIẤY
+        // ==========================================
+        function proceedToReceipt() {
+            const items = Object.values(myCart);
+            if (items.length === 0) return;
+
+            closeCartModal();
+            initAudioContext();
+            playReceiptPrintSound();
+
+            const billItemsBody = document.getElementById('billItemsBody');
+            billItemsBody.innerHTML = '';
+            let total = 0;
+
+            items.forEach(item => {
+                const rowTotal = item.rawPrice * item.qty;
+                total += rowTotal;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.title}</td>
+                    <td style="text-align: center;">${item.qty}</td>
+                    <td style="text-align: right;">${rowTotal.toLocaleString('vi-VN')}đ</td>
+                `;
+                billItemsBody.appendChild(tr);
+            });
+
+            // Sinh mã hóa đơn và thời gian thực
+            const randomCode = '#OHUE-' + Math.floor(1000 + Math.random() * 9000);
+            const now = new Date();
+            const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} - ${now.getDate().toString().padStart(2, '0')}/${(now.getMonth()+1).toString().padStart(2, '0')}/${now.getFullYear()}`;
+
+            document.getElementById('billReceiptCode').innerText = randomCode;
+            document.getElementById('billReceiptTime').innerText = timeStr;
+            document.getElementById('billSubTotal').innerText = total.toLocaleString('vi-VN') + 'đ';
+            document.getElementById('billGrandTotal').innerText = total.toLocaleString('vi-VN') + 'đ';
+
+            isModalOpen = true;
+            document.getElementById('billModalOverlay').classList.add('active');
+        }
+
+        function closeBillModal() {
+            document.getElementById('billModalOverlay').classList.remove('active');
+            isModalOpen = false;
+        }
+
+        function selectPayMethod(method, btn) {
+            selectedPaymentMethod = method;
+            document.querySelectorAll('.pay-option-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function confirmPaymentAndOrder() {
+            const code = document.getElementById('billReceiptCode').innerText;
+            const total = document.getElementById('billGrandTotal').innerText;
+            const methodText = selectedPaymentMethod === 'cod' ? 'Tiền mặt khi nhận hàng (COD)' : 'Chuyển khoản QR ngân hàng';
+
+            alert(`✅ ĐẶT HÀNG THÀNH CÔNG!\n------------------------\nMã đơn: ${code}\nTổng thanh toán: ${total}\nPhương thức: ${methodText}\n\nQuán O Huệ đang chuẩn bị món và sẽ giao ngay tới bạn!`);
+            
+            // Xóa sạch giỏ hàng sau khi đặt thành công
+            myCart = {};
+            updateCartBadge();
+            closeBillModal();
+        }
+
         // TOPPING
         const isMobile = window.innerWidth < 768;
         const toppingLayer = document.getElementById('topping-layer');
@@ -1156,7 +1496,7 @@
         }
 
         // ==========================================
-        // 4. THIẾT LẬP VẬT LÝ & KÉO THẢ VÀO GIỎ
+        // 4. THIẾT LẬP VẬT LÝ
         // ==========================================
         const { Engine, Runner, Bodies, Composite, Mouse, MouseConstraint, Events, Query } = Matter;
         const engine = Engine.create();
@@ -1189,8 +1529,8 @@
 
         let cardBodies = [];
         const cardsContainer = document.getElementById('cards-container');
-        const cardW = isMobile ? 155 : 195;
-        const cardH = isMobile ? 90 : 110;
+        const cardW = isMobile ? 160 : 200;
+        const cardH = isMobile ? 95 : 115;
 
         function loadRegionFoods(regionKey) {
             initAudioContext();
@@ -1217,10 +1557,17 @@
                     </div>
                     <div class="food-footer">
                         <span class="food-price">${item.price}</span>
-                        <span class="hint-badge">Xem Chi Tiết 🔍</span>
+                        <button class="btn-quick-add" type="button">+ Giỏ 🧺</button>
                     </div>
                 `;
                 cardsContainer.appendChild(card);
+
+                const quickBtn = card.querySelector('.btn-quick-add');
+                quickBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
+                quickBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    addToCart(item, card);
+                });
 
                 const colIdx = index % cols;
                 const rowIdx = Math.floor(index / cols);
@@ -1273,19 +1620,17 @@
             }
         });
 
-        // Kiểm tra xem vị trí chuột/thẻ có rơi trúng giỏ nan tre không
         Events.on(engine, 'afterUpdate', () => {
             if (draggedBody) {
                 const cartRect = cartElement.getBoundingClientRect();
                 const mouseX = mouse.position.x;
                 const mouseY = mouse.position.y;
                 
-                // Mở rộng vùng hứng giỏ tre để bắt dính mượt mà
                 const isHoveringCart = (
-                    mouseX >= cartRect.left - 25 &&
-                    mouseX <= cartRect.right + 25 &&
-                    mouseY >= cartRect.top - 25 &&
-                    mouseY <= cartRect.bottom + 25
+                    mouseX >= cartRect.left - 60 &&
+                    mouseX <= cartRect.right + 60 &&
+                    mouseY >= cartRect.top - 60 &&
+                    mouseY <= cartRect.bottom + 60
                 );
 
                 if (isHoveringCart) {
@@ -1304,17 +1649,15 @@
             const mouseY = mouse.position.y;
 
             const isDroppedIntoCart = (
-                mouseX >= cartRect.left - 25 &&
-                mouseX <= cartRect.right + 25 &&
-                mouseY >= cartRect.top - 25 &&
-                mouseY <= cartRect.bottom + 25
+                mouseX >= cartRect.left - 60 &&
+                mouseX <= cartRect.right + 60 &&
+                mouseY >= cartRect.top - 60 &&
+                mouseY <= cartRect.bottom + 60
             );
 
-            // NẾU THẢ VÀO GIỎ NAN TRE
             if (draggedBody && isDroppedIntoCart && draggedBody.foodRawData) {
                 addToCart(draggedBody.foodRawData);
                 
-                // Hiệu ứng hút thẻ vào giỏ tre
                 const el = draggedBody.customData;
                 if (el) {
                     el.style.transition = 'all 0.25s ease-in';
@@ -1323,7 +1666,6 @@
                     setTimeout(() => {
                         el.style.transition = '';
                         el.style.opacity = '1';
-                        // Đưa vật thể về lại vị trí ngẫu nhiên trên cao
                         Matter.Body.setPosition(draggedBody, {
                             x: Math.random() * (width - 200) + 100,
                             y: 100
@@ -1332,7 +1674,6 @@
                     }, 300);
                 }
             } else {
-                // NẾU CHỈ LÀ THAO TÁC CHẠM (CLICK) ĐỂ XEM CHI TIẾT
                 const distanceMoved = Math.hypot(
                     mouse.position.x - startPoint.x,
                     mouse.position.y - startPoint.y
@@ -1484,7 +1825,7 @@
         }
 
         // ==========================================
-        // 6. POPUP CHI TIẾT & NÚT THÊM GIỎ HÀNG
+        // 6. POPUP CHI TIẾT MÓN
         // ==========================================
         const modalOverlay = document.getElementById('modalOverlay');
         const modalImg = document.getElementById('modalImg');
@@ -1533,6 +1874,7 @@
                 closeModal();
                 closeWheelModal();
                 closeCartModal();
+                closeBillModal();
             }
         });
 
