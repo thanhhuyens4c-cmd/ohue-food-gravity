@@ -53,7 +53,7 @@
             color: var(--charcoal);
         }
 
-        /* 1. LỚP TOPPING NỀN */
+        /* 1. LỚP TOPPING NỀN LƠ LỬNG */
         #topping-layer {
             position: absolute;
             top: 0;
@@ -139,6 +139,7 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            pointer-events: auto !important;
         }
         .music-btn {
             background: rgba(255, 255, 255, 0.1);
@@ -149,6 +150,7 @@
             font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
+            pointer-events: auto !important;
         }
         .music-btn.playing {
             background: var(--hoian-yellow);
@@ -184,6 +186,7 @@
             cursor: pointer;
             flex-shrink: 0;
             transition: all 0.2s ease;
+            pointer-events: auto !important;
         }
         .cat-btn.active {
             background: var(--hoian-yellow);
@@ -221,7 +224,7 @@
             touch-action: none;
         }
 
-        /* 4. THẺ MÓN ĂN */
+        /* 4. THẺ MÓN ĂN (TẬP TRUNG HOÀN TOÀN VÀO CẦM, KÉO, NÉM VÀO GIỎ) */
         .food-card {
             position: absolute;
             background: #FFFDF9;
@@ -232,32 +235,33 @@
             flex-direction: column;
             justify-content: space-between;
             box-shadow: 0 6px 14px rgba(42, 36, 33, 0.12), inset 0 0 0 1px rgba(229, 169, 60, 0.2);
-            pointer-events: auto;
+            pointer-events: none; /* Để toàn bộ sự kiện kéo thả do Matter quản lý mượt mà */
             z-index: 20;
             will-change: transform, opacity;
-            width: 160px;
-            height: 95px;
+            width: 155px;
+            height: 90px;
+            cursor: grab;
         }
         @media (min-width: 768px) {
             .food-card {
-                width: 200px;
-                height: 115px;
+                width: 195px;
+                height: 105px;
                 padding: 10px 12px;
                 border-width: 2px;
             }
         }
         .food-card.dragging-to-cart {
             border-color: var(--burgundy);
-            box-shadow: 0 8px 20px rgba(142, 40, 36, 0.35);
+            box-shadow: 0 10px 25px rgba(142, 40, 36, 0.45);
+            cursor: grabbing;
         }
         .food-card-header {
             display: flex;
             flex-direction: column;
-            cursor: pointer;
         }
         .food-title {
             font-family: 'Merriweather', serif;
-            font-size: 0.84rem;
+            font-size: 0.85rem;
             font-weight: 700;
             color: var(--burgundy);
             white-space: nowrap;
@@ -284,28 +288,18 @@
         }
         .food-price {
             font-family: 'Be Vietnam Pro', sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             font-weight: 800;
             color: var(--teal-blue);
         }
-        .btn-quick-add {
-            background: linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
-            color: #FFFFFF;
-            border: 1px solid var(--hoian-yellow);
-            font-size: 0.66rem;
-            padding: 3px 7px;
-            border-radius: 6px;
+        .drag-hint-badge {
+            background: #FAF3E0;
+            color: var(--burgundy);
+            border: 1px solid rgba(229, 169, 60, 0.6);
+            font-size: 0.6rem;
+            padding: 2px 5px;
+            border-radius: 4px;
             font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            box-shadow: 0 2px 4px rgba(92, 24, 10, 0.2);
-            transition: transform 0.1s;
-            pointer-events: auto;
-        }
-        .btn-quick-add:active {
-            transform: scale(0.92);
         }
 
         /* 5. GIỎ NAN TRE GÓC DƯỚI BÊN TRÁI */
@@ -337,7 +331,7 @@
             }
         }
         #bamboo-cart-zone.drag-hover {
-            transform: scale(1.22) rotate(-6deg);
+            transform: scale(1.25) rotate(-6deg);
             border-color: var(--burgundy);
             box-shadow: 0 12px 32px rgba(142, 40, 36, 0.55);
         }
@@ -401,7 +395,7 @@
         }
         .cart-modal-overlay.active {
             opacity: 1;
-            pointer-events: auto;
+            pointer-events: auto !important;
         }
         .cart-modal-card {
             background: #FFFDF9;
@@ -417,6 +411,7 @@
             max-height: 85vh;
             display: flex;
             flex-direction: column;
+            pointer-events: auto !important;
         }
         .cart-modal-overlay.active .cart-modal-card {
             transform: scale(1);
@@ -437,6 +432,7 @@
             max-height: 42vh;
             margin: 10px 0;
             padding-right: 4px;
+            pointer-events: auto !important;
         }
         .cart-item-row {
             display: flex;
@@ -463,16 +459,17 @@
         .qty-btn {
             background: #EDE2D2;
             border: 1px solid #D5C6B0;
-            width: 28px;
-            height: 28px;
+            width: 30px;
+            height: 30px;
             border-radius: 6px;
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: var(--charcoal);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            pointer-events: auto !important;
         }
         .qty-btn:active {
             background: var(--hoian-yellow);
@@ -509,6 +506,7 @@
             text-align: center;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(142, 40, 36, 0.3);
+            pointer-events: auto !important;
         }
         .checkout-order-btn:disabled {
             background: #CCC;
@@ -525,9 +523,10 @@
             font-size: 1.6rem;
             color: var(--teal-blue);
             cursor: pointer;
+            pointer-events: auto !important;
         }
 
-        /* 7. MODAL HÓA ĐƠN BILL GIẤY CỔ ĐIỂN (VINTAGE PAPER RECEIPT) */
+        /* 7. MODAL HÓA ĐƠN BILL GIẤY CỔ ĐIỂN */
         .bill-modal-overlay {
             position: fixed;
             top: 0;
@@ -547,7 +546,7 @@
         }
         .bill-modal-overlay.active {
             opacity: 1;
-            pointer-events: auto;
+            pointer-events: auto !important;
         }
         .paper-receipt {
             background: #FFFDF7;
@@ -556,18 +555,18 @@
             padding: 22px 20px 28px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.5);
             position: relative;
-            font-family: 'Courier Prime', monospace; /* Phông chữ in máy hóa đơn */
+            font-family: 'Courier Prime', monospace;
             color: #2b2b2b;
             transform: translateY(20px);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             max-height: 90vh;
             overflow-y: auto;
             border-radius: 4px;
+            pointer-events: auto !important;
         }
         .bill-modal-overlay.active .paper-receipt {
             transform: translateY(0);
         }
-        /* Mép răng cưa xé giấy cổ điển ở đáy bill */
         .paper-receipt::after {
             content: "";
             position: absolute;
@@ -657,6 +656,7 @@
             font-weight: 700;
             cursor: pointer;
             text-align: center;
+            pointer-events: auto !important;
         }
         .pay-option-btn.active {
             border-color: var(--burgundy);
@@ -677,6 +677,7 @@
             cursor: pointer;
             display: block;
             box-shadow: 0 4px 10px rgba(16, 50, 59, 0.3);
+            pointer-events: auto !important;
         }
         .close-receipt-x {
             position: absolute;
@@ -687,6 +688,7 @@
             font-size: 1.6rem;
             color: #888;
             cursor: pointer;
+            pointer-events: auto !important;
         }
 
         /* 8. MODAL VÒNG QUAY */
@@ -709,7 +711,7 @@
         }
         .wheel-modal-overlay.active {
             opacity: 1;
-            pointer-events: auto;
+            pointer-events: auto !important;
         }
         .wheel-modal-card {
             background: #FFFDF9;
@@ -723,6 +725,7 @@
             position: relative;
             transform: scale(0.95);
             transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: auto !important;
         }
         .wheel-modal-overlay.active .wheel-modal-card {
             transform: scale(1);
@@ -781,6 +784,7 @@
             font-weight: 700;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(142, 40, 36, 0.35);
+            pointer-events: auto !important;
         }
         .spin-action-btn:disabled {
             background: #A09890;
@@ -798,6 +802,7 @@
             cursor: pointer;
             line-height: 1;
             z-index: 20;
+            pointer-events: auto !important;
         }
 
         /* 9. POPUP CHI TIẾT */
@@ -820,7 +825,7 @@
         }
         .modal-overlay.active {
             opacity: 1;
-            pointer-events: auto;
+            pointer-events: auto !important;
         }
         .modal-content {
             background: #FFFDF9;
@@ -833,7 +838,7 @@
             transform: scale(0.95);
             transition: transform 0.25s ease;
             position: relative;
-            pointer-events: auto;
+            pointer-events: auto !important;
         }
         .modal-overlay.active .modal-content {
             transform: scale(1);
@@ -909,6 +914,7 @@
             text-align: center;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(142, 40, 36, 0.3);
+            pointer-events: auto !important;
         }
     </style>
 </head>
@@ -947,7 +953,7 @@
         </div>
     </header>
 
-    <div class="instruction">🧺 Chạm "+ Giỏ" hoặc kéo món thả vào giỏ nan tre</div>
+    <div class="instruction">🧺 Cầm thẻ món kéo thả vào giỏ nan tre để chọn!</div>
 
     <!-- GIỎ NAN TRE GÓC DƯỚI BÊN TRÁI -->
     <div id="bamboo-cart-zone" onclick="openCartModal()">
@@ -1001,9 +1007,7 @@
                         <th style="width: 35%; text-align: right;">T.Tiền</th>
                     </tr>
                 </thead>
-                <tbody id="billItemsBody">
-                    <!-- Các món trong bill sẽ render ở đây -->
-                </tbody>
+                <tbody id="billItemsBody"></tbody>
             </table>
 
             <div class="receipt-summary">
@@ -1124,7 +1128,6 @@
             } catch (e) {}
         }
 
-        // Âm thanh in bill xé giấy
         function playReceiptPrintSound() {
             if (!audioCtx) return;
             try {
@@ -1229,7 +1232,7 @@
         window.addEventListener('pointerdown', autoPlayOnFirstTouch, { once: true });
 
         // ==========================================
-        // 3. DỮ LIỆU ĐẦY ĐỦ 44 MÓN ĂN & GIỎ HÀNG
+        // 3. DỮ LIỆU ĐẦY ĐỦ 44 MÓN ĂN
         // ==========================================
         const menuData = {
             danang_quangnam: [
@@ -1303,8 +1306,9 @@
         // QUẢN LÝ GIỎ HÀNG VÀ HÓA ĐƠN
         let myCart = {};
         let selectedPaymentMethod = 'cod';
+        let isModalOpen = false; // Khóa toàn cục chống lẫn lộn thao tác
 
-        function addToCart(foodItem, triggerElement = null) {
+        function addToCart(foodItem) {
             initAudioContext();
             if (myCart[foodItem.id]) {
                 myCart[foodItem.id].qty += 1;
@@ -1314,36 +1318,10 @@
             playAddToCartSound();
             animateCartZone();
             updateCartBadge();
-
-            if (triggerElement) {
-                const rect = triggerElement.getBoundingClientRect();
-                const cartRect = document.getElementById('bamboo-cart-zone').getBoundingClientRect();
-                
-                const flyingDot = document.createElement('div');
-                flyingDot.innerText = '🍲';
-                flyingDot.style.position = 'fixed';
-                flyingDot.style.left = rect.left + 'px';
-                flyingDot.style.top = rect.top + 'px';
-                flyingDot.style.fontSize = '1.4rem';
-                flyingDot.style.zIndex = '9999';
-                flyingDot.style.transition = 'all 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
-                flyingDot.style.pointerEvents = 'none';
-                document.body.appendChild(flyingDot);
-
-                setTimeout(() => {
-                    flyingDot.style.left = (cartRect.left + 25) + 'px';
-                    flyingDot.style.top = (cartRect.top + 25) + 'px';
-                    flyingDot.style.transform = 'scale(0.2) rotate(360deg)';
-                    flyingDot.style.opacity = '0';
-                }, 20);
-
-                setTimeout(() => {
-                    flyingDot.remove();
-                }, 450);
-            }
         }
 
         function updateCartQty(foodId, delta) {
+            initAudioContext();
             if (myCart[foodId]) {
                 myCart[foodId].qty += delta;
                 if (myCart[foodId].qty <= 0) {
@@ -1376,7 +1354,7 @@
 
             const items = Object.values(myCart);
             if (items.length === 0) {
-                container.innerHTML = '<p style="text-align:center; padding:20px; color:#888; font-size:0.85rem;">Giỏ nan tre đang trống.<br>Hãy bấm "+ Giỏ" hoặc kéo món thả vào giỏ nhé!</p>';
+                container.innerHTML = '<p style="text-align:center; padding:25px 10px; color:#888; font-size:0.85rem;">Giỏ nan tre đang trống.<br>Hãy cầm thẻ món kéo thả vào giỏ nhé!</p>';
                 btnOrder.disabled = true;
             } else {
                 btnOrder.disabled = false;
@@ -1390,9 +1368,9 @@
                             <span>${(item.rawPrice * item.qty).toLocaleString('vi-VN')}đ</span>
                         </div>
                         <div class="cart-item-qty">
-                            <button class="qty-btn" onclick="updateCartQty('${item.id}', -1)">-</button>
-                            <span style="font-size:0.9rem; font-weight:800; min-width:18px; text-align:center;">${item.qty}</span>
-                            <button class="qty-btn" onclick="updateCartQty('${item.id}', 1)">+</button>
+                            <button class="qty-btn" type="button" onclick="updateCartQty('${item.id}', -1); event.stopPropagation();">-</button>
+                            <span style="font-size:0.95rem; font-weight:800; min-width:20px; text-align:center;">${item.qty}</span>
+                            <button class="qty-btn" type="button" onclick="updateCartQty('${item.id}', 1); event.stopPropagation();">+</button>
                         </div>
                     `;
                     container.appendChild(row);
@@ -1440,7 +1418,6 @@
                 billItemsBody.appendChild(tr);
             });
 
-            // Sinh mã hóa đơn và thời gian thực
             const randomCode = '#OHUE-' + Math.floor(1000 + Math.random() * 9000);
             const now = new Date();
             const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} - ${now.getDate().toString().padStart(2, '0')}/${(now.getMonth()+1).toString().padStart(2, '0')}/${now.getFullYear()}`;
@@ -1472,7 +1449,6 @@
 
             alert(`✅ ĐẶT HÀNG THÀNH CÔNG!\n------------------------\nMã đơn: ${code}\nTổng thanh toán: ${total}\nPhương thức: ${methodText}\n\nQuán O Huệ đang chuẩn bị món và sẽ giao ngay tới bạn!`);
             
-            // Xóa sạch giỏ hàng sau khi đặt thành công
             myCart = {};
             updateCartBadge();
             closeBillModal();
@@ -1496,7 +1472,7 @@
         }
 
         // ==========================================
-        // 4. THIẾT LẬP VẬT LÝ
+        // 4. THIẾT LẬP VẬT LÝ & KÉO THẢ VÀO GIỎ
         // ==========================================
         const { Engine, Runner, Bodies, Composite, Mouse, MouseConstraint, Events, Query } = Matter;
         const engine = Engine.create();
@@ -1515,6 +1491,7 @@
         Composite.add(world, [ground, leftWall, rightWall, ceiling]);
 
         Events.on(engine, 'collisionStart', (event) => {
+            if (isModalOpen) return;
             event.pairs.forEach((pair) => {
                 const { bodyA, bodyB } = pair;
                 const speedA = bodyA.speed || 0;
@@ -1529,8 +1506,8 @@
 
         let cardBodies = [];
         const cardsContainer = document.getElementById('cards-container');
-        const cardW = isMobile ? 160 : 200;
-        const cardH = isMobile ? 95 : 115;
+        const cardW = isMobile ? 155 : 195;
+        const cardH = isMobile ? 90 : 105;
 
         function loadRegionFoods(regionKey) {
             initAudioContext();
@@ -1557,17 +1534,10 @@
                     </div>
                     <div class="food-footer">
                         <span class="food-price">${item.price}</span>
-                        <button class="btn-quick-add" type="button">+ Giỏ 🧺</button>
+                        <span class="drag-hint-badge">Kéo vào giỏ 🧺</span>
                     </div>
                 `;
                 cardsContainer.appendChild(card);
-
-                const quickBtn = card.querySelector('.btn-quick-add');
-                quickBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
-                quickBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    addToCart(item, card);
-                });
 
                 const colIdx = index % cols;
                 const rowIdx = Math.floor(index / cols);
@@ -1590,6 +1560,7 @@
         }
 
         function switchRegion(regionKey, btnElement) {
+            if (isModalOpen) return;
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
             if (btnElement) btnElement.classList.add('active');
             loadRegionFoods(regionKey);
@@ -1605,12 +1576,12 @@
 
         let startPoint = { x: 0, y: 0 };
         let startTime = 0;
-        let isModalOpen = false;
         let draggedBody = null;
 
         const cartElement = document.getElementById('bamboo-cart-zone');
 
         Events.on(mouseConstraint, 'startdrag', (evt) => {
+            if (isModalOpen) return;
             initAudioContext();
             startPoint = { x: mouse.position.x, y: mouse.position.y };
             startTime = Date.now();
@@ -1620,17 +1591,19 @@
             }
         });
 
+        // Bắt dính giỏ tre cực nhạy
         Events.on(engine, 'afterUpdate', () => {
+            if (isModalOpen) return;
             if (draggedBody) {
                 const cartRect = cartElement.getBoundingClientRect();
                 const mouseX = mouse.position.x;
                 const mouseY = mouse.position.y;
                 
                 const isHoveringCart = (
-                    mouseX >= cartRect.left - 60 &&
-                    mouseX <= cartRect.right + 60 &&
-                    mouseY >= cartRect.top - 60 &&
-                    mouseY <= cartRect.bottom + 60
+                    mouseX >= cartRect.left - 50 &&
+                    mouseX <= cartRect.right + 50 &&
+                    mouseY >= cartRect.top - 50 &&
+                    mouseY <= cartRect.bottom + 50
                 );
 
                 if (isHoveringCart) {
@@ -1649,38 +1622,40 @@
             const mouseY = mouse.position.y;
 
             const isDroppedIntoCart = (
-                mouseX >= cartRect.left - 60 &&
-                mouseX <= cartRect.right + 60 &&
-                mouseY >= cartRect.top - 60 &&
-                mouseY <= cartRect.bottom + 60
+                mouseX >= cartRect.left - 50 &&
+                mouseX <= cartRect.right + 50 &&
+                mouseY >= cartRect.top - 50 &&
+                mouseY <= cartRect.bottom + 50
             );
 
+            // NẾU KÉO THẢ VÀO GIỎ NAN TRE: CHO VÀO GIỎ VÀ BIẾN MẤT VĨNH VIỄN
             if (draggedBody && isDroppedIntoCart && draggedBody.foodRawData) {
                 addToCart(draggedBody.foodRawData);
                 
-                const el = draggedBody.customData;
+                const targetBody = draggedBody;
+                const el = targetBody.customData;
+
                 if (el) {
-                    el.style.transition = 'all 0.25s ease-in';
-                    el.style.transform = `translate3d(${cartRect.left}px, ${cartRect.top}px, 0) scale(0.1)`;
+                    el.style.transition = 'all 0.25s cubic-bezier(0.25, 1, 0.5, 1)';
+                    el.style.transform = `translate3d(${cartRect.left}px, ${cartRect.top}px, 0) scale(0.05) rotate(720deg)`;
                     el.style.opacity = '0';
+                    
                     setTimeout(() => {
-                        el.style.transition = '';
-                        el.style.opacity = '1';
-                        Matter.Body.setPosition(draggedBody, {
-                            x: Math.random() * (width - 200) + 100,
-                            y: 100
-                        });
-                        Matter.Body.setVelocity(draggedBody, { x: 0, y: 0 });
-                    }, 300);
+                        // Xóa hoàn toàn khỏi DOM và Thế giới vật lý Matter.js
+                        el.remove();
+                        Composite.remove(world, targetBody);
+                        cardBodies = cardBodies.filter(cb => cb.body !== targetBody);
+                    }, 260);
                 }
             } else {
+                // NẾU CHỈ LÀ THAO TÁC CHẠM (CLICK) NHẸ THÌ MỞ CHI TIẾT
                 const distanceMoved = Math.hypot(
                     mouse.position.x - startPoint.x,
                     mouse.position.y - startPoint.y
                 );
                 const duration = Date.now() - startTime;
 
-                if (distanceMoved < 15 && duration < 350) {
+                if (distanceMoved < 12 && duration < 300) {
                     const allUnderCursor = Query.point(cardBodies.map(cb => cb.body), mouse.position);
                     if (allUnderCursor.length > 0) {
                         allUnderCursor.sort((a, b) => b.renderOrder - a.renderOrder);
