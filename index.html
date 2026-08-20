@@ -222,6 +222,21 @@
             height: 100vh;
             z-index: 10;
             touch-action: none;
+            contain: layout style paint;
+        }
+
+        /* Giảm chi phí render trên thiết bị yếu */
+        .food-card,
+        #bamboo-cart-zone,
+        .topping-item {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .topping-item {
+                animation: none !important;
+            }
         }
 
         /* 4. THẺ MÓN ĂN */
@@ -1218,18 +1233,8 @@
             }
         }
 
-        const autoPlayOnFirstTouch = () => {
-            initAudioContext();
-            if (!isMusicPlaying) {
-                bgMusic.volume = 0.4;
-                bgMusic.play().then(() => {
-                    isMusicPlaying = true;
-                    updateMusicUI(true);
-                }).catch(() => {});
-            }
-            window.removeEventListener('pointerdown', autoPlayOnFirstTouch);
-        };
-        window.addEventListener('pointerdown', autoPlayOnFirstTouch, { once: true });
+        // Không tự phát nhạc khi người dùng chạm màn hình.
+        // Chỉ phát khi người dùng chủ động bấm nút "Nhạc".
 
         // ==========================================
         // 3. DỮ LIỆU ĐẦY ĐỦ 44 MÓN ĂN
@@ -1382,6 +1387,7 @@
         function openCartModal() {
             initAudioContext();
             isModalOpen = true;
+            pausePhysics();
             renderCartModal();
             document.getElementById('cartModalOverlay').classList.add('active');
         }
@@ -1389,6 +1395,7 @@
         function closeCartModal() {
             document.getElementById('cartModalOverlay').classList.remove('active');
             isModalOpen = false;
+            resumePhysics();
         }
 
         // ==========================================
@@ -1398,7 +1405,7 @@
             const items = Object.values(myCart);
             if (items.length === 0) return;
 
-            closeCartModal();
+            document.getElementById('cartModalOverlay').classList.remove('active');
             initAudioContext();
             playReceiptPrintSound();
 
@@ -1428,12 +1435,14 @@
             document.getElementById('billGrandTotal').innerText = total.toLocaleString('vi-VN') + 'đ';
 
             isModalOpen = true;
+            pausePhysics();
             document.getElementById('billModalOverlay').classList.add('active');
         }
 
         function closeBillModal() {
             document.getElementById('billModalOverlay').classList.remove('active');
             isModalOpen = false;
+            resumePhysics();
         }
 
         function selectPayMethod(method, btn) {
@@ -1455,7 +1464,7 @@
         }
 
         // TOPPING
-        const isMobile = window.innerWidth < 768;
+        let isMobile = window.innerWidth < 768;
         const toppingLayer = document.getElementById('topping-layer');
         const toppingIcons = ['🏮', '🪷', '🌶️', '🦐', '🥟', '🥢', '🌿'];
         const totalToppings = isMobile ? 7 : 12;
@@ -1474,58 +1483,88 @@
         // ==========================================
         // 4. THIẾT LẬP VẬT LÝ & KÉO THẢ VÀO GIỎ
         // ==========================================
-        const { Engine, Runner, Bodies, Composite, Mouse, MouseConstraint, Events, Query } = Matter;
-        const engine = Engine.create();
+        const { Engine, Runner, Bodies, Composite, Mouse, MouseConstraint, Events, Query, Body } = Matter;
+        const engine = Engine.create({
+            enableSleeping: true
+        });
         const world = engine.world;
+
+        let viewportWidth = window.innerWidth;
+        let viewportHeight = window.innerHeight;
+        let cardW = isMobile ? 155 : 195;
+        let cardH = isMobile ? 90 : 105;
+        let currentRegionKey = 'danang_quangnam';
+
         engine.world.gravity.y = isMobile ? 0.75 : 0.8;
 
-        const width = window.innerWidth;
-        const height = window.innerHeight;
+        const wallOptions = {
+            isStatic: true,
+            render: { visible: false },
+            friction: 0.2
+        };
 
-        const wallOptions = { isStatic: true, render: { visible: false } };
-        const ground = Bodies.rectangle(width / 2, height + 25, width * 2, 50, wallOptions);
-        const leftWall = Bodies.rectangle(-25, height / 2, 50, height * 2, wallOptions);
-        const rightWall = Bodies.rectangle(width + 25, height / 2, 50, height * 2, wallOptions);
-        const ceiling = Bodies.rectangle(width / 2, 75, width * 2, 10, wallOptions);
+        let boundaries = [];
 
-        Composite.add(world, [ground, leftWall, rightWall, ceiling]);
+        function rebuildBoundaries() {
+            if (boundaries.length) {
+                Composite.remove(world, boundaries);
+            }
+
+            boundaries = [
+                Bodies.rectangle(viewportWidth / 2, viewportHeight + 25, viewportWidth * 2, 50, wallOptions),
+                Bodies.rectangle(-25, viewportHeight / 2, 50, viewportHeight * 2, wallOptions),
+                Bodies.rectangle(viewportWidth + 25, viewportHeight / 2, 50, viewportHeight * 2, wallOptions),
+                // Header chiếm khoảng 75px, tránh để thẻ xuyên lên vùng header.
+                Bodies.rectangle(viewportWidth / 2, 75, viewportWidth * 2, 10, wallOptions)
+            ];
+
+            Composite.add(world, boundaries);
+        }
+
+        rebuildBoundaries();
 
         Events.on(engine, 'collisionStart', (event) => {
             if (isModalOpen) return;
-            event.pairs.forEach((pair) => {
-                const { bodyA, bodyB } = pair;
-                const speedA = bodyA.speed || 0;
-                const speedB = bodyB.speed || 0;
-                const relativeSpeed = Math.max(speedA, speedB);
 
-                if (relativeSpeed > 1.5) {
+            for (const pair of event.pairs) {
+                const relativeSpeed = Math.max(pair.bodyA.speed || 0, pair.bodyB.speed || 0);
+
+                // Chỉ tạo âm thanh cho va chạm đủ mạnh, tránh tạo quá nhiều AudioNode.
+                if (relativeSpeed > 1.8) {
                     playCollisionSound(relativeSpeed);
                 }
-            });
+            }
         });
 
         let cardBodies = [];
         const cardsContainer = document.getElementById('cards-container');
-        const cardW = isMobile ? 155 : 195;
-        const cardH = isMobile ? 90 : 105;
 
         function loadRegionFoods(regionKey) {
-            initAudioContext();
-            cardsContainer.innerHTML = '';
-            cardBodies.forEach(({ body }) => Composite.remove(world, body));
+            if (isModalOpen) return;
+
+            currentRegionKey = regionKey;
+
+            // Xóa body trước khi xóa DOM để tránh giữ reference không cần thiết.
+            if (cardBodies.length) {
+                Composite.remove(world, cardBodies.map(({ body }) => body));
+            }
+
             cardBodies = [];
+            cardsContainer.replaceChildren();
 
             const foods = menuData[regionKey] || [];
             const cols = isMobile ? 2 : 4;
+
+            const fragment = document.createDocumentFragment();
 
             foods.forEach((item, index) => {
                 const card = document.createElement('div');
                 card.className = 'food-card';
                 card.style.zIndex = 20 + index;
-                card.setAttribute('data-title', item.title);
-                card.setAttribute('data-price', item.price);
-                card.setAttribute('data-desc', item.desc);
-                card.setAttribute('data-img', item.img);
+                card.dataset.title = item.title;
+                card.dataset.price = item.price;
+                card.dataset.desc = item.desc;
+                card.dataset.img = item.img;
 
                 card.innerHTML = `
                     <div class="food-card-header">
@@ -1537,157 +1576,247 @@
                         <span class="drag-hint-badge">Kéo vào giỏ 🧺</span>
                     </div>
                 `;
-                cardsContainer.appendChild(card);
+
+                fragment.appendChild(card);
 
                 const colIdx = index % cols;
                 const rowIdx = Math.floor(index / cols);
-                const startX = (width / (cols + 1)) * (colIdx + 1);
-                const startY = 90 + rowIdx * 45;
+                const startX = (viewportWidth / (cols + 1)) * (colIdx + 1);
+                const startY = 100 + rowIdx * 45;
 
                 const body = Bodies.rectangle(startX, startY, cardW, cardH, {
-                    restitution: 0.4,
+                    restitution: 0.28,
                     friction: 0.35,
-                    density: 0.002
+                    frictionAir: 0.015,
+                    density: 0.002,
+                    sleepThreshold: 30
                 });
 
                 body.customData = card;
                 body.foodRawData = item;
                 body.renderOrder = index;
 
-                cardBodies.push({ element: card, body: body });
-                Composite.add(world, body);
+                cardBodies.push({ element: card, body });
             });
+
+            cardsContainer.appendChild(fragment);
+
+            if (cardBodies.length) {
+                Composite.add(world, cardBodies.map(({ body }) => body));
+            }
+
+            requestCardRender();
         }
 
         function switchRegion(regionKey, btnElement) {
-            if (isModalOpen) return;
+            if (isModalOpen || !menuData[regionKey]) return;
+
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
             if (btnElement) btnElement.classList.add('active');
+
             loadRegionFoods(regionKey);
         }
 
         const physicsContainer = document.getElementById('physics-container');
         const mouse = Mouse.create(physicsContainer);
+
         const mouseConstraint = MouseConstraint.create(engine, {
-            mouse: mouse,
-            constraint: { stiffness: 0.25, render: { visible: false } }
+            mouse,
+            collisionFilter: {
+                mask: 0xFFFFFFFF
+            },
+            constraint: {
+                stiffness: 0.18,
+                angularStiffness: 0.15,
+                render: { visible: false }
+            }
         });
+
         Composite.add(world, mouseConstraint);
 
         let startPoint = { x: 0, y: 0 };
         let startTime = 0;
         let draggedBody = null;
+        let cartHoverState = false;
 
         const cartElement = document.getElementById('bamboo-cart-zone');
+        let cartRectCache = cartElement.getBoundingClientRect();
+
+        function updateCartRectCache() {
+            cartRectCache = cartElement.getBoundingClientRect();
+        }
+
+        function setCartHover(active) {
+            if (active === cartHoverState) return;
+            cartHoverState = active;
+            cartElement.classList.toggle('drag-hover', active);
+        }
+
+        function isPointNearCart(x, y) {
+            return (
+                x >= cartRectCache.left - 60 &&
+                x <= cartRectCache.right + 60 &&
+                y >= cartRectCache.top - 60 &&
+                y <= cartRectCache.bottom + 60
+            );
+        }
 
         Events.on(mouseConstraint, 'startdrag', (evt) => {
             if (isModalOpen) return;
+
             initAudioContext();
+            updateCartRectCache();
+
             startPoint = { x: mouse.position.x, y: mouse.position.y };
-            startTime = Date.now();
+            startTime = performance.now();
             draggedBody = evt.body;
-            if (draggedBody && draggedBody.customData) {
+
+            if (draggedBody?.customData) {
                 draggedBody.customData.classList.add('dragging-to-cart');
             }
         });
 
-        // Bắt dính giỏ tre cực nhạy
+        // Chỉ đọc bounding rect một lần khi bắt đầu kéo / resize,
+        // không gọi getBoundingClientRect() trên mỗi physics tick.
         Events.on(engine, 'afterUpdate', () => {
-            if (isModalOpen) return;
-            if (draggedBody) {
-                const cartRect = cartElement.getBoundingClientRect();
-                const mouseX = mouse.position.x;
-                const mouseY = mouse.position.y;
-                
-                const isHoveringCart = (
-                    mouseX >= cartRect.left - 60 &&
-                    mouseX <= cartRect.right + 60 &&
-                    mouseY >= cartRect.top - 60 &&
-                    mouseY <= cartRect.bottom + 60
-                );
+            if (isModalOpen || !draggedBody) return;
 
-                if (isHoveringCart) {
-                    cartElement.classList.add('drag-hover');
-                } else {
-                    cartElement.classList.remove('drag-hover');
-                }
-            }
+            setCartHover(isPointNearCart(mouse.position.x, mouse.position.y));
+            requestCardRender();
         });
 
         Events.on(mouseConstraint, 'enddrag', () => {
             if (isModalOpen) return;
 
-            const cartRect = cartElement.getBoundingClientRect();
+            updateCartRectCache();
+
             const mouseX = mouse.position.x;
             const mouseY = mouse.position.y;
+            const droppedIntoCart = isPointNearCart(mouseX, mouseY);
+            const targetBody = draggedBody;
 
-            const isDroppedIntoCart = (
-                mouseX >= cartRect.left - 60 &&
-                mouseX <= cartRect.right + 60 &&
-                mouseY >= cartRect.top - 60 &&
-                mouseY <= cartRect.bottom + 60
-            );
+            if (targetBody?.foodRawData && droppedIntoCart) {
+                addToCart(targetBody.foodRawData);
 
-            // NẾU KÉO THẢ VÀO GIỎ NAN TRE: CHO VÀO GIỎ VÀ BIẾN MẤT
-            if (draggedBody && isDroppedIntoCart && draggedBody.foodRawData) {
-                addToCart(draggedBody.foodRawData);
-                
-                const targetBody = draggedBody;
                 const el = targetBody.customData;
 
                 if (el) {
-                    el.style.transition = 'all 0.25s cubic-bezier(0.25, 1, 0.5, 1)';
-                    el.style.transform = `translate3d(${cartRect.left}px, ${cartRect.top}px, 0) scale(0.05) rotate(720deg)`;
+                    el.style.transition = 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.25s ease';
+                    el.style.transform =
+                        `translate3d(${cartRectCache.left}px, ${cartRectCache.top}px, 0) scale(0.05) rotate(720deg)`;
                     el.style.opacity = '0';
-                    
+
+                    // Xóa ngay khỏi physics world, tránh body vô hình tiếp tục tính toán.
+                    Composite.remove(world, targetBody);
+                    cardBodies = cardBodies.filter(cb => cb.body !== targetBody);
+
                     setTimeout(() => {
                         el.remove();
-                        Composite.remove(world, targetBody);
-                        cardBodies = cardBodies.filter(cb => cb.body !== targetBody);
                     }, 260);
+                } else {
+                    Composite.remove(world, targetBody);
+                    cardBodies = cardBodies.filter(cb => cb.body !== targetBody);
                 }
             } else {
-                // NẾU CHỈ LÀ THAO TÁC CHẠM (CLICK) NHẸ THÌ MỞ CHI TIẾT
                 const distanceMoved = Math.hypot(
-                    mouse.position.x - startPoint.x,
-                    mouse.position.y - startPoint.y
+                    mouseX - startPoint.x,
+                    mouseY - startPoint.y
                 );
-                const duration = Date.now() - startTime;
+                const duration = performance.now() - startTime;
 
                 if (distanceMoved < 12 && duration < 300) {
-                    const allUnderCursor = Query.point(cardBodies.map(cb => cb.body), mouse.position);
-                    if (allUnderCursor.length > 0) {
+                    const bodies = cardBodies.map(cb => cb.body);
+                    const allUnderCursor = Query.point(bodies, mouse.position);
+
+                    if (allUnderCursor.length) {
                         allUnderCursor.sort((a, b) => b.renderOrder - a.renderOrder);
                         const topmostBody = allUnderCursor[0];
-                        if (topmostBody && topmostBody.customData) {
+
+                        if (topmostBody?.customData) {
                             openModal(topmostBody.customData, topmostBody.foodRawData);
                         }
                     }
                 }
             }
 
-            if (draggedBody && draggedBody.customData) {
-                draggedBody.customData.classList.remove('dragging-to-cart');
-            }
-            cartElement.classList.remove('drag-hover');
+            targetBody?.customData?.classList.remove('dragging-to-cart');
+            setCartHover(false);
             draggedBody = null;
+            requestCardRender();
         });
 
-        const runner = Runner.create();
-        Runner.run(runner, engine);
+        const runner = Runner.create({
+            isFixed: true,
+            delta: 1000 / 60
+        });
 
-        const halfW = cardW / 2;
-        const halfH = cardH / 2;
+        function pausePhysics() {
+            Runner.stop(runner);
+        }
 
-        Events.on(engine, 'afterUpdate', () => {
-            cardBodies.forEach(({ element, body }) => {
-                if (!element.style.transition) {
+        function resumePhysics() {
+            if (!isModalOpen) {
+                Runner.run(runner, engine);
+                requestCardRender();
+            }
+        }
+
+        // Batch DOM updates bằng requestAnimationFrame.
+        // Matter.js có thể cập nhật physics nhiều lần, nhưng DOM chỉ cập nhật tối đa 1 lần/frame.
+        let renderScheduled = false;
+
+        function requestCardRender() {
+            if (renderScheduled || isModalOpen) return;
+
+            renderScheduled = true;
+
+            requestAnimationFrame(() => {
+                renderScheduled = false;
+
+                if (isModalOpen) return;
+
+                for (const { element, body } of cardBodies) {
+                    if (!element.isConnected || element.style.opacity === '0') continue;
+
                     const { x, y } = body.position;
-                    const angle = body.angle;
-                    element.style.transform = `translate3d(${x - halfW}px, ${y - halfH}px, 0) rotate(${angle}rad)`;
+                    element.style.transform =
+                        `translate3d(${x - cardW / 2}px, ${y - cardH / 2}px, 0) rotate(${body.angle}rad)`;
                 }
             });
-        });
+        }
+
+        Events.on(engine, 'afterUpdate', requestCardRender);
+
+        Runner.run(runner, engine);
+
+        function handleViewportResize() {
+            const newWidth = window.innerWidth;
+            const newHeight = window.innerHeight;
+            const newIsMobile = newWidth < 768;
+            const breakpointChanged = newIsMobile !== isMobile;
+
+            viewportWidth = newWidth;
+            viewportHeight = newHeight;
+
+            if (breakpointChanged) {
+                isMobile = newIsMobile;
+                cardW = isMobile ? 155 : 195;
+                cardH = isMobile ? 90 : 105;
+                engine.world.gravity.y = isMobile ? 0.75 : 0.8;
+
+                loadRegionFoods(currentRegionKey);
+            } else {
+                rebuildBoundaries();
+                updateCartRectCache();
+                requestCardRender();
+            }
+        }
+
+        let resizeTimer = null;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(handleViewportResize, 120);
+        }, { passive: true });
 
         // ==========================================
         // 5. VÒNG QUAY "HÔM NAY ĂN GÌ?" (ĐÃ FIX QUAY 100%)
@@ -1746,6 +1875,7 @@
         function openWheelModal() {
             initAudioContext();
             isModalOpen = true;
+            pausePhysics();
             wheelModalOverlay.classList.add('active');
         }
 
@@ -1753,6 +1883,7 @@
             if (isSpinning) return;
             wheelModalOverlay.classList.remove('active');
             isModalOpen = false;
+            resumePhysics();
         }
 
         function spinWheel() {
@@ -1812,6 +1943,7 @@
         function openModal(cardElement, foodRawData) {
             initAudioContext();
             isModalOpen = true;
+            pausePhysics();
             currentModalFood = foodRawData;
             modalImg.src = cardElement.getAttribute('data-img');
             modalTitle.innerText = cardElement.getAttribute('data-title');
@@ -1823,6 +1955,7 @@
         function openDirectModal(foodObj) {
             initAudioContext();
             isModalOpen = true;
+            pausePhysics();
             currentModalFood = foodObj;
             modalImg.src = foodObj.img;
             modalTitle.innerText = "🏮 Gợi Ý: " + foodObj.title;
@@ -1841,6 +1974,7 @@
         function closeModal() {
             modalOverlay.classList.remove('active');
             isModalOpen = false;
+            resumePhysics();
         }
 
         document.addEventListener('keydown', (e) => {
